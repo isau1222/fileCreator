@@ -4,6 +4,6 @@ module.exports.passport = {
   },
 
   rememberme: {
-    key: 'token',
+    key: 'app.token',
   },
 };
