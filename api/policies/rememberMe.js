@@ -2,26 +2,61 @@
  * rememberMe
  *
  * @module      :: Policy
- * @description :: Tries to authenticate the user from the request.
+ * @description :: Tries to remember the user.
  */
 
 var passport = require('passport');
 
 module.exports = function(req, res, next) {
-  if (req.isAuthenticated()) return next();
+  if (req.isAuthenticated()) {
+    // @NOTE: nothing really to log
+    return next();
+  }
 
-  // Retrieve token from the request
-  var key = sails.config.passport.rememberme.key;
+  var key = sails.config.passport.rememberMe.key;
   var token = req.cookies[key];
 
-  if (!token) return next();
+  if (!token) {
+    // @NOTE: nothing really to log
+    return next();
+  }
 
-  // Verify token
-  return passport.authenticate('remember-me', function(err, user, info) {
-    if (err || !user) {
+  return passport.authenticate('remember-me', function(err, user, challenges) {
+    // @NOTE: if authentication has failed, then there's no point in:
+    //        - doing logoing, because user was not logged in from the start
+    //        - manually removing cookies, because this is done by the passport
+
+    if (err) {
       // @TODO: log security incident, token was present but authentication failed
-      return passport.logout(req, res, next);
+      return res.badRequest(err);
     }
-    return passport.login(req, res, user, next);
-  })(req, res, next);
+
+    else if (!user) {
+      // @TODO: log security incident
+      return res.badRequest(new Error('Authentication failed'), undefined, challenges ? { challenges: challenges } : undefined);
+    }
+
+    else {
+      return req.login(user, function(err) {
+        if (err) {
+          // @TODO: log security incident
+          return res.badRequest(err);
+        }
+
+        else {
+          // @TODO: log security event
+          return next(null, 'what');
+        }
+      });
+    }
+  })(req, res, function(err) {
+    if (err) {
+      // @TODO: log application incident
+      return res.serverError(err);
+    }
+
+    else {
+      return next();
+    }
+  });
 };

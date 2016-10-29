@@ -3,7 +3,7 @@ module.exports.passport = {
     // @NOTE: uses default config
   },
 
-  rememberme: {
-    key: 'app.token',
+  rememberMe: {
+    key: 'app.remember-me',
   },
 };
