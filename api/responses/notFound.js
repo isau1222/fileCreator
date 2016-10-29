@@ -29,6 +29,8 @@ module.exports = function notFound(err, data, details) {
   // Set status code
   res.status(404);
 
+  if (!err) err = new Error('Not found');
+
   // @TODO: log application event
 
   // Only include errors in response if application environment
@@ -36,16 +38,16 @@ module.exports = function notFound(err, data, details) {
   // send back any identifying information about errors.
   if (sails.config.environment === 'production' && sails.config.keepResponseErrors !== true) {
     return res.json({
-      message: err ? err.message : undefined,
+      message: err.message,
       data: data,
     });
   }
   else {
     return res.json({
-      message: err ? err.message : undefined,
+      message: err.message,
       data: data,
       details: details,
-      stack: err ? err.stack : undefined,
+      stack: err.stack,
     })
   }
 };

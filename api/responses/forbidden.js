@@ -24,6 +24,8 @@ module.exports = function forbidden(err, data, details) {
   // Set status code
   res.status(403);
 
+  if (!err) err = new Error('Forbidden');
+
   // @TODO: log security incident
 
   // Only include errors in response if application environment
@@ -31,16 +33,16 @@ module.exports = function forbidden(err, data, details) {
   // send back any identifying information about errors.
   if (sails.config.environment === 'production' && sails.config.keepResponseErrors !== true) {
     return res.json({
-      message: err ? err.message : undefined,
+      message: err.message,
       data: data,
     });
   }
   else {
     return res.json({
-      message: err ? err.message : undefined,
+      message: err.message,
       data: data,
       details: details,
-      stack: err ? err.stack : undefined,
+      stack: err.stack,
     });
   }
 };
