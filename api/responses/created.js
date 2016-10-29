@@ -17,7 +17,7 @@ module.exports = function created(data, details) {
   var req = this.req;
   var res = this.res;
 
-  // @TODO: log metrics
+  // @TODO: log application event
 
   // Set status code
   res.status(201);
