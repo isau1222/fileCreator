@@ -22,6 +22,22 @@
 
 module.exports.routes = {
 
+  // @NOTE(denis.karabaza): I had to define two routes instead of one, because:
+  // - `/app*` also matches `/app1`, which is undesirable
+  // - `/app/*` does not match `/app`, which is undesirable
+
+  'GET /': '/app',
+
+  'GET /app': {
+    controller: 'VueController',
+    action: 'render',
+  },
+
+  'GET /app/*': {
+    controller: 'VueController',
+    action: 'render',
+  },
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
