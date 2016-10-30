@@ -29,7 +29,7 @@ module.exports = {
     },
 
     strategy: {
-      type: 'alphanumeric',
+      type: 'string',
       required: true,
       enum: ['local', 'remember-me'],
     },
