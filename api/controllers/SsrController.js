@@ -1,7 +1,7 @@
 /**
- * VueController
+ * SsrController
  *
- * @description :: A controller that renders the page using Vue SSR.
+ * @description :: A controller that renders the page using SSR.
  */
 
 module.exports = {

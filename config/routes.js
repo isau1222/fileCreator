@@ -29,12 +29,12 @@ module.exports.routes = {
   'GET /': '/app',
 
   'GET /app': {
-    controller: 'VueController',
+    controller: 'SsrController',
     action: 'render',
   },
 
   'GET /app/*': {
-    controller: 'VueController',
+    controller: 'SsrController',
     action: 'render',
   },
 
