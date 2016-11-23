@@ -26,15 +26,15 @@ module.exports.routes = {
   // - `/app*` also matches `/app1`, which is undesirable
   // - `/app/*` does not match `/app`, which is undesirable
 
-  'GET /': '/app',
+  'GET /': '/webapp',
 
-  'GET /app': {
-    controller: 'SsrController',
+  'GET /webapp': {
+    controller: 'WebappController',
     action: 'render',
   },
 
-  'GET /app/*': {
-    controller: 'SsrController',
+  'GET /webapp/*': {
+    controller: 'WebappController',
     action: 'render',
   },
 

@@ -1,7 +1,7 @@
 /**
- * SsrController
+ * WebappController
  *
- * @description :: A controller that renders the page using SSR.
+ * @description :: A controller that renders the webapp page using SSR.
  */
 
 module.exports = {
