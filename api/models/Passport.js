@@ -4,7 +4,7 @@
  * @description :: User passport.
  */
 
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var crypto = require('crypto');
 
 function hashPassword(passport, next) {

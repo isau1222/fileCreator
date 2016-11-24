@@ -5,7 +5,7 @@
   "description": "A Sails and Vue application",
   "keywords": [],
   "dependencies": {
-    "bcrypt": "^0.8.7",
+    "bcryptjs": "^2.3.0",
     "include-all": "^1.0.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
