@@ -19,6 +19,6 @@ var vm = new Vue({
 
 module.exports = {
   vm: vm,
-  store: store,
   router: router,
+  store: store,
 };
