@@ -22,21 +22,16 @@
 
 module.exports.routes = {
 
-  // @NOTE(denis.karabaza): I had to define two routes instead of one, because:
-  // - `/app*` also matches `/app1`, which is undesirable
-  // - `/app/*` does not match `/app`, which is undesirable
-
-  'GET /': '/webapp',
-
-  'GET /webapp': {
-    controller: 'WebappController',
-    action: 'render',
-  },
+  // @NOTE: order matters, redirects should be after the controller,
+  //        otherwise there will be a redirect loop
 
   'GET /webapp/*': {
     controller: 'WebappController',
     action: 'render',
   },
+
+  'GET /': '/webapp/',
+  'GET /webapp': '/webapp/',
 
   /***************************************************************************
   *                                                                          *
