@@ -35,4 +35,16 @@ module.exports = {
   //   level: "silent"
   // }
 
+  webapp: {
+    compileJs: 'once',
+    uglifyJs: true,
+    NODE_ENV: 'production',
+    server: {
+      devtool: null,
+    },
+    client: {
+      devtool: null,
+    },
+  },
+
 };

@@ -47,5 +47,9 @@ module.exports.bootstrap = function(done) {
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  return done();
+  return async.parallel([
+    function(next) {
+      return sails.services.webapp.init(next);
+    },
+  ], done);
 };

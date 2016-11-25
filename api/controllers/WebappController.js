@@ -12,7 +12,16 @@ module.exports = {
   },
 
   render: function(req, res) {
-    // res.type('text/html; charset=utf-8'); // @NOTE: probably needed for stream
-    res.send('<p>@TODO: Render ' + req.url + '</p><pre>');
+    var context = { url: req.url }; // @TODO: session info
+
+    return sails.services.webapp.render(context, function(err, result) {
+      if (err) {
+        return res.send(500, 'Internal server error');
+      }
+
+      else {
+        return res.send(result.status, result.body);
+      }
+    });
   },
 };
