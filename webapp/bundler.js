@@ -143,12 +143,12 @@ Bundler.prototype.render = function(context, done) {
     try {
       html = lodash.compact([
         '<!DOCTYPE html>',
-        context.lang ? ('<html lang="' + context.helmet.lang + '">') : '<html>',
+        context.helmet && context.helmet.lang ? ('<html lang="' + context.helmet.lang + '">') : '<html>',
           '<head>',
             '<meta charset="UTF-8">',
             context.helmet && context.helmet.title && ('<title>' + he.escape(context.helmet.title) + '</title>'),
             context.helmet && context.helmet.canonical && ('<link rel="canonical" href="' + he.escape(context.helmet.canonical) + '">'),
-            context.helmet.meta && context.helmet.meta
+            context.helmet && context.helmet.meta && context.helmet.meta
               .map(function(item) {
                 return '<meta name="' + he.escape(item.name) + '" content="' + he.escape(item.content) + '">';
               })
