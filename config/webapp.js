@@ -33,9 +33,9 @@ module.exports.webapp = {
     devtool: null,
     entry: './main-server.js',
     output: {
-      filename: 'bundle-server.js', // The name of the server bundle
-      path: path.resolve(SAILS_ROOT, '.tmp'), // The file path to the server bundle
-      externals: Object.keys(require('../package.json').dependencies), // External modules
+      filename: 'bundle-server.js',
+      path: path.resolve(SAILS_ROOT, '.tmp'),
+      externals: Object.keys(require('../package.json').dependencies),
     },
   },
 
@@ -48,9 +48,9 @@ module.exports.webapp = {
       vendor: ['vue', 'vue-router', 'vuex'],
     },
     output: {
-      filename: 'bundle-client.js', // The name of the client bundle
-      path: path.resolve(SAILS_ROOT, '.tmp/public/assets'), // The file path to the client bundle
-      publicPath: '/assets/', // The URL path to the the client bundle
+      filename: 'bundle-client.js',
+      path: path.resolve(SAILS_ROOT, '.tmp/public/assets'),
+      publicPath: '/assets/', // @NOTE: has to end with a slash
     },
   },
 
