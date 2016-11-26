@@ -8,6 +8,7 @@
 var passport = require('passport');
 
 module.exports = {
+
   login: function(req, res) {
     // @TODO: log security event
 
