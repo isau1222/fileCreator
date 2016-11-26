@@ -1,5 +1,7 @@
+var Vue = require('vue');
+
 var main = require('./main');
-var vm = main.vm;
+var app = main.app;
 var router = main.router;
 var store = main.store;
 
@@ -7,4 +9,5 @@ var store = main.store;
 store.replaceState(window.__INITIAL_STATE__);
 
 // @NOTE: mounts to the DOM
+var vm = new Vue(app);
 vm.$mount('[server-rendered="true"]');

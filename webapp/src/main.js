@@ -1,9 +1,7 @@
-var Vue = require('vue');
-
 var store = require('./store');
 var router = require('./router');
 
-var vm = new Vue({
+var app = {
   store: store,
   router: router,
   template: [
@@ -15,10 +13,10 @@ var vm = new Vue({
     '  <router-view></router-view>',
     '</div>',
   ].join(''),
-});
+};
 
 module.exports = {
-  vm: vm,
+  app: app,
   router: router,
   store: store,
 };

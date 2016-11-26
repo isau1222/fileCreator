@@ -1,10 +1,14 @@
+var Vue = require('vue');
+
 var main = require('./main');
-var vm = main.vm;
+var app = main.app;
 var router = main.router;
 var store = main.store;
 
 // @NOTE: exposes a factory
 module.exports = function(context) {
+  var vm = new Vue(app);
+
   var base = process.env.APP_ROUTER_BASE;
   var url = context.url.slice(base.length);
   router.push(url);
