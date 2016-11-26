@@ -31,6 +31,15 @@ function Bundler(config, opts) {
   this.config = config;
   this.opts = opts;
 
+  var baseWpConfig = {
+    module: {
+      loaders: [
+        // @NOTE: necessary because webpack does not support .json files out of box
+        { test: /\.json$/, loader: 'json' },
+      ],
+    },
+  };
+
   var serverWpConfigOverride = {
     target: 'node', // Necessary for Vue bundle renderer
     output: {
@@ -80,19 +89,19 @@ function Bundler(config, opts) {
     };
   }
 
-  this.serverWpConfig = merge.smart(this.config.server, serverWpConfigOverride);
-  this.clientWpConfig = merge.smart(this.config.client, clientWpConfigOverride);
+  var serverWpConfig = merge.smart(baseWpConfig, this.config.server, serverWpConfigOverride);
+  var clientWpConfig = merge.smart(baseWpConfig, this.config.client, clientWpConfigOverride);
 
-  this.serverCompiler = webpack(this.serverWpConfig);
-  this.clientCompiler = webpack(this.clientWpConfig);
+  this.serverCompiler = webpack(serverWpConfig);
+  this.clientCompiler = webpack(clientWpConfig);
 
   this.renderer = null;
 
-  this.serverPath = getBundlePath(this.serverWpConfig);
-  this.clientPath = getBundlePath(this.clientWpConfig);
+  this.serverPath = getBundlePath(serverWpConfig);
+  this.clientPath = getBundlePath(clientWpConfig);
 
-  this.publicBundlePath = url.resolve(this.clientWpConfig.output.publicPath, this.clientWpConfig.output.filename);
-  this.publicVendorPath = url.resolve(this.clientWpConfig.output.publicPath, this.config.vendorFilename);
+  this.publicBundlePath = url.resolve(clientWpConfig.output.publicPath, clientWpConfig.output.filename);
+  this.publicVendorPath = url.resolve(clientWpConfig.output.publicPath, this.config.vendorFilename);
 }
 
 Bundler.prototype.init = function(done) {
