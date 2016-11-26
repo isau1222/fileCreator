@@ -16,6 +16,7 @@ module.exports = {
 
     return sails.services.webapp.render(context, function(err, result) {
       if (err) {
+        console.log(err); // @FIXME: proper logging
         return res.send(500, 'Internal server error');
       }
 
