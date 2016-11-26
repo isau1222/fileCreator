@@ -237,7 +237,7 @@ Bundler.prototype._initWithWatchCompile = function(done) {
   bundler.clientCompiler.watch({}, function(err, stats) {
     if (err) return bundler.opts.processSoftError(err);
 
-    bundler.opts.processServerStats(stats);
+    bundler.opts.processClientStats(stats);
 
     if (stats.hasErrors()) {
       return bundler.opts.processSoftError(new Error('Client bundle contains errors'));
