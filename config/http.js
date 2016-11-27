@@ -25,9 +25,6 @@ module.exports.http = {
 
   middleware: {
 
-    passportInit: passport.initialize(),
-    passportSession: passport.session(),
-
   /***************************************************************************
   *                                                                          *
   * The order in which middleware should be run for HTTP request. (the Sails *
@@ -40,8 +37,10 @@ module.exports.http = {
       'cookieParser',
       'session',
 
-      'passportInit',
-      'passportSession',
+      // @NOTE: we can not use passport middleware, because it would only
+      //        work for proper http request, and would not work for
+      //        `sails.request`, so instead we mimic this middleware
+      //        from the hook
 
       // 'myRequestLogger',
       'bodyParser',
