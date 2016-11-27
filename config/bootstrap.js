@@ -10,7 +10,7 @@
  */
 
 var passport = require('passport');
-var RememberMeStrategy = require('passport-remember-me').Strategy;
+var RememberMeStrategy = require('passport-remember-me-extended').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports.bootstrap = function(done) {
