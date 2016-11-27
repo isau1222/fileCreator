@@ -5,6 +5,7 @@ var urel = require('urel');
 var he = require('he');
 var async = require('async');
 var lodash = require('lodash');
+var serialize = require('serialize-javascript');
 
 var webpack = require('webpack');
 var merge = require('webpack-merge');
@@ -150,7 +151,7 @@ Bundler.prototype.render = function(context, done) {
             // @TODO: styles
           '</head>',
           '<body>',
-            '<script>window.__INITIAL_STATE__ = ' + JSON.stringify(context.initialState) + ';</script>',
+            '<script>window.__INITIAL_STATE__ = ' + serialize(context.initialState) + ';</script>',
             // @TODO: initial state
             appHtml,
             '<script src="' + he.escape(urel(context.url, bundler.publicVendorPath)) + '"></script>',
