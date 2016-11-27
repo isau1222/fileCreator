@@ -48,7 +48,7 @@ function Bundler(config, opts) {
     plugins: lodash.compact([
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(this.config.NODE_ENV),
-        'process.env.APP_ROUTER_BASE': JSON.stringify(this.config.base),
+        'process.env.APP_PUBLIC_PATH': JSON.stringify(this.config.publicPath),
       }),
       // @NOTE: it is necessary for the server bundle to be a single file
       new webpack.optimize.LimitChunkCountPlugin({
@@ -66,7 +66,7 @@ function Bundler(config, opts) {
     plugins: lodash.compact([
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(this.config.NODE_ENV),
-        'process.env.APP_ROUTER_BASE': JSON.stringify(this.config.base),
+        'process.env.APP_PUBLIC_PATH': JSON.stringify(this.config.publicPath),
       }),
       // @NOTE: extracts vendor chunk
       new webpack.optimize.CommonsChunkPlugin({

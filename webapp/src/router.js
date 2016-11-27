@@ -26,7 +26,7 @@ var Reports = {
 
 module.exports = new VueRouter({
   mode: 'history',
-  base: process.env.APP_ROUTER_BASE,
+  base: process.env.APP_PUBLIC_PATH,
   routes: [
     { path: '/', component: Dashboard },
     { path: '/reports', component: Reports },

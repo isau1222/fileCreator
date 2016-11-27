@@ -9,8 +9,8 @@ var store = main.store;
 module.exports = function(context) {
   var vm = new Vue(app);
 
-  var base = process.env.APP_ROUTER_BASE;
-  var url = context.url.slice(base.length);
+  var publicPath = process.env.APP_PUBLIC_PATH;
+  var url = context.url.slice(publicPath.length);
   router.push(url);
 
   // @FIXME: implement
