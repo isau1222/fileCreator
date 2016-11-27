@@ -73,6 +73,9 @@ module.exports = function(context) {
   var url = furl.slice(publicPath.length);
   router.push(url);
 
+  // @TODO: redirects
+  // @TODO: 404
+
   // @NOTE: prefetch data for the components
   var route = router.currentRoute;
   var components = router.getMatchedComponents();

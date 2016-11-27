@@ -6,6 +6,8 @@ var WEBAPP_ROOT = path.resolve(SAILS_ROOT, 'webapp', 'src');
 
 module.exports.webapp = {
 
+  // @TODO: option to disable SSR
+
   // Public path to the base of the app
   publicPath: '/webapp',
 
