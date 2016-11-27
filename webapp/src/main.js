@@ -8,11 +8,16 @@ var app = {
 
   template: [
     '<div>',
-    '  <ul>',
-    '    <li><router-link to="/">Dashboard</router-link></li>',
-    '    <li><router-link to="/reports">Reports</router-link></li>',
-    '  </ul>',
-    '  <router-view></router-view>',
+      '<ul>',
+        '<li><router-link to="/">Dashboard</router-link></li>',
+        '<li>',
+          '<router-link to="/reports">Reports</router-link>',
+          '<ul>',
+            '<li><router-link to="/reports/1">Report #1</router-link></li>',
+          '</ul>',
+        '</li>',
+      '</ul>',
+      '<router-view></router-view>',
     '</div>',
   ].join(''),
 
