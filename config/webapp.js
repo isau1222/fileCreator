@@ -1,5 +1,6 @@
 var path = require('path');
 
+var pkg = require('read-pkg-up').sync().pkg;
 var SAILS_ROOT = path.resolve(__dirname, '..');
 var WEBAPP_ROOT = path.resolve(SAILS_ROOT, 'webapp', 'src');
 
@@ -35,7 +36,7 @@ module.exports.webapp = {
     output: {
       filename: 'bundle-server.js',
       path: path.resolve(SAILS_ROOT, '.tmp'),
-      externals: Object.keys(require('../package.json').dependencies),
+      externals: Object.keys(pkg.dependencies),
     },
   },
 

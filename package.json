@@ -15,6 +15,7 @@
     "passport-local": "^1.0.0",
     "passport-remember-me": "0.0.1",
     "rc": "1.0.1",
+    "read-pkg-up": "^2.0.0",
     "sails": "~0.12.8",
     "sails-disk": "~0.10.9",
     "urel": "^1.0.0",
