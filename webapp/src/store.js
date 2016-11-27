@@ -2,7 +2,11 @@ var Vue = require('vue');
 var Vuex = require('vuex');
 Vue.use(Vuex);
 
-module.exports = new Vuex.Store({
+var store = new Vuex.Store({
   state: {
   },
 });
+
+// === //
+
+module.exports = store;

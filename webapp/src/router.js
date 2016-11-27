@@ -31,7 +31,7 @@ var Report = {
 };
 
 // @NOTE: nested paths that start with `/` will be treated as a root path
-module.exports = new VueRouter({
+var router = new VueRouter({
   mode: 'history',
   base: process.env.APP_PUBLIC_PATH, // @FIXME: router appears to ignore this during SSR
   routes: [
@@ -46,3 +46,7 @@ module.exports = new VueRouter({
     },
   ],
 });
+
+// === //
+
+module.exports = router;
