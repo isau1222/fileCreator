@@ -123,10 +123,6 @@ Bundler.prototype.render = function(context, done) {
     return done(new Error('Renderer is not ready'));
   }
 
-  context = Object.assign({}, context, {
-    config: this.config,
-  });
-
   return bundler.renderer.renderToString(context, function(err, appHtml) {
     if (err) {
       // @NOTE: If there is a runtime error, this branch will execute.
