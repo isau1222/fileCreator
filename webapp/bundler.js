@@ -167,6 +167,10 @@ Bundler.prototype.render = function(context, done) {
       return done(err);
     }
 
+    if (context.status == null) {
+      return done(new Error('Renderer did not return a status code'));
+    }
+
     return done(null, {
       status: context.status,
       body: html,
