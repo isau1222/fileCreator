@@ -9,6 +9,9 @@ module.exports.webapp = {
   // Public path to the base of the app
   publicPath: '/webapp',
 
+  // Public path to the api of the app
+  apiPublicPath: '/api',
+
   // Whether the server should compile bundles
   // - `once` will compile bundles once
   // - `watch` will recompile bundles on changes
@@ -46,7 +49,7 @@ module.exports.webapp = {
     devtool: '#cheap-module-inline-source-map',
     entry: {
       app: './main-client.js',
-      vendor: ['vue', 'vue-router', 'vuex'],
+      vendor: ['vue', 'vue-router', 'vuex', 'axios'],
     },
     output: {
       filename: 'bundle-client.js',

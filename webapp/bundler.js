@@ -43,6 +43,7 @@ function Bundler(config, opts) {
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(this.config.NODE_ENV),
         'process.env.APP_PUBLIC_PATH': JSON.stringify(this.config.publicPath),
+        'process.env.APP_API_PUBLIC_PATH': JSON.stringify(this.config.apiPublicPath),
       }),
     ],
   };

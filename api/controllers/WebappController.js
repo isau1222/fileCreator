@@ -12,7 +12,7 @@ module.exports = {
   },
 
   render: function(req, res) {
-    var context = { url: req.url }; // @TODO: session info
+    var context = { url: req.url, sails: sails };
 
     return sails.services.webapp.render(context, function(err, result) {
       if (err) {
