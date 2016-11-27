@@ -27,7 +27,6 @@ function makeSailsAdapter(context) {
   return function sailsAdapter(config) {
     // @TODO: reject request to a remote server?
     return new Promise(function(resolve, reject) {
-      console.log('@sails', context.sails);
       var request = {
         url: config.url, // @FIXME: produces question mark an the end of the url?
         method: config.method,
