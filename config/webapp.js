@@ -6,7 +6,7 @@ var WEBAPP_ROOT = path.resolve(SAILS_ROOT, 'webapp', 'src');
 module.exports.webapp = {
 
   // Public path to the base of the app
-  publicPath: '/webapp/',
+  publicPath: '/webapp',
 
   // Whether the server should compile bundles
   // - `once` will compile bundles once
