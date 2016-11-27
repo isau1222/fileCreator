@@ -2,8 +2,10 @@ var store = require('./store');
 var router = require('./router');
 
 var app = {
+
   store: store,
   router: router,
+
   template: [
     '<div>',
     '  <ul>',
@@ -13,6 +15,7 @@ var app = {
     '  <router-view></router-view>',
     '</div>',
   ].join(''),
+
 };
 
 module.exports = {
