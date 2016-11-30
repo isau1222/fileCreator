@@ -16,33 +16,12 @@
  *          - Details about the failure, will NOT be sent to user.
  */
 
-module.exports = function badRequest(err, data, details) {
-  // Get access to `req`, `res`, & `sails`
-  var req = this.req;
-  var res = this.res;
-
-  // Set status code
-  res.status(400);
-
-  if (!err) err = new Error('Bad Request');
-
-  // @TODO: log application incident
-
-  // Only include errors in response if application environment
-  // is not set to 'production'.  In production, we shouldn't
-  // send back any identifying information about errors.
-  if (sails.config.environment === 'production' && sails.config.keepResponseErrors !== true) {
-    return res.json({
-      message: err.message,
-      data: data,
-    });
-  }
-  else {
-    return res.json({
-      message: err.message,
-      data: data,
-      details: details,
-      stack: err.stack,
-    })
-  }
+module.exports = function badRequest(message, data, details) {
+  return sails.services.responses.jsonError.call(this, message, data, details, {
+    status: 400,
+    message: 'Bad Request',
+    log: function(err) {
+      // @TODO: log application event
+    },
+  });
 };

@@ -35,6 +35,9 @@ module.exports = {
   //   level: "silent"
   // }
 
+  // Set this to `true` to reep development info in API responses
+  keepResponseErrors: false,
+
   webapp: {
     compileJs: 'once',
     uglifyJs: true,

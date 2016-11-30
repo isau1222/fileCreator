@@ -21,34 +21,13 @@
  * automatically.
  */
 
-module.exports = function notFound(err, data, details) {
-  // Get access to `req`, `res`, & `sails`
-  var req = this.req;
-  var res = this.res;
-
-  // Set status code
-  res.status(404);
-
-  if (!err) err = new Error('Not found');
-
-  // @TODO: log application event
-
-  // Only include errors in response if application environment
-  // is not set to 'production'.  In production, we shouldn't
-  // send back any identifying information about errors.
-  if (sails.config.environment === 'production' && sails.config.keepResponseErrors !== true) {
-    return res.json({
-      message: err.message,
-      data: data,
-    });
-  }
-  else {
-    return res.json({
-      message: err.message,
-      data: data,
-      details: details,
-      stack: err.stack,
-    })
-  }
+module.exports = function notFound(message, data, details) {
+  return sails.services.responses.jsonError(this.req, this.res, message, data, details, {
+    status: 404,
+    message: 'Not found',
+    log: function(err) {
+      // @TODO: log application event
+    },
+  });
 };
 

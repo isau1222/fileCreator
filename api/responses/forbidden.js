@@ -16,34 +16,13 @@
  *          - Details about the failure, will NOT be sent to user.
  */
 
-module.exports = function forbidden(err, data, details) {
-  // Get access to `req`, `res`
-  var req = this.req;
-  var res = this.res;
-
-  // Set status code
-  res.status(403);
-
-  if (!err) err = new Error('Forbidden');
-
-  // @TODO: log security incident
-
-  // Only include errors in response if application environment
-  // is not set to 'production'.  In production, we shouldn't
-  // send back any identifying information about errors.
-  if (sails.config.environment === 'production' && sails.config.keepResponseErrors !== true) {
-    return res.json({
-      message: err.message,
-      data: data,
-    });
-  }
-  else {
-    return res.json({
-      message: err.message,
-      data: data,
-      details: details,
-      stack: err.stack,
-    });
-  }
+module.exports = function forbidden(message, data, details) {
+  return sails.services.responses.jsonError(this.req, this.res, message, data, details, {
+    status: 403,
+    message: 'Forbidden',
+    log: function(err) {
+      // @TODO: log security incident
+    },
+  });
 };
 

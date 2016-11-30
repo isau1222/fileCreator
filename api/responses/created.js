@@ -13,27 +13,8 @@
  */
 
 module.exports = function created(data, details) {
-  // Get access to `req`, `res`, & `sails`
-  var req = this.req;
-  var res = this.res;
-
-  // @TODO: log application event
-
-  // Set status code
-  res.status(201);
-
-  // Only include errors in response if application environment
-  // is not set to 'production'.  In production, we shouldn't
-  // send back any identifying information about errors.
-  if (sails.config.environment === 'production' && sails.config.keepResponseErrors !== true) {
-    return res.json({
-      data: data,
-    });
-  }
-  else {
-    return res.json({
-      data: data,
-      details: details,
-    });
-  }
+  return sails.services.responses.jsonOk(this.req, this.res, data, details, {
+    status: 201,
+    message: 'Created',
+  });
 };
