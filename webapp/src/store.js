@@ -12,7 +12,7 @@ var store = new Vuex.Store({
     meta: null,
   },
   mutations: {
-    'api/error-happened': function(state, error) {
+    'log/error': function(state, error) {
       state.errors.push(error);
     },
     'meta/changed': function(state, meta) {
@@ -31,7 +31,7 @@ var store = new Vuex.Store({
 });
 
 function apiErrorHandler(err) {
-  store.commit('api/error-happened', {
+  store.commit('log/error', {
     id: cuid(),
     message: err.message,
     stack: err.stack,
