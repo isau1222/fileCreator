@@ -30,7 +30,7 @@ function makeSailsAdapter(context) {
       var request = {
         url: config.url, // @FIXME: produces question mark an the end of the url?
         method: config.method,
-        headers: config.headers, // @FIXME: enhance headers with cookies?
+        headers: config.headers, // @FIXME: enhance headers with cookies and content type?
         data: config.data,
       };
 
