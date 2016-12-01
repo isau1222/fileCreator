@@ -14,39 +14,39 @@ module.exports = {
 
     if (req.isAuthenticated()) {
       // @TODO: log security incident
-      return res.badRequest(new Error('Already authenticated'));
+      return res.apiBadRequest(new Error('Already authenticated'));
     }
 
     return passport.authenticate('local', function(err, user, challenges) {
       if (err) {
         // @TODO: log security incident
-        return res.badRequest(err);
+        return res.apiBadRequest(err);
       }
 
       else if (!user) {
         // @TODO: log security incident, include challenges
-        return res.badRequest(new Error('Authentication failed'), undefined, challenges ? { challenges: challenges } : undefined);
+        return res.apiBadRequest(new Error('Authentication failed'), undefined, challenges ? { challenges: challenges } : undefined);
       }
 
       else {
         return req.login(user, function(err) {
           if (err) {
             // @TODO: log security incident
-            return res.badRequest(err);
+            return res.apiBadRequest(err);
           }
 
           else {
             return sails.models.passport.issueToken(user, function(err, token) {
               if (err) {
                 // @TODO: log security incident
-                return res.badRequest(err);
+                return res.apiBadRequest(err);
               }
 
               else {
                 // @TODO: send user info
                 // @TODO: log security event
                 res.cookie(sails.config.passport.rememberMe.key, token, { path: '/', httpOnly: true, maxAge: 604800000 });
-                return res.ok();
+                return res.apiOk();
               }
             });
           }
@@ -55,7 +55,7 @@ module.exports = {
     })(req, res, function(err) {
       // @NOTE: normally we don't arrive here
       // @TODO: log application incident
-      return res.serverError(err);
+      return res.apiServerError(err);
     });
   },
 
@@ -64,7 +64,7 @@ module.exports = {
 
     if (!req.isAuthenticated()) {
       // @TODO: log security incident
-      return res.badRequest(new Error('Not authenticated yet'));
+      return res.apiBadRequest(new Error('Not authenticated yet'));
     }
 
     else {
@@ -75,20 +75,20 @@ module.exports = {
 
       if (!token) {
         // @TODO: log security event
-        return res.ok();
+        return res.apiOk();
       }
 
       if (token) {
         return sails.models.passport.destroy({ token: token }, function(err) {
           if (err) {
             // @TODO: log security incident
-            return res.badRequest(err);
+            return res.apiBadRequest(err);
           }
 
           else {
             // @TODO: log security event
             res.clearCookie(key);
-            return res.ok();
+            return res.apiOk();
           }
         });
       }
@@ -96,7 +96,7 @@ module.exports = {
   },
 
   status: function(req, res) {
-    return res.ok({
+    return res.apiOk({
       authenticated: req.isAuthenticated(),
       session: req.session,
       user: req.user,

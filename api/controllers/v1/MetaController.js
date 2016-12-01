@@ -10,7 +10,7 @@ var pkg = require('read-pkg-up').sync().pkg;
 module.exports = {
 
   index: function(req, res) {
-    return res.ok({
+    return res.apiOk({
       version: pkg.version,
     });
   },
