@@ -95,11 +95,12 @@
 # Chores
 
 - Причесать responses под один формат
-  - ok(data, { actions, context });
-  - badRequest(message, data, { actions, error, context });
-  - serverError(message, data, { actions, error, context });
-  - forbidden(message, data, { actions, error, context });
-  - notFound(message, data, { actions, error, context });
+  - ok(data, { actions, $context });
+  - badRequest(message, data, { actions, $error, $context });
+  - serverError(message, data, { actions, $error, $context });
+  - forbidden(message, data, { actions, $error, $context });
+  - notFound(message, data, { actions, $error, $context });
+  - @PAYLOAD: { data, error, actions, $error, $context }
 - Логирование
 - Роли
   - Политики для API
