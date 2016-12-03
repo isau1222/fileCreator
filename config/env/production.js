@@ -35,7 +35,7 @@ module.exports = {
   //   level: "silent"
   // }
 
-  // Set this to `true` to reep development info in API responses
+  // Set this to `true` to keep development info in API responses
   keepResponseErrors: false,
 
   filler: {

@@ -31,7 +31,7 @@ var app = {
   // @NOTE: this is a static method of the component, and can not access `this`,
   //        because the instance may not exist during SSR
   // @NOTE: the only way to share information between server and client
-  //        is to pass it through the vuex store, so it's  likely that
+  //        is to pass it through the vuex store, so it's likely that
   //        only store actions will be called here
   // @NOTE: restrain from cross-origin requests, because it's awkward
   //        to perform them during ssr
