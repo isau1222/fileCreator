@@ -8,14 +8,13 @@ Vue.use(Vuex);
 var api = require('../api');
 
 var store = new Vuex.Store({
+  modules: {
+    toast: require('./toast'),
+  },
   state: {
-    errors: [],
     meta: null,
   },
   mutations: {
-    'log/error': function(state, error) {
-      state.errors.push(error);
-    },
     'meta/changed': function(state, meta) {
       state.meta = meta;
     },
@@ -39,14 +38,26 @@ api.axios.interceptors.response.use(apiSuccessHandler, apiFailureHandler);
 // @NOTE: make sure this does not throw errors, because this would reject
 //        the promise and collapse the chain
 function apiSuccessHandler(response) {
-  if (api.isFailure(response)) {
-    var record = {
-      id: cuid(),
+  var toast;
+
+  if (api.isSuccess(response)) {
+    // @TODO: these might be annoying, maybe show them conditionally,
+    //        depending on a config option
+    toast = {
+      type: 'info',
+      message: response.data.message,
+    };
+  }
+  else {
+    toast = {
+      type: 'warning',
       message: response.data.message,
       error: response.data.$error,
     };
+  }
 
-    store.commit('log/error', record);
+  if (toast) {
+    store.dispatch('toast/add', toast);
   }
 
   return response;
@@ -55,25 +66,31 @@ function apiSuccessHandler(response) {
 // @NOTE: make sure this does not throw errors except for the one it was given,
 //        because it would break the api failure handlers in call sites
 function apiFailureHandler(err) {
-  var record = {
-    id: cuid(),
-  };
+  var toast;
+
+  // @NOTE: in dev mode server sends error info for debugging
+  // @NOTE: we don't want to hide it under a env guard because
+  //        we might want to see the error on production server
+  //        without rebundling
 
   if (api.isServerError(err)) {
-    record.message = err.response.data.message || '<No message>';
-
-    // @NOTE: in dev mode server sends error info for debugging
-    // @NOTE: we don't want to hide this under a env guard because
-    //        we might want to see the error on production server
-    //        without rebundling
-    record.error = err.response.data.$error;
+    toast = {
+      type: 'error',
+      title: 'Error: ' + (err.response.data.message || '<No message>'),
+      error: err.response.data.$error,
+    };
   }
   else {
-    record.message = err.message;
-    record.error = serializeError(err);
+    toast = {
+      type: 'error',
+      title: 'Error: ' + err.message,
+      error: serializeError(err),
+    }
   }
 
-  store.commit('log/error', record);
+  if (toast) {
+    store.dispatch('toast/add', toast);
+  }
 
   return Promise.reject(err);
 }
