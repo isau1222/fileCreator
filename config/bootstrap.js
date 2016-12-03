@@ -49,6 +49,9 @@ module.exports.bootstrap = function(done) {
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
   return async.parallel([
     function(next) {
+      return sails.services.filler.init(next);
+    },
+    function(next) {
       return sails.services.webapp.init(next);
     },
   ], done);

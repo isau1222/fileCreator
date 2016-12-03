@@ -38,6 +38,10 @@ module.exports = {
   // Set this to `true` to reep development info in API responses
   keepResponseErrors: false,
 
+  filler: {
+    enabled: false,
+  },
+
   webapp: {
     compileJs: 'once',
     uglifyJs: true,
