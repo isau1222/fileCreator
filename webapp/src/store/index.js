@@ -4,7 +4,7 @@ var Vue = require('vue');
 var Vuex = require('vuex');
 Vue.use(Vuex);
 
-var api = require('./api');
+var api = require('../api');
 
 var store = new Vuex.Store({
   state: {
