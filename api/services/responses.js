@@ -37,10 +37,10 @@ module.exports = {
     var error;
     if (message instanceof Error) {
       error = message;
-      message = opts.defaultMessage; // @NOTE: confidential
+      message = opts.message; // @NOTE: confidential
     }
     else {
-      if (!message) message = opts.defaultMessage;
+      if (!message) message = opts.message;
       error = new Error(message);
     }
 
