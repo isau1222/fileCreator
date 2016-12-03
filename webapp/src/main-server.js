@@ -46,7 +46,7 @@ function makeSailsAdapter(context) {
         else {
           return settle(resolve, reject, {
             data: response.body,
-            status: response.status,
+            status: response.statusCode,
             // headers: response.headers,
             config: config,
           });
