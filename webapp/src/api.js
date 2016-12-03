@@ -10,6 +10,9 @@ function VueApi(options) {
   this.options = options;
   this.axios = axios.create({
     baseURL: options.baseURL,
+    validateStatus: function(status) {
+      return (status < 500);
+    },
   });
 }
 
@@ -19,6 +22,22 @@ methods.forEach(function(method) {
     return this.axios[method].apply(this.axios, arguments);
   };
 });
+
+VueApi.prototype.isConnectivityError = function(err) {
+  return err.config && (err.response == undefined); // @NOTE: double equal
+};
+
+VueApi.prototype.isServerError = function(err) {
+  return err.config && err.response && (err.response.status >= 500);
+};
+
+VueApi.prototype.isSuccess = function(response) {
+  return response && (response.status >= 200) && (response.status < 300);
+};
+
+VueApi.prototype.isFailure = function(response) {
+  return response && (response.status >= 400) && (response.status < 500);
+};
 
 VueApi.install = install;
 
