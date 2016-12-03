@@ -1,3 +1,5 @@
+var serializeError = require('serialize-error');
+
 module.exports = {
 
   jsonOk: function error(req, res, data, details, opts) {
@@ -63,7 +65,7 @@ module.exports = {
       if (details.signals !== undefined) payload.signals = details.signals;
       if (sails.config.environment !== 'production' || sails.config.keepResponseErrors === true) {
         if (details.$context !== undefined) payload.$context = details.$context;
-        if (details.$error !== undefined) payload.$error = details.$error; // @FIXME: serialize
+        if (details.$error !== undefined) payload.$error = serializeError(details.$error);
       }
     }
 
