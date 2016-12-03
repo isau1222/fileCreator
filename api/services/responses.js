@@ -44,9 +44,10 @@ module.exports = {
       error = new Error(message);
     }
 
-    // Override the inferred error with explicit one, if it's present
-    if (details !== undefined && details.$error !== undefined) {
-      error = details.$error;
+    // Add inferred error if no explicit one was given
+    if (details === undefined) details = {};
+    if (details.$error === undefined) {
+      details.$error = error;
     }
 
     // Log error
@@ -62,7 +63,7 @@ module.exports = {
       if (details.signals !== undefined) payload.signals = details.signals;
       if (sails.config.environment !== 'production' || sails.config.keepResponseErrors === true) {
         if (details.$context !== undefined) payload.$context = details.$context;
-        payload.$error = error; // @FIXME: serialize?
+        if (details.$error !== undefined) payload.$error = details.$error; // @FIXME: serialize
       }
     }
 
