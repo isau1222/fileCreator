@@ -24,22 +24,29 @@ var store = new Vuex.Store({
       return api.get('/v1/meta')
         .then(function(response) {
           context.commit('meta/changed', response.data.data);
-        })
-        .catch(apiErrorHandler);
+        });
     },
   },
 });
 
-function apiErrorHandler(err) {
+// @NOTE: set up an response interceptor to automatically record errors
+
+api.axios.interceptors.response.use(apiSuccessHandler, apiFailureHandler);
+
+function apiSuccessHandler(response) {
+  return response;
+}
+
+function apiFailureHandler(err) {
   store.commit('log/error', {
     id: cuid(),
     message: err.message,
     stack: err.stack,
   });
 
-  console.log('@apiErrorHandler', err); // FIXME: proper logging
+  console.error('@apiFailureHandler', err); // FIXME: proper logging
 
-  throw err;
+  return Promise.reject(err);
 }
 
 // === //
