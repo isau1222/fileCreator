@@ -23,7 +23,7 @@ var store = new Vuex.Store({
     'meta/update': function(context) {
       return api.get('/v1/meta')
         .then(function(response) {
-          context.commit('meta/changed', response.data.data);
+          context.commit('meta/changed', response.data.result);
         });
     },
   },

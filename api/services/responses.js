@@ -2,7 +2,7 @@ var serializeError = require('serialize-error');
 
 module.exports = {
 
-  jsonOk: function error(req, res, data, details, opts) {
+  jsonOk: function error(req, res, result, details, opts) {
     // "Default" the opts
     opts = Object.assign({
       status: 200,
@@ -14,7 +14,7 @@ module.exports = {
       message: opts.message,
     };
 
-    if (data !== undefined) payload.data = data;
+    if (result !== undefined) payload.result = result;
     if (details !== undefined) {
       if (details.signals !== undefined) payload.signals = details.signals;
       if (sails.config.environment !== 'production' || sails.config.keepResponseErrors === true) {
@@ -27,7 +27,7 @@ module.exports = {
     res.jsonx(payload);
   },
 
-  jsonError: function (req, res, message, data, details, opts) {
+  jsonError: function (req, res, message, result, details, opts) {
     // "Default" the opts
     opts = Object.assign({
       status: 500,
@@ -60,7 +60,7 @@ module.exports = {
       message: message,
     };
 
-    if (data !== undefined) payload.data = data;
+    if (result !== undefined) payload.result = result;
     if (details !== undefined) {
       if (details.signals !== undefined) payload.signals = details.signals;
       if (sails.config.environment !== 'production' || sails.config.keepResponseErrors === true) {
