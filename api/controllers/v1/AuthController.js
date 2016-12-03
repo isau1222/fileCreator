@@ -17,16 +17,16 @@ module.exports = {
       return res.apiBadRequest('Already authenticated');
     }
 
-    return passport.authenticate('local', function(err, user, challenges) {
+    return passport.authenticate('local', function(err, user, challenge) {
       if (err) {
         // @TODO: log security incident
         return res.apiBadRequest('Authentication failed', undefined, { $error: err });
       }
 
       else if (!user) {
-        // @TODO: log security incident, include challenges
-        var context = { challenges: challenges };
-        return res.apiBadRequest('Authentication failed', undefined, { $context: context });
+        // @TODO: log security incident, include challenge
+        var message = challenge ? challenge.message : 'Authentication failed';
+        return res.apiBadRequest(message);
       }
 
       else {
