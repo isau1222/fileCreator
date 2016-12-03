@@ -99,7 +99,6 @@ module.exports = {
   status: function(req, res) {
     return res.apiOk({
       authenticated: req.isAuthenticated(),
-      session: req.session,
       user: req.user,
     });
   },
