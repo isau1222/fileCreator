@@ -14,32 +14,33 @@ module.exports = {
 
     if (req.isAuthenticated()) {
       // @TODO: log security incident
-      return res.apiBadRequest(new Error('Already authenticated'));
+      return res.apiBadRequest('Already authenticated');
     }
 
     return passport.authenticate('local', function(err, user, challenges) {
       if (err) {
         // @TODO: log security incident
-        return res.apiBadRequest(err);
+        return res.apiBadRequest('Authentication failed', undefined, { $error: err });
       }
 
       else if (!user) {
         // @TODO: log security incident, include challenges
-        return res.apiBadRequest(new Error('Authentication failed'), undefined, challenges ? { challenges: challenges } : undefined);
+        var context = { challenges: challenges };
+        return res.apiBadRequest('Authentication failed', undefined, { $context: context });
       }
 
       else {
         return req.login(user, function(err) {
           if (err) {
             // @TODO: log security incident
-            return res.apiBadRequest(err);
+            return res.apiBadRequest('Authentication failed', undefined, { $error: err });
           }
 
           else {
             return sails.models.passport.issueToken(user, function(err, token) {
               if (err) {
                 // @TODO: log security incident
-                return res.apiBadRequest(err);
+                return res.apiBadRequest('Authentication failed', undefined, { $error: err });
               }
 
               else {
@@ -64,7 +65,7 @@ module.exports = {
 
     if (!req.isAuthenticated()) {
       // @TODO: log security incident
-      return res.apiBadRequest(new Error('Not authenticated yet'));
+      return res.apiBadRequest('Not authenticated yet');
     }
 
     else {
@@ -82,7 +83,7 @@ module.exports = {
         return sails.models.passport.destroy({ token: token }, function(err) {
           if (err) {
             // @TODO: log security incident
-            return res.apiBadRequest(err);
+            return res.apiBadRequest('Deauthentification failed', undefined, { $error: err });
           }
 
           else {
