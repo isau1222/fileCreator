@@ -155,8 +155,8 @@ Bundler.prototype.render = function(context, done) {
             '<script>window.__INITIAL_STATE__ = ' + serialize(context.initialState) + ';</script>',
             // @TODO: initial state
             appHtml,
-            '<script src="' + he.escape(urel(context.url, bundler.publicVendorPath)) + '"></script>',
-            '<script src="' + he.escape(urel(context.url, bundler.publicBundlePath)) + '"></script>',
+            '<script src="' + he.escape(urel(context.req.url, bundler.publicVendorPath)) + '"></script>',
+            '<script src="' + he.escape(urel(context.req.url, bundler.publicBundlePath)) + '"></script>',
           '</body>',
         '</html>',
       ]).join('');

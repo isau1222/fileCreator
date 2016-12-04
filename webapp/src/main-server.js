@@ -68,7 +68,7 @@ module.exports = function(context) {
   //        the base path before we pass the route down to the router
   // @FIXME: make sure it works under any circumstances
   var publicPath = cleanUrl(process.env.APP_PUBLIC_PATH);
-  var furl = cleanUrl(context.url); // @NOTE: full url
+  var furl = cleanUrl(context.req.url); // @NOTE: full url
   var url = furl.slice(publicPath.length);
   router.push(url);
 
@@ -98,7 +98,7 @@ module.exports = function(context) {
       context.helmet = {
         lang: 'en',
         title: 'Hello from Vue!',
-        canonical: context.url,
+        canonical: context.req.url,
         meta: [
           { name: 'description', content: 'Description' },
         ],
