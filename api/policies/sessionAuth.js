@@ -8,5 +8,5 @@
 module.exports = function(req, res, next) {
   if (req.isAuthenticated()) return next();
 
-  return res.forbidden(new Error('You are not permitted to perform this action'));
+  return res.forbidden('You are not permitted to perform this action');
 };

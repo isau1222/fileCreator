@@ -21,7 +21,7 @@ module.exports = function(req, res, next) {
     return next();
   }
 
-  return passport.authenticate('remember-me', function(err, user, challenges) {
+  return passport.authenticate('remember-me', function(err, user, challenge) {
     // @NOTE: if authentication has failed, then there's no point in:
     //        - doing logoing, because user was not logged in from the start
     //        - manually removing cookies, because this is done by the passport
@@ -33,7 +33,8 @@ module.exports = function(req, res, next) {
 
     else if (!user) {
       // @TODO: log security incident
-      return res.badRequest(new Error('Authentication failed'), undefined, challenges ? { challenges: challenges } : undefined);
+      var message = challenge ? challenge.message : 'Authentication failed';
+      return res.badRequest(message);
     }
 
     else {
