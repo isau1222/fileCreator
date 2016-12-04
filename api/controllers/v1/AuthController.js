@@ -7,6 +7,13 @@
 
 var passport = require('passport');
 
+function makeSessionPayload(req) {
+  return {
+    authenticated: req.isAuthenticated(),
+    user: req.user,
+  };
+}
+
 module.exports = {
 
   login: function(req, res) {
@@ -14,40 +21,40 @@ module.exports = {
 
     if (req.isAuthenticated()) {
       // @TODO: log security incident
-      return res.apiBadRequest('Already authenticated');
+      return res.apiBadRequest('Already authenticated', makeSessionPayload(req));
     }
 
     return passport.authenticate('local', function(err, user, challenge) {
       if (err) {
         // @TODO: log security incident
-        return res.apiBadRequest('Authentication failed', undefined, { $error: err });
+        return res.apiBadRequest('Authentication failed', makeSessionPayload(req), { $error: err });
       }
 
       else if (!user) {
         // @TODO: log security incident, include challenge
         var message = challenge ? challenge.message : 'Authentication failed';
-        return res.apiBadRequest(message);
+        return res.apiBadRequest(message, makeSessionPayload(req));
       }
 
       else {
         return req.login(user, function(err) {
           if (err) {
             // @TODO: log security incident
-            return res.apiBadRequest('Authentication failed', undefined, { $error: err });
+            return res.apiBadRequest('Authentication failed', makeSessionPayload(req), { $error: err });
           }
 
           else {
             return sails.models.passport.issueToken(user, function(err, token) {
               if (err) {
                 // @TODO: log security incident
-                return res.apiBadRequest('Authentication failed', undefined, { $error: err });
+                return res.apiBadRequest('Authentication failed', makeSessionPayload(req), { $error: err });
               }
 
               else {
                 // @TODO: send user info
                 // @TODO: log security event
                 res.cookie(sails.config.passport.rememberMe.key, token, { path: '/', httpOnly: true, maxAge: 604800000 });
-                return res.apiOk();
+                return res.apiOk(makeSessionPayload(req));
               }
             });
           }
@@ -56,7 +63,7 @@ module.exports = {
     })(req, res, function(err) {
       // @NOTE: normally we don't arrive here
       // @TODO: log application incident
-      return res.apiServerError(err);
+      return res.apiServerError(err, makeSessionPayload(req));
     });
   },
 
@@ -97,9 +104,6 @@ module.exports = {
   },
 
   status: function(req, res) {
-    return res.apiOk({
-      authenticated: req.isAuthenticated(),
-      user: req.user,
-    });
+    return res.apiOk(makeSessionPayload(req));
   },
 };
