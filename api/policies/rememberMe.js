@@ -46,7 +46,8 @@ module.exports = function(req, res, next) {
 
         else {
           // @TODO: log security event
-          return next(null, 'what');
+          return res.redirect(req.url);
+          // @NOTE: `next` would have been called here if we didn't redirect
         }
       });
     }
