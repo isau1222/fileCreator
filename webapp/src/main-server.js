@@ -27,10 +27,18 @@ function makeSailsAdapter(context) {
   return function sailsAdapter(config) {
     // @TODO: reject request to a remote server?
     return new Promise(function(resolve, reject) {
+      // @NOTE: remember-me mechanism triggers redirect when engaged,
+      //        so we can be sure that the cookies from the primary request
+      //        are the ones sails expects for future (virtual) requests
+
       var request = {
         url: config.url, // @FIXME: produces question mark an the end of the url?
         method: config.method,
-        headers: config.headers, // @FIXME: enhance headers with cookies and content type?
+        headers: Object.assign({}, config.headers, {
+          'cookie': context.req.headers['cookie'],
+          'accept-language': context.req.headers['accept-language'],
+          'user-agent': context.req.headers['user-agent'],
+        }),
         data: config.data,
       };
 
