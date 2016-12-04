@@ -13,35 +13,22 @@ module.exports = function(req, res, next) {
     return next();
   }
 
-  var key = sails.config.passport.rememberMe.key;
-  var token = req.cookies[key];
-
-  if (!token) {
-    // @NOTE: nothing really to log
-    return next();
-  }
-
-  return passport.authenticate('remember-me', function(err, user, challenge) {
-    // @NOTE: if authentication has failed, then there's no point in:
-    //        - doing logoing, because user was not logged in from the start
-    //        - manually removing cookies, because this is done by the passport
-
+  return passport.authenticate('remember-me', function(err, user) {
     if (err) {
-      // @TODO: log security incident, token was present but authentication failed
-      return res.badRequest(err);
+      // @TODO: log server error
+      return res.serverError(err, undefined, { $context: { note: 'Remember startegy is misbehaving, expected it to never land here' } });
     }
 
     else if (!user) {
-      // @TODO: log security incident
-      var message = challenge ? challenge.message : 'Authentication failed';
-      return res.badRequest(message);
+      // @TODO: log server error
+      return res.serverError('Authentication failed', undefined, { $context: { note: 'Remember startegy is misbehaving, expected it to never land here' } });
     }
 
     else {
       return req.login(user, function(err) {
         if (err) {
-          // @TODO: log security incident
-          return res.badRequest(err);
+          // @TODO: log server error
+          return res.serverError(err);
         }
 
         else {
@@ -52,6 +39,13 @@ module.exports = function(req, res, next) {
       });
     }
   })(req, res, function(err) {
+    // @NOTE: we land here when authentication attempt failed, e.g. malformed
+    //        or invalid token
+    // @NOTE: there's no point in:
+    //        - doing logout, because user was not logged in from the start
+    //        - manually removing cookies, because this is done by the remember
+    //          strategy
+
     if (err) {
       // @TODO: log application incident
       return res.serverError(err);
