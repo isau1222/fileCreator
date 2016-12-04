@@ -4,6 +4,8 @@ var router = require('./router');
 
 var app = {
 
+  name: 'App',
+
   api: api,
   store: store,
   router: router,
