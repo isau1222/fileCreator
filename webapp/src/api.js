@@ -4,16 +4,8 @@ var axios = require('axios');
 // === //
 
 function VueApi(options) {
-  if (options === undefined) options = {};
-  if (options.baseURL === undefined) options.baseURL = '/';
-
   this.options = options;
-  this.axios = axios.create({
-    baseURL: options.baseURL,
-    validateStatus: function(status) {
-      return (status < 500);
-    },
-  });
+  this.axios = axios.create(options);
 }
 
 var methods = ['request', 'get', 'delete', 'head', 'post', 'put', 'patch'];
@@ -66,4 +58,8 @@ Vue.use(VueApi);
 
 module.exports = new VueApi({
   baseURL: process.env.APP_API_PUBLIC_PATH,
+  // @TODO: set default content type to application/json
+  validateStatus: function(status) {
+    return (status < 500);
+  },
 });
