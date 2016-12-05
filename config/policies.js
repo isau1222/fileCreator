@@ -28,15 +28,6 @@ module.exports.policies = {
 
   '*': ['rememberMe'],
 
-  // @NOTE: free for all
-  MetaController: true,
-
-  AuthController: {
-    // @NOTE: rememberMe does not apply to these actions
-    'login': true,
-    'logout': true,
-  },
-
   /***************************************************************************
   *                                                                          *
   * Here's an example of mapping some policies to run before a controller    *
