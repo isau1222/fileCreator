@@ -30,11 +30,6 @@ module.exports = {
     return Promise.resolve()
       .then(function() {
         return store.dispatch('auth/update');
-      })
-      .then(function() {
-        return Promise.all([
-          store.dispatch('meta/update'),
-        ]);
       });
   },
 
