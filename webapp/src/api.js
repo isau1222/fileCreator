@@ -56,10 +56,14 @@ function install(Vue) {
 
 Vue.use(VueApi);
 
-module.exports = new VueApi({
+var api = new VueApi({
   baseURL: process.env.APP_API_PUBLIC_PATH,
   // @TODO: set default content type to application/json
   validateStatus: function(status) {
     return (status < 500);
   },
 });
+
+// === //
+
+module.exports = api;
