@@ -1,5 +1,7 @@
 module.exports = {
+
   name: 'Auth',
+
   template: [
     '<div>',
       '<h3>Auth state</h3>',
@@ -19,12 +21,14 @@ module.exports = {
       '</p>',
     '</div>',
   ].join(''),
+
   data: function() {
     return {
       username: '',
       password: '',
     };
   },
+
   computed: {
     authState: function() {
       return this.$store.state.auth;
@@ -33,6 +37,7 @@ module.exports = {
       return this.$store.state.auth.inProgress;
     },
   },
+
   methods: {
     submitSignIn: function() {
       return this.$store.dispatch('auth/login', { username: this.username, password: this.password });
@@ -44,4 +49,5 @@ module.exports = {
       return this.$store.dispatch('auth/update');
     },
   },
+
 };
