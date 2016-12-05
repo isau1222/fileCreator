@@ -13,8 +13,8 @@ module.exports = {
         '<form @submit.prevent="submitSignOut">',
           '<div><button :disabled="busy" type="submit">Sign out</button></div>',
         '</form>',
-        '<form @submit.prevent="submitRemember">',
-          '<div><button :disabled="busy" type="submit">Remember</button></div>',
+        '<form @submit.prevent="submitUpdate">',
+          '<div><button :disabled="busy" type="submit">Update</button></div>',
         '</form>',
       '</p>',
     '</div>',
@@ -40,8 +40,8 @@ module.exports = {
     submitSignOut: function() {
       return this.$store.dispatch('auth/logout');
     },
-    submitRemember: function() {
-      return this.$store.dispatch('auth/remember');
+    submitUpdate: function() {
+      return this.$store.dispatch('auth/update');
     },
   },
 };

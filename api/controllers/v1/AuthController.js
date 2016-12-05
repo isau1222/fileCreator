@@ -10,7 +10,7 @@ var passport = require('passport');
 function makeSessionPayload(req) {
   return {
     authenticated: req.isAuthenticated(),
-    user: req.user,
+    user: req.user || null,
   };
 }
 
@@ -72,7 +72,7 @@ module.exports = {
 
     if (!req.isAuthenticated()) {
       // @TODO: log security incident
-      return res.apiBadRequest('Not authenticated yet');
+      return res.apiBadRequest('Not authenticated yet', makeSessionPayload(req));
     }
 
     else {
@@ -83,20 +83,20 @@ module.exports = {
 
       if (!token) {
         // @TODO: log security event
-        return res.apiOk();
+        return res.apiOk(makeSessionPayload(req));
       }
 
       if (token) {
         return sails.models.passport.destroy({ token: token }, function(err) {
           if (err) {
             // @TODO: log security incident
-            return res.apiBadRequest('Deauthentification failed', undefined, { $error: err });
+            return res.apiBadRequest('Deauthentification failed', makeSessionPayload(req), { $error: err });
           }
 
           else {
             // @TODO: log security event
             res.clearCookie(key);
-            return res.apiOk();
+            return res.apiOk(makeSessionPayload(req));
           }
         });
       }

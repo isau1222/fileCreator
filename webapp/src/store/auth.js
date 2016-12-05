@@ -5,6 +5,7 @@ module.exports = {
     inProgress: false,
     session: {
       authenticated: false,
+      user: null,
     },
     challenge: null,
   },
@@ -22,91 +23,48 @@ module.exports = {
       state.session = payload.session;
       state.challenge = (payload.challenge || null);
     },
-    'auth/deauthentication-started': function(state) {
-      state.inProgress = true;
-    },
-    'auth/deauthentication-succeeded': function(state, payload) {
+    'auth/authentication-canceled': function(state, payload) {
       state.inProgress = false;
-      state.session = { authenticated: false };
-      state.challenge = null;
-    },
-    'auth/deauthentication-failed': function(state, payload) {
-      state.inProgress = false;
-      state.challenge = (payload.challenge || null);
     },
   },
   actions: {
-    'auth/remember': function(context) {
+    'auth/update': function(context) {
       context.commit('auth/authentication-started');
-      return api.post('/v1/auth/status')
-        .then(function(response) {
-          if (api.isSuccess(response)) {
-            context.commit('auth/authentication-succeeded', { session: response.data.result });
-          }
-          else if (api.isFailure(response)) {
-            context.commit('auth/authentication-failed', { session: response.data.result, challenge: response.data.message });
-          }
-          else {
-            throw new Error('Unexpected response');
-          }
-        })
-        .catch(function(err) {
-          if (api.isServerError(err)) {
-            context.commit('auth/authentication-failed', { session: response.data.result, challenge: response.data.message });
-          }
-          else {
-            context.commit('auth/authentication-failed', { session: response.data.result, challenge: err.message });
-          }
-          throw err;
-        });
+      var response = api.post('/v1/auth/status');
+      return finishAuthentication(context, response);
     },
     'auth/login': function(context, credentials) {
       context.commit('auth/authentication-started');
-      return api.post('/v1/auth/login', credentials)
-        .then(function(response) {
-          if (api.isSuccess(response)) {
-            context.commit('auth/authentication-succeeded', { session: response.data.result });
-          }
-          else if (api.isFailure(response)) {
-            context.commit('auth/authentication-failed', { session: response.data.result, challenge: response.data.message });
-          }
-          else {
-            throw new Error('Unexpected response');
-          }
-        })
-        .catch(function(err) {
-          if (api.isServerError(err)) {
-            context.commit('auth/authentication-failed', { session: response.data.result, challenge: response.data.message });
-          }
-          else {
-            context.commit('auth/authentication-failed', { session: response.data.result, challenge: err.message });
-          }
-          throw err;
-        });
+      var response = api.post('/v1/auth/login', credentials);
+      return finishAuthentication(context, response);
     },
     'auth/logout': function(context) {
-      context.commit('auth/deauthentication-started');
-      return api.post('/v1/auth/logout')
-        .then(function(response) {
-          if (api.isSuccess(response)) {
-            context.commit('auth/deauthentication-succeeded');
-          }
-          else if (api.isFailure(response)) {
-            context.commit('auth/deauthentication-failed', { challenge: response.data.message });
-          }
-          else {
-            throw new Error('Unexpected response');
-          }
-        })
-        .catch(function(err) {
-          if (api.isServerError(err)) {
-            context.commit('auth/deauthentication-failed', { challenge: response.data.message });
-          }
-          else {
-            context.commit('auth/deauthentication-failed', { challenge: err.message });
-          }
-          throw err;
-        });
+      context.commit('auth/authentication-started');
+      var response = api.post('/v1/auth/logout');
+      return finishAuthentication(context, response);
     },
   },
 };
+
+// This function takes a promise of api response that would contain the session
+// and performs necessary steps to finish the (de)authentication
+function finishAuthentication(context, response) {
+  return response
+    .then(function(response) {
+      if (api.isSuccess(response)) {
+        context.commit('auth/authentication-succeeded', { session: response.data.result });
+        return response;
+      }
+      else if (api.isFailure(response)) {
+        context.commit('auth/authentication-failed', { session: response.data.result, challenge: response.data.message });
+        return response;
+      }
+      else {
+        throw new Error('Unexpected response');
+      }
+    })
+    .catch(function(err) {
+      context.commit('auth/authentication-canceled');
+      throw err;
+    });
+}

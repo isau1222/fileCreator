@@ -38,7 +38,7 @@ var app = {
   preFetch: function(store, route) {
     return Promise.resolve()
       .then(function() {
-        return store.dispatch('auth/remember');
+        return store.dispatch('auth/update');
       })
       .then(function() {
         return Promise.all([
