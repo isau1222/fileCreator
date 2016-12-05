@@ -41,7 +41,7 @@ module.exports = {
       return this.$store.dispatch('auth/logout');
     },
     submitRemember: function() {
-      return this.$store.dispatch('auth/remember2');
+      return this.$store.dispatch('auth/remember');
     },
   },
 };
