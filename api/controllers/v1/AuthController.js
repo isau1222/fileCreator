@@ -9,7 +9,7 @@ var passport = require('passport');
 
 function makeSessionPayload(req) {
   return {
-    authenticated: req.isAuthenticated(),
+    isAuthenticated: req.isAuthenticated(),
     user: req.user || null,
   };
 }

@@ -4,7 +4,7 @@ module.exports = {
   state: {
     inProgress: false,
     session: {
-      authenticated: false,
+      isAuthenticated: false,
       user: null,
     },
     challenge: null,
