@@ -9,6 +9,20 @@ module.exports = {
     },
     challenge: null,
   },
+  getters: {
+    'auth/user': function(state) {
+      return state.session.user;
+    },
+    'auth/isAuthenticated': function(state) {
+      return state.session.isAuthenticated;
+    },
+    'auth/inProgress': function(state) {
+      return state.inProgress;
+    },
+    'auth/challenge': function(state) {
+      return state.challenge;
+    },
+  },
   mutations: {
     'auth/authentication-started': function(state) {
       state.inProgress = true;
