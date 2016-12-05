@@ -36,6 +36,7 @@ var router = new VueRouter({
   base: process.env.APP_PUBLIC_PATH, // @FIXME: router appears to ignore this during SSR
   routes: [
     { path: '/', component: Dashboard },
+    { path: '/auth', component: require('../controllers/auth') },
     {
       path: '/reports',
       component: Reports,

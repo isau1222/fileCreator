@@ -15,6 +15,7 @@ var app = {
       '<pre>{{ $store.state.meta }}</pre>',
       '<ul>',
         '<li><router-link to="/">Dashboard</router-link></li>',
+        '<li><router-link to="/auth">Auth</router-link></li>',
         '<li>',
           '<router-link to="/reports">Reports</router-link>',
           '<ul>',
@@ -35,9 +36,15 @@ var app = {
   // @NOTE: restrain from cross-origin requests, because it's awkward
   //        to perform them during ssr
   preFetch: function(store, route) {
-    return Promise.all([
-      store.dispatch('meta/update'),
-    ]);
+    return Promise.resolve()
+      .then(function() {
+        return store.dispatch('auth/remember');
+      })
+      .then(function() {
+        return Promise.all([
+          store.dispatch('meta/update'),
+        ]);
+      });
   },
 
 };

@@ -10,6 +10,7 @@ var api = require('../api');
 var store = new Vuex.Store({
   modules: {
     toast: require('./toast'),
+    auth: require('./auth'),
   },
   state: {
     meta: null,
