@@ -63,7 +63,7 @@ module.exports = {
     })(req, res, function(err) {
       // @NOTE: normally we don't arrive here
       // @TODO: log application incident
-      return res.apiServerError(err, makeSessionPayload(req));
+      return res.apiServerError(err);
     });
   },
 
