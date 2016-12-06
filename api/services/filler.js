@@ -1,6 +1,6 @@
 module.exports = {
   init: function(done) {
-    if (!sails.config.filler.enabled) return;
+    if (!sails.config.filler.enabled) return done();
 
     Promise.resolve()
       .then(function() {
