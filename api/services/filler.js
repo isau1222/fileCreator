@@ -19,6 +19,9 @@ module.exports = {
       })
       .then(function() {
         return done();
+      })
+      .catch(function(err) {
+        return done(err);
       });
   },
 };
