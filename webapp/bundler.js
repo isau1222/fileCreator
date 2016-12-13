@@ -153,7 +153,6 @@ Bundler.prototype.render = function(context, done) {
           '</head>',
           '<body>',
             '<script>window.__INITIAL_STATE__ = ' + serialize(context.initialState) + ';</script>',
-            // @TODO: initial state
             appHtml,
             '<script src="' + he.escape(urel(context.req.url, bundler.publicVendorPath)) + '"></script>',
             '<script src="' + he.escape(urel(context.req.url, bundler.publicBundlePath)) + '"></script>',
