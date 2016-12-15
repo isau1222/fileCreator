@@ -1,11 +1,9 @@
 var fs = require('fs');
 var path = require('path');
 var url = require('url');
-var urel = require('urel');
 var he = require('he');
 var async = require('async');
 var lodash = require('lodash');
-var serialize = require('serialize-javascript');
 
 var webpack = require('webpack');
 var merge = require('webpack-merge');
@@ -125,7 +123,7 @@ Bundler.prototype.render = function(context, done) {
     return done(new Error('Renderer is not ready'));
   }
 
-  return bundler.renderer.renderToString(context, function(err, appHtml) {
+  return bundler.renderer.renderToString(context, function(err, body) {
     if (err) {
       // @NOTE: If there is a runtime error, this branch will execute.
       //        Unfortunately, the stack trace will not give reasonable
@@ -134,47 +132,18 @@ Bundler.prototype.render = function(context, done) {
       return done(err);
     }
 
-    var html;
-
-    try {
-      html = lodash.compact([
-        '<!DOCTYPE html>',
-        context.helmet && context.helmet.lang ? ('<html lang="' + context.helmet.lang + '">') : '<html>',
-          '<head>',
-            '<meta charset="UTF-8">',
-            context.helmet && context.helmet.title && ('<title>' + he.escape(context.helmet.title) + '</title>'),
-            context.helmet && context.helmet.canonical && ('<link rel="canonical" href="' + he.escape(context.helmet.canonical) + '">'),
-            context.helmet && context.helmet.meta && context.helmet.meta
-              .map(function(item) {
-                return '<meta name="' + he.escape(item.name) + '" content="' + he.escape(item.content) + '">';
-              })
-              .join(''),
-            // @TODO: styles
-          '</head>',
-          '<body>',
-            '<script>window.__INITIAL_STATE__ = ' + serialize(context.initialState) + ';</script>',
-            appHtml,
-            '<script src="' + he.escape(urel(context.req.url, bundler.publicVendorPath)) + '"></script>',
-            '<script src="' + he.escape(urel(context.req.url, bundler.publicBundlePath)) + '"></script>',
-          '</body>',
-        '</html>',
-      ]).join('');
-    }
-    catch(err) {
-      return done(err);
-    }
-
     if (context.status == null) {
       return done(new Error('Renderer did not return a status code'));
     }
 
-    return done(null, {
-      status: context.status,
-      body: html,
-    });
-  });
+    context.body = body;
+    context.scripts = [
+      bundler.publicVendorPath,
+      bundler.publicBundlePath,
+    ];
 
-  return done();
+    return done();
+  });
 };
 
 Bundler.prototype._initWithOnceCompile = function(done) {

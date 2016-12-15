@@ -20,7 +20,11 @@ module.exports = {
       }
 
       else {
-        return res.send(result.status, result.body);
+        res.status(context.status);
+        return res.view('webapp', {
+          layout: null,
+          context: context,
+        });
       }
     });
   },
