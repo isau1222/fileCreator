@@ -3,6 +3,7 @@
  *
  * @description :: A controller that renders the webapp page using SSR.
  */
+var url = require('url');
 
 module.exports = {
   _config: {
@@ -20,6 +21,21 @@ module.exports = {
       }
 
       else {
+        var assetsConfig = sails.config.assets;
+        var assetsJsPublicPath = url.resolve(assetsConfig.wpConfig.output.publicPath, assetsConfig.wpConfig.output.filename);
+        var assetsCssPublicPath = url.resolve(assetsConfig.wpConfig.output.publicPath, assetsConfig.cssFilename);
+
+        if (context.scripts == null) {
+          context.scripts = [];
+        }
+
+        if (context.styles == null) {
+          context.styles = [];
+        }
+
+        context.scripts = [assetsJsPublicPath].concat(context.scripts);
+        context.styles = [assetsCssPublicPath].concat(context.styles);
+
         res.status(context.status);
         return res.view('webapp', {
           layout: null,

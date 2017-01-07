@@ -42,6 +42,13 @@ module.exports = {
     enabled: false,
   },
 
+  assets: {
+    wpConfig: {
+      devtool: null,
+    },
+    uglifyJs: true,
+  },
+
   webapp: {
     compileJs: 'once',
     uglifyJs: true,
