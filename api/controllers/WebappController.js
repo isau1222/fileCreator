@@ -15,7 +15,7 @@ module.exports = {
   render: function(req, res) {
     var context = { req: req, sails: sails };
 
-    return sails.services.webapp.render(context, function(err, result) {
+    return sails.hooks.webapp.render(context, function(err, result) {
       if (err) {
         return res.negotiate(err);
       }
