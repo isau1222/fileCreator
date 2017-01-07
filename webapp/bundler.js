@@ -71,7 +71,8 @@ function Bundler(config, opts) {
         name: 'vendor',
         filename: this.config.vendorFilename,
       }),
-      this.config.uglifyJs && new webpack.optimize.UglifyJsPlugin({
+      // @NOTE: uglifyJs appears to minify css too
+      this.config.uglify && new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false,
         },

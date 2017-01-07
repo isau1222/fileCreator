@@ -46,12 +46,12 @@ module.exports = {
     wpConfig: {
       devtool: null,
     },
-    uglifyJs: true,
+    uglify: true,
   },
 
   webapp: {
     compileJs: 'once',
-    uglifyJs: true,
+    uglify: true,
     NODE_ENV: 'production',
     server: {
       devtool: null,

@@ -26,7 +26,7 @@ module.exports.webapp = {
   // Whether the server should minify compiled files
   // - `true` will minify
   // - `false` will keep as is
-  uglifyJs: false,
+  uglify: false,
 
   // The name of the vendor client bundle
   vendorFilename: 'vendor-client.js',
