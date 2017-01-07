@@ -56,11 +56,6 @@ function Bundler(config, opts) {
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,
       }),
-      this.config.uglifyJs && new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false,
-        },
-      }),
     ]),
   };
 
