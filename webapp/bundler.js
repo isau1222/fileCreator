@@ -77,6 +77,9 @@ function Bundler(config, opts) {
         },
       }),
     ]),
+    output: {
+      devtoolModuleFilenameTemplate: 'webpack-src:///[resource-path]',
+    },
   };
 
   if (this.config.vueAlias) {
