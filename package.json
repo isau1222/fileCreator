@@ -37,6 +37,6 @@
     "type": "git",
     "url": "git://github.com/anonymous node/sails user/sails-vue.git"
   },
-  "author": "anonymous node/sails user",
+  "author": "Denis Karabaza <denis.karabaza@gmail.com>",
   "license": "ISC"
 }
