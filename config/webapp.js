@@ -18,7 +18,7 @@ module.exports.webapp = {
   // - `once` will compile bundles once
   // - `watch` will recompile bundles on changes
   // @TODO: `reuse` strategy, compile if not present
-  compileJs: 'watch',
+  compile: 'watch',
 
   // Node environment (often used for dev/prod conditional compiling)
   NODE_ENV: 'development',

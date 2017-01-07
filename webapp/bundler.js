@@ -102,16 +102,16 @@ function Bundler(config, opts) {
 }
 
 Bundler.prototype.init = function(done) {
-  if (this.config.compileJs === 'once') {
+  if (this.config.compile === 'once') {
     return this._initWithOnceCompile(done);
   }
 
-  else if (this.config.compileJs === 'watch') {
+  else if (this.config.compile === 'watch') {
     return this._initWithWatchCompile(done);
   }
 
   else {
-    return done(new Error('Unknown compileJs option value'));
+    return done(new Error('Unknown `compile` option value'));
   }
 };
 

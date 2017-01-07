@@ -50,7 +50,7 @@ module.exports = {
   },
 
   webapp: {
-    compileJs: 'once',
+    compile: 'once',
     uglify: true,
     NODE_ENV: 'production',
     server: {
