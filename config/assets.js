@@ -15,8 +15,8 @@ module.exports.assets = {
     context: ASSETS_ROOT,
     entry: Array.prototype.concat.apply([], [
       bower.ext(['js', 'css']).files,
-      match('./template/**/*.js'),
-      match('./template/**/*.css'),
+      match('./vendor/**/*.js'),
+      match('./vendor/**/*.css'),
     ]),
     output: {
       path: path.resolve(SAILS_ROOT, '.tmp/public/assets'),
