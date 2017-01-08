@@ -36,14 +36,14 @@ module.exports.assets = {
 };
 
 // Utility function, matches glob pattern against the asset directory.
-// Return a list of file relative paths consumable by webpack.
+// Return a list of relative file paths to be consumed by webpack.
 function match(pattern) {
   var paths = glob.sync(pattern, { cwd: ASSETS_ROOT });
 
   // @NOTE: we have to explicitly make them relative to conform with commonJs
   //        require syntax, otherwise webpack will try to look for them
   //        in the node_modules
-  return paths.map(function(path) {
-    return './' + path;
+  return paths.map(function(filepath) {
+    return './' + filepath;
   });
 }
