@@ -1,7 +1,7 @@
 var api = require('./api');
 var store = require('./store');
 var router = require('./router');
-var app = require('./controllers/app');
+var app = require('./controllers/app.vue');
 
 app = Object.assign({}, app, {
   api: api,

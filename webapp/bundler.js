@@ -35,6 +35,11 @@ function Bundler(config, opts) {
       loaders: [
         // @NOTE: necessary because webpack does not support .json files out of box
         { test: /\.json$/, loader: 'json' },
+        { test: /\.vue$/, loader: 'vue' },
+        {
+          test: /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
+          loader: 'file-loader?name=[path][name].[ext]?[hash]',
+        },
       ],
     },
     plugins: [
