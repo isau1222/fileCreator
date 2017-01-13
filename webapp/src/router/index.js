@@ -42,7 +42,7 @@ var router = new VueRouter({
       component: Reports,
       children: [
         { path: '', component: ReportList },
-        { path: ':reportId', component: Report },
+        { path: ':reportId', name: 'report', component: Report },
       ],
     },
   ],
