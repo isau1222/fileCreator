@@ -11,16 +11,18 @@ module.exports = function(sails) {
     initialize: function(done) {
         var config = sails.config.assets;
 
+        var cssLoaderString = config.wpConfig.devtool
+          ? 'css-loader?sourceMap'
+          : 'css-loader'; // @NOTE: in production we don't want sourcemaps
+
         var baseWpConfig = {
           // @NOTE: entries are defined in the sails config
           module: {
             loaders: [
               {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract(
-                  'style-loader',
-                  config.wpConfig.devtool ? 'css-loader?sourceMap' : 'css-loader' // @NOTE: in production we don't want sourcemaps
-                ),
+                // loader: ['style-loader', cssLoaderString].join('!'),
+                loader: ExtractTextPlugin.extract('style-loader', cssLoaderString),
               },
               {
                 test: /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
