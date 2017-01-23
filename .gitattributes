@@ -1,2 +1,16 @@
-# Set the default behavior, in case people don't have core.autocrlf set.
-* text eol=lf
+# Dotfiles
+
+.* text eol=lf
+
+# Source
+
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.vue text eol=lf
+*.json text eol=lf
+*.ejs text eol=lf
+
+# Text and documentation
+
+*.md text eol=lf
