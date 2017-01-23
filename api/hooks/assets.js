@@ -39,6 +39,7 @@ module.exports = function(sails) {
           ]),
           output: {
             devtoolModuleFilenameTemplate: 'webpack-assets:///[resource-path]',
+            devtoolFallbackModuleFilenameTemplate: 'webpack-assets:///[resource-path]',
           },
         };
 

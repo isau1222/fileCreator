@@ -80,6 +80,7 @@ function Bundler(config, opts) {
     ]),
     output: {
       devtoolModuleFilenameTemplate: 'webpack-src:///[resource-path]',
+      devtoolFallbackModuleFilenameTemplate: 'webpack-src:///[resource-path]',
     },
   };
 
