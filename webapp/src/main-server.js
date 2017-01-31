@@ -81,10 +81,16 @@ module.exports = function(context) {
   router.push(url);
 
   // @TODO: redirects
-  // @TODO: 404
 
   // @NOTE: prefetch data for the components
   var route = router.currentRoute;
+
+  // @NOTE: retrieve status code
+  var status = route.meta.status;
+  if (status == null) {
+    status = 200;
+  }
+
   var components = router.getMatchedComponents();
   components.unshift(app); // @NOTE: router does not include the root component
 
@@ -99,8 +105,7 @@ module.exports = function(context) {
       // @NOTE: after routing and prefetching is done, we report the results
       //        back to the bundler
 
-      // @FIXME: implement
-      context.status = 200;
+      context.status = status;
 
       // @FIXME: implement
       context.helmet = {
