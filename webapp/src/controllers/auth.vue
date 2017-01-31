@@ -1,31 +1,31 @@
 <template lang="jade">
   div
-    h3 Auth state
-    pre {{ authState }}
-    p
+    template(v-if="isAuthenticated")
+      form(@submit.prevent="submitSignOut")
+        p You are authenticated as <strong>{{ user.username }}</strong>.
+        button(:disabled="inProgress", type="submit") Sign out
+
+    template(v-else)
       form(@submit.prevent="submitSignIn")
+        p You are not authenticated.
         div
           label
             | Username:
-            input(type="text", :disabled="busy", v-model="username")
+            input(type="text", :disabled="inProgress", v-model="username")
         div
           label
             | Password:
-            input(type="text", :disabled="busy", v-model="password")
+            input(type="password", :disabled="inProgress", v-model="password")
         div
-          button(:disabled="busy", type="submit") Sign in
-      form(@submit.prevent="submitSignOut")
-        div
-          button(:disabled="busy", type="submit") Sign out
-      form(@submit.prevent="submitUpdate")
-        div
-          button(:disabled="busy", type="submit") Update
+          button(:disabled="inProgress", type="submit") Sign in
 </template>
 
 <style lang="sass">
 </style>
 
 <script>
+  var utils = require('../utils');
+
   module.exports = {
 
     name: 'Auth',
@@ -37,26 +37,28 @@
       };
     },
 
-    computed: {
-      authState: function() {
-        return this.$store.state.auth;
-      },
-      busy: function() {
-        return this.$store.state.auth.inProgress;
-      },
-    },
+    computed: utils.merge([
+      Vuex.mapGetters({
+        inProgress: 'auth/inProgress',
+        isAuthenticated: 'auth/isAuthenticated',
+        user: 'auth/user',
+      }),
+    ]),
 
-    methods: {
-      submitSignIn: function() {
-        return this.$store.dispatch('auth/login', { username: this.username, password: this.password });
+    methods: utils.merge([
+      Vuex.mapActions({
+        doLogin: 'auth/login',
+        doLogout: 'auth/logout',
+      }),
+      {
+        submitSignIn: function() {
+          this.doLogin({ username: this.username, password: this.password });
+        },
+        submitSignOut: function() {
+          this.doLogout();
+        },
       },
-      submitSignOut: function() {
-        return this.$store.dispatch('auth/logout');
-      },
-      submitUpdate: function() {
-        return this.$store.dispatch('auth/update');
-      },
-    },
+    ]),
 
   };
 </script>
