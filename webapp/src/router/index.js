@@ -2,13 +2,6 @@ var Vue = require('vue');
 var VueRouter = require('vue-router');
 Vue.use(VueRouter);
 
-var Dashboard = {
-  name: 'Dashboard',
-  template: [
-    '<div>I am dashboard</div>',
-  ].join(''),
-};
-
 var Reports = {
   name: 'Reports',
   template: [
@@ -37,7 +30,7 @@ var router = new VueRouter({
   routes: [
     {
       path: '/',
-      component: Dashboard,
+      component: require('../controllers/dashboard.vue'),
     },
     {
       path: '/auth',
