@@ -1,5 +1,4 @@
 var cuid = require('cuid');
-var Vue = require('vue');
 
 module.exports = {
   state: [],

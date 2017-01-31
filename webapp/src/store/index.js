@@ -1,9 +1,7 @@
+Vue.use(Vuex);
+
 var cuid = require('cuid');
 var serializeError = require('serialize-error');
-
-var Vue = require('vue');
-var Vuex = require('vuex');
-Vue.use(Vuex);
 
 var api = require('../api');
 

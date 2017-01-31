@@ -1,5 +1,3 @@
-var Vue = require('vue');
-
 // @NOTE: axios does not expose settle on the main module, but we need it
 //        for the custom adapter, so let's import it directly.
 // @NOTE: this is quite fragile
