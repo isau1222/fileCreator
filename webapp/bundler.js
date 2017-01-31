@@ -147,7 +147,7 @@ Bundler.prototype.render = function(context, done) {
     }
 
     context.body = body;
-    context.scripts = [
+    context.includeScripts = [
       bundler.publicVendorPath,
       bundler.publicBundlePath,
     ];

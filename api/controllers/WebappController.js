@@ -25,16 +25,16 @@ module.exports = {
         var assetsJsPublicPath = url.resolve(assetsConfig.wpConfig.output.publicPath, assetsConfig.wpConfig.output.filename);
         var assetsCssPublicPath = url.resolve(assetsConfig.wpConfig.output.publicPath, assetsConfig.cssFilename);
 
-        if (context.scripts == null) {
-          context.scripts = [];
+        if (context.includeScripts == null) {
+          context.includeScripts = [];
         }
 
-        if (context.styles == null) {
-          context.styles = [];
+        if (context.includeStyles == null) {
+          context.includeStyles = [];
         }
 
-        context.scripts = [assetsJsPublicPath].concat(context.scripts);
-        context.styles = [assetsCssPublicPath].concat(context.styles);
+        context.includeScripts = [assetsJsPublicPath].concat(context.includeScripts);
+        context.includeStyles = [assetsCssPublicPath].concat(context.includeStyles);
 
         res.status(context.status);
         return res.view('webapp', {

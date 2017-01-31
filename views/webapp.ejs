@@ -28,8 +28,8 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 
     <!-- @SECTION: client styles -->
-    <% if (context.styles != null) { %>
-      <% context.styles.forEach(function(item) { %>
+    <% if (context.includeStyles != null) { %>
+      <% context.includeStyles.forEach(function(item) { %>
         <link href="<%= item %>" rel="stylesheet" type="text/css">
       <% }); %>
     <% } %>
@@ -48,8 +48,8 @@
     <%- context.body %>
 
     <!-- @SECTION: client scripts -->
-    <% if (context.scripts != null) { %>
-      <% context.scripts.forEach(function(item) { %>
+    <% if (context.includeScripts != null) { %>
+      <% context.includeScripts.forEach(function(item) { %>
         <script src="<%= item %>"></script>
       <% }); %>
     <% } %>
