@@ -72,7 +72,7 @@ module.exports = function(sails) {
           //        will think they are running under node,
           //        and will not export globals correctly
           if (scriptTest.test(entry)) {
-            return 'imports-loader?module=>undefined,exports=>undefined,define=>undefined,require=>undefined!' + entry;
+            return 'imports-loader?module=>undefined,exports=>undefined,define=>undefined,require=>undefined,this=>window!' + entry;
           }
 
           return entry;
