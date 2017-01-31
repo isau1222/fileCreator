@@ -111,7 +111,7 @@ module.exports = function(context) {
       context.helmet = {
         lang: 'en',
         title: 'Hello from Vue!',
-        canonical: context.req.url,
+        canonical: publicPath + route.path, // @TODO: account for query string too
         meta: [
           { name: 'description', content: 'Description' },
         ],
