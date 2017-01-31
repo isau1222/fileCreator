@@ -1,12 +1,13 @@
 var cuid = require('cuid');
 
 module.exports = {
+  namespaced: true,
   state: [],
   mutations: {
-    'toast/added': function(state, toast) {
+    'added': function(state, toast) {
       state.push(toast);
     },
-    'toast/removed': function(state, toastId) {
+    'removed': function(state, toastId) {
       var io = state.findIndex(function(toast) {
         return (toast.id === toastId);
       });
@@ -14,14 +15,14 @@ module.exports = {
     },
   },
   actions: {
-    'toast/add': function(context, toast) {
+    'add': function(context, toast) {
       var id = cuid();
       Vue.set(toast, 'id', id);
-      context.commit('toast/added', toast);
+      context.commit('added', toast);
       return id;
     },
-    'toast/remove': function(context, toastId) {
-      context.commit('toast/removed', toastId);
+    'remove': function(context, toastId) {
+      context.commit('removed', toastId);
     }
   },
 };

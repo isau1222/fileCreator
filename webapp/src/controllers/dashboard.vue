@@ -11,10 +11,10 @@
 
     name: 'Dashboard',
 
-    computed: Vuex.mapGetters({
-      inProgress: 'auth/inProgress',
-      user: 'auth/user',
-      isAuthenticated: 'auth/isAuthenticated',
+    computed: Vuex.mapGetters('auth', {
+      inProgress: 'inProgress',
+      user: 'user',
+      isAuthenticated: 'isAuthenticated',
     }),
 
   };

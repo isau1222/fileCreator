@@ -38,17 +38,17 @@
     },
 
     computed: utils.merge([
-      Vuex.mapGetters({
-        inProgress: 'auth/inProgress',
-        isAuthenticated: 'auth/isAuthenticated',
-        user: 'auth/user',
+      Vuex.mapGetters('auth', {
+        inProgress: 'inProgress',
+        isAuthenticated: 'isAuthenticated',
+        user: 'user',
       }),
     ]),
 
     methods: utils.merge([
-      Vuex.mapActions({
-        doLogin: 'auth/login',
-        doLogout: 'auth/logout',
+      Vuex.mapActions('auth', {
+        doLogin: 'login',
+        doLogout: 'logout',
       }),
       {
         submitSignIn: function() {
