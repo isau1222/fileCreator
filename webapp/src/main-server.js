@@ -64,8 +64,6 @@ function makeSailsAdapter(context) {
 
 // @NOTE: exposes a factory
 module.exports = function(context) {
-  var vm = new Vue(app);
-
   // @NOTE: to be able to prefetch data during ssr, we set axios adapter
   //        that will call our sails api directly
   api.axios.defaults.adapter = makeSailsAdapter(context);
@@ -76,47 +74,57 @@ module.exports = function(context) {
   var publicPath = cleanUrl(process.env.APP_PUBLIC_PATH);
   var furl = cleanUrl(context.req.url); // @NOTE: full url
   var url = furl.slice(publicPath.length);
-  router.push(url);
 
-  // @TODO: redirects
+  return new Promise(function(resolve, reject) {
+    var vm = new Vue(app);
+    router.push(url);
 
-  // @NOTE: prefetch data for the components
-  var route = router.currentRoute;
+    // @NOTE: wait until router has resolved possible async hooks
+    router.onReady(function() {
+      // @TODO: redirects
 
-  // @NOTE: retrieve status code
-  var status = route.meta.status;
-  if (status == null) {
-    status = 200;
-  }
+      // @NOTE: retrieve current route
+      var route = router.currentRoute;
 
-  var components = router.getMatchedComponents();
-  components.unshift(app); // @NOTE: router does not include the root component
+      // @NOTE: retrieve status code
+      var status = route.meta.status;
+      if (status == null) {
+        status = 200;
+      }
 
-  var fetches = components.map(function(component) {
-    if (component.preFetch) {
-      return component.preFetch(store, route);
-    }
-  });
+      var components = router.getMatchedComponents();
+      components.unshift(app); // @NOTE: router does not include the root component
 
-  return Promise.all(fetches)
-    .then(function() {
-      // @NOTE: after routing and prefetching is done, we report the results
-      //        back to the bundler
+      // @NOTE: prefetch data for the components
+      var fetches = components.map(function(component) {
+        if (component.preFetch) {
+          return component.preFetch(store, route);
+        }
+      });
 
-      context.status = status;
+      Promise.all(fetches)
+        .then(function() {
+          // @NOTE: after routing and prefetching is done, we report the results
+          //        back to the bundler
 
-      // @FIXME: implement
-      context.helmet = {
-        lang: 'en',
-        title: 'Hello from Vue!',
-        canonical: publicPath + route.path, // @TODO: account for query string too
-        meta: [
-          { name: 'description', content: 'Description' },
-        ],
-      };
+          context.status = status;
 
-      context.initialState = store.state;
+          // @FIXME: implement
+          context.helmet = {
+            lang: 'en',
+            title: 'Hello from Vue!',
+            canonical: publicPath + route.path, // @TODO: account for query string too
+            meta: [
+              { name: 'description', content: 'Description' },
+            ],
+          };
 
-      return vm;
+          context.initialState = store.state;
+
+          return vm;
+        })
+        .then(resolve)
+        .catch(reject);
     });
+  });
 };

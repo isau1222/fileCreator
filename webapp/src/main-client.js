@@ -7,6 +7,11 @@ var store = main.store;
 // @NOTE: state rehydration
 store.replaceState(window.__INITIAL_STATE__);
 
-// @NOTE: mounts to the DOM
+// @NOTE: create the instance
 var vm = new Vue(app);
-vm.$mount('[server-rendered="true"]');
+
+// @NOTE: wait until router has resolved possible async hooks
+router.onReady(function() {
+  // @NOTE: mount the instance to the dom
+  vm.$mount('[server-rendered="true"]');
+});
