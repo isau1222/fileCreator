@@ -9,7 +9,7 @@ module.exports.webapp = {
   // @TODO: option to disable SSR
 
   // Public path to the base of the app
-  publicPath: '/webapp',
+  publicPath: '/',
 
   // Public path to the api of the app
   apiPublicPath: '/api',

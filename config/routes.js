@@ -25,13 +25,12 @@ module.exports.routes = {
   // @NOTE: order matters, redirects should be after the controller,
   //        otherwise there will be a redirect loop
 
-  'GET /webapp/*': {
+  'GET /*': {
     controller: 'WebappController',
     action: 'render',
+    skipAssets: true,
+    skipRegex: /^\/api(\/|$)/, // @NOTE: matches `/api` and `/api/` and `/api/abc`, but not `/api-docs`
   },
-
-  'GET /': '/webapp/',
-  'GET /webapp': '/webapp/',
 
   /***************************************************************************
   *                                                                          *
