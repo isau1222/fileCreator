@@ -24,7 +24,7 @@ var Report = {
 // @NOTE: nested paths that start with `/` will be treated as a root path
 var router = new VueRouter({
   mode: 'history',
-  base: process.env.APP_PUBLIC_PATH, // @FIXME: router appears to ignore this during SSR
+  base: process.env.APP_PUBLIC_PATH,
   routes: [
     {
       path: '/',
