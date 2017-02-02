@@ -40,8 +40,9 @@ module.exports.assets = {
 function match(pattern) {
   var paths = glob.sync(pattern, { cwd: ASSETS_ROOT });
 
-  // @TODO: warn if no paths were matched,
-  //        sadly, sails does not support logging from the config
+  if (paths.length === 0) {
+    console.warn('Asset pattern ' + pattern + ' did not match any files');
+  }
 
   // @NOTE: we have to explicitly make them relative to conform with commonJs
   //        require syntax, otherwise webpack will try to look for them
