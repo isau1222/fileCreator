@@ -10,7 +10,7 @@ module.exports = function(sails) {
   // @NOTE: mimicing express passport middleware to be able to use it for
   //        non-proper request (sockets and `sails.request`)
   function middleware(req, res, next) {
-    extendReq(req);
+    extendReqRes(req, res);
     initialize(req, res, function(err) {
       if (err) return next(err);
       session(req, res, function (err) {
@@ -29,12 +29,24 @@ module.exports = function(sails) {
   };
 };
 
-function extendReq(req) {
+function noop() {
+  // @NOTE: do nothing
+}
+
+function extendReqRes(req, res) {
   var methods = ['login', 'logIn', 'logout', 'logOut', 'isAuthenticated', 'isUnauthenticated'];
   for (var i = 0, l = methods.length; i < l; i++) {
     var method = methods[i];
     if (!req[method]) {
       req[method] = IncomingMessageExt[method];
     }
+  }
+
+  // @NOTE: some agents (e.g. remember-me) rely on `req.res` being defined
+  req.res = res;
+
+  // @NOTE: some agents (e.g. remember-me) rely on `res.clearCookie` being defined
+  if (!res.clearCookie) {
+    res.clearCookie = noop;
   }
 }
