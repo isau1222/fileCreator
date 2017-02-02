@@ -42,6 +42,11 @@ function Bundler(config, opts) {
         },
       ],
     },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
+    },
     plugins: [
       new webpack.ProvidePlugin({
         Vue: 'vue',
