@@ -42,6 +42,8 @@ module.exports = function(req, res, next) {
     // @NOTE: we land here when authentication attempt failed, e.g. malformed
     //        or invalid token
     // @NOTE: there's no point in:
+    //        - rejecting the user, because remember-me is a convinience,
+    //          not a requirement
     //        - doing logout, because user was not logged in from the start
     //        - manually removing cookies, because this is done by the remember
     //          strategy
