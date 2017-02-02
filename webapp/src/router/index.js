@@ -28,11 +28,11 @@ var router = new VueRouter({
   routes: [
     {
       path: '/',
-      component: require('../controllers/dashboard.vue'),
+      component: require('@/controllers/dashboard.vue'),
     },
     {
       path: '/auth',
-      component: require('../controllers/auth.vue'),
+      component: require('@/controllers/auth.vue'),
     },
     {
       path: '/reports',
@@ -44,7 +44,7 @@ var router = new VueRouter({
     },
     {
       path: '*',
-      component: require('../controllers/error-404.vue'),
+      component: require('@/controllers/error-404.vue'),
       meta: { status: 404 },
     },
   ],

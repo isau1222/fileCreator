@@ -3,7 +3,7 @@ Vue.use(Vuex);
 var cuid = require('cuid');
 var serializeError = require('serialize-error');
 
-var api = require('../api');
+var api = require('@/api');
 
 var store = new Vuex.Store({
   modules: {
