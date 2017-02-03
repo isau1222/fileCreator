@@ -36,10 +36,6 @@ function Bundler(config, opts) {
         // @NOTE: necessary because webpack does not support .json files out of box
         { test: /\.json$/, loader: 'json' },
         { test: /\.vue$/, loader: 'vue' },
-        {
-          test: /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
-          loader: 'file-loader?name=[path][name].[ext]?[hash]',
-        },
       ],
     },
     resolve: {
@@ -61,7 +57,29 @@ function Bundler(config, opts) {
     ],
   };
 
+  var serverWpConfig = merge.smart(baseWpConfig, this.config.server);
+  var clientWpConfig = merge.smart(baseWpConfig, this.config.client);
+
+  this.serverPath = getBundlePath(serverWpConfig);
+  this.clientPath = getBundlePath(clientWpConfig);
+
+  this.publicBundlePath = url.resolve(clientWpConfig.output.publicPath, clientWpConfig.output.filename);
+  this.publicVendorPath = url.resolve(clientWpConfig.output.publicPath, this.config.vendorFilename);
+
+  // @NOTE: overrides can not change public paths and bundle filename and paths
+
+  var fileLoaderTest = /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/;
+  var fileLoaderQuery = 'file-loader?name=[path][name].[ext]?[hash]&publicPath=' + clientWpConfig.output.publicPath;
+
   var serverWpConfigOverride = {
+    module: {
+      loaders: [
+        {
+          test: fileLoaderTest,
+          loader: fileLoaderQuery + '&emitFile=false',
+        },
+      ],
+    },
     target: 'node', // Necessary for Vue bundle renderer
     output: {
       libraryTarget: 'commonjs2', // Necessary for Vue bundle renderer
@@ -75,6 +93,14 @@ function Bundler(config, opts) {
   };
 
   var clientWpConfigOverride = {
+    module: {
+      loaders: [
+        {
+          test: fileLoaderTest,
+          loader: fileLoaderQuery,
+        },
+      ],
+    },
     plugins: lodash.compact([
       // @NOTE: extracts vendor chunk
       new webpack.optimize.CommonsChunkPlugin({
@@ -102,19 +128,13 @@ function Bundler(config, opts) {
     };
   }
 
-  var serverWpConfig = merge.smart(baseWpConfig, this.config.server, serverWpConfigOverride);
-  var clientWpConfig = merge.smart(baseWpConfig, this.config.client, clientWpConfigOverride);
+  serverWpConfig = merge.smart(serverWpConfig, serverWpConfigOverride);
+  clientWpConfig = merge.smart(clientWpConfig, clientWpConfigOverride);
 
   this.serverCompiler = webpack(serverWpConfig);
   this.clientCompiler = webpack(clientWpConfig);
 
   this.renderer = null;
-
-  this.serverPath = getBundlePath(serverWpConfig);
-  this.clientPath = getBundlePath(clientWpConfig);
-
-  this.publicBundlePath = url.resolve(clientWpConfig.output.publicPath, clientWpConfig.output.filename);
-  this.publicVendorPath = url.resolve(clientWpConfig.output.publicPath, this.config.vendorFilename);
 }
 
 Bundler.prototype.init = function(done) {
