@@ -24,10 +24,6 @@ module.exports = function(sails) {
                 // loader: ['style-loader', cssLoaderString].join('!'),
                 loader: ExtractTextPlugin.extract('style-loader', cssLoaderString),
               },
-              {
-                test: /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
-                loader: 'file-loader?name=[path][name].[ext]?[hash]',
-              },
             ],
           },
           plugins: _.compact([
@@ -84,6 +80,22 @@ module.exports = function(sails) {
         else if (_.isString(wpConfig.entry)) {
           wpConfig.entry = transformEntry(wpConfig.entry);
         }
+
+        // @NOTE: overrides can not change public paths and bundle filename and paths
+
+        var wpConfigOverride = {
+          module: {
+            loaders: [
+              {
+                test: /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
+                // @NOTE: file-loader does not appear to respect the public path, so we prepend it manually
+                loader: 'file-loader?name=[path][name].[ext]?[hash]&publicPath=' + wpConfig.output.publicPath,
+              },
+            ],
+          },
+        };
+
+        wpConfig = merge.smart(wpConfig, wpConfigOverride);
 
         var compiler = webpack(wpConfig);
 
