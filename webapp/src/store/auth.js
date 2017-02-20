@@ -66,20 +66,16 @@ module.exports = {
 function finishAuthentication(context, response) {
   return response
     .then(function(response) {
-      if (api.isSuccess(response)) {
-        context.commit('authentication-succeeded', { session: response.data.result });
-        return response;
-      }
-      else if (api.isFailure(response)) {
-        context.commit('authentication-failed', { session: response.data.result, challenge: response.data.message });
-        return response;
-      }
-      else {
-        throw new Error('Unexpected response');
-      }
+      context.commit('authentication-succeeded', { session: response.data.result });
+      return response;
     })
     .catch(function(err) {
-      context.commit('authentication-canceled');
+      if (api.isFailure(err)) {
+        context.commit('authentication-failed', { session: err.response.data.result, challenge: err.response.data.message });
+      }
+      else {
+        context.commit('authentication-canceled');
+      }
       throw err;
     });
 }

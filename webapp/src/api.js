@@ -22,12 +22,12 @@ VueApi.prototype.isServerError = function(err) {
   return err.config && err.response && (err.response.status >= 500);
 };
 
-VueApi.prototype.isSuccess = function(response) {
-  return response && (response.status >= 200) && (response.status < 300);
+VueApi.prototype.isFailure = function(err) {
+  return err.config && err.response && (err.response.status >= 400) && (err.response.status < 500);
 };
 
-VueApi.prototype.isFailure = function(response) {
-  return response && (response.status >= 400) && (response.status < 500);
+VueApi.prototype.isSuccess = function(response) {
+  return response && (response.status >= 200) && (response.status < 300);
 };
 
 VueApi.install = install;
@@ -58,9 +58,6 @@ Vue.use(VueApi);
 var api = new VueApi({
   baseURL: process.env.APP_API_PUBLIC_PATH,
   // @TODO: set default content type to application/json
-  validateStatus: function(status) {
-    return (status < 500);
-  },
 });
 
 // === //

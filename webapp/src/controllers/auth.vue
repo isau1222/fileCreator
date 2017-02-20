@@ -52,10 +52,12 @@
       }),
       {
         submitSignIn: function() {
-          this.doLogin({ username: this.username, password: this.password });
+          this.doLogin({ username: this.username, password: this.password })
+            .catch(console.warn);
         },
         submitSignOut: function() {
-          this.doLogout();
+          this.doLogout()
+            .catch(console.warn);
         },
       },
     ]),

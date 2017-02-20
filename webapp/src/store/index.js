@@ -22,10 +22,9 @@ var store = new Vuex.Store({
     'meta/update': function(context) {
       return api.get('/v1/meta')
         .then(function(response) {
-          if (api.isSuccess(response)) {
-            context.commit('meta/changed', response.data.result);
-          }
-        });
+          context.commit('meta/changed', response.data.result);
+        })
+        .catch(console.warn);
     },
   },
 });
@@ -37,27 +36,13 @@ api.axios.interceptors.response.use(apiSuccessHandler, apiFailureHandler);
 // @NOTE: make sure this does not throw errors, because this would reject
 //        the promise and collapse the chain
 function apiSuccessHandler(response) {
-  var toast;
+  // @TODO: these might be annoying, maybe show them conditionally,
+  //        depending on a config option
 
-  if (api.isSuccess(response)) {
-    // @TODO: these might be annoying, maybe show them conditionally,
-    //        depending on a config option
-    toast = {
-      type: 'info',
-      message: response.data.message,
-    };
-  }
-  else {
-    toast = {
-      type: 'warning',
-      message: response.data.message,
-      error: response.data.$error,
-    };
-  }
-
-  if (toast) {
-    store.dispatch('toast/add', toast);
-  }
+  store.dispatch('toast/add', {
+    type: 'info',
+    message: 'Request succeded: ' + (response.data.message || '<No message>'),
+  });
 
   return response;
 }
@@ -72,26 +57,38 @@ function apiFailureHandler(err) {
   //        we might want to see the error on production server
   //        without rebundling
 
-  if (api.isServerError(err)) {
+  if (api.isFailure(err)) {
     toast = {
       type: 'error',
-      title: 'Error: ' + (err.response.data.message || '<No message>'),
+      message: 'Request failed: ' + (err.response.data.message || '<No message>'),
       error: err.response.data.$error,
+    };
+  }
+  else if (api.isServerError(err)) {
+    toast = {
+      type: 'error',
+      title: 'Server error: ' + (err.response.data.message || '<No message>'),
+      error: err.response.data.$error,
+    };
+  }
+  else if (api.isConnectivityError(err)) {
+    toast = {
+      type: 'error',
+      title: 'Connectiviry error: ' + (err.message || '<No message>'),
+      error: serializeError(err),
     };
   }
   else {
     toast = {
       type: 'error',
-      title: 'Error: ' + err.message,
+      title: 'Unexpected error: ' + (err.message || '<No message>'),
       error: serializeError(err),
-    }
+    };
   }
 
-  if (toast) {
-    store.dispatch('toast/add', toast);
-  }
+  store.dispatch('toast/add', toast);
 
-  return Promise.reject(err);
+  throw err;
 }
 
 // === //
