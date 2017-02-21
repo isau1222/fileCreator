@@ -5,6 +5,7 @@ var router = main.router;
 var store = main.store;
 
 // @NOTE: state rehydration
+// @TODO: codepath when no rehydration occures (mimic the SSR codepath)
 store.replaceState(window.__INITIAL_STATE__);
 
 // @NOTE: create the instance

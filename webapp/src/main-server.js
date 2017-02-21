@@ -75,14 +75,30 @@ module.exports = function(context) {
   var furl = cleanUrl(context.req.url); // @NOTE: full url
   var url = furl.slice(publicPath.length);
 
-  return new Promise(function(resolve, reject) {
-    var vm = new Vue(app);
-    router.push(url);
+  var vm = new Vue(app);
 
-    // @NOTE: wait until router has resolved possible async hooks
-    router.onReady(function() {
-      // @TODO: redirects
+  return Promise.resolve()
+    .then(function() {
+      // @NOTE: push the url and wait for the router to settle
+      router.push(url);
+      return new Promise(function(resolve, reject) {
+        return router.onReady(resolve);
+      });
+    })
+    .then(function() {
+      // @NOTE: prefetch the rest of the data for components
+      var components = router.getMatchedComponents();
+      components.unshift(app); // @NOTE: router does not include the root component
 
+      var fetches = components.map(function(component) {
+        if (component.preFetch) {
+          return component.preFetch(store, router.currentRoute);
+        }
+      });
+
+      return Promise.all(fetches);
+    })
+    .then(function() {
       // @NOTE: retrieve current route
       var route = router.currentRoute;
 
@@ -92,39 +108,25 @@ module.exports = function(context) {
         status = 200;
       }
 
-      var components = router.getMatchedComponents();
-      components.unshift(app); // @NOTE: router does not include the root component
+      // @TODO: redirects
 
-      // @NOTE: prefetch data for the components
-      var fetches = components.map(function(component) {
-        if (component.preFetch) {
-          return component.preFetch(store, route);
-        }
-      });
+      // @NOTE: after routing and prefetching is done, we report the results
+      //        back to the bundler
 
-      Promise.all(fetches)
-        .then(function() {
-          // @NOTE: after routing and prefetching is done, we report the results
-          //        back to the bundler
+      context.status = status;
 
-          context.status = status;
+      // @FIXME: implement
+      context.helmet = {
+        lang: 'en',
+        title: 'Hello from Vue!',
+        canonical: publicPath + route.path, // @TODO: account for query string too
+        meta: [
+          { name: 'description', content: 'Description' },
+        ],
+      };
 
-          // @FIXME: implement
-          context.helmet = {
-            lang: 'en',
-            title: 'Hello from Vue!',
-            canonical: publicPath + route.path, // @TODO: account for query string too
-            meta: [
-              { name: 'description', content: 'Description' },
-            ],
-          };
+      context.initialState = store.state;
 
-          context.initialState = store.state;
-
-          return vm;
-        })
-        .then(resolve)
-        .catch(reject);
+      return vm;
     });
-  });
 };
