@@ -79,6 +79,15 @@ module.exports = function(context) {
 
   return Promise.resolve()
     .then(function() {
+      // @NOTE: prefetch the root data, which is necessary for router guards
+      if (app.preFetch) {
+        return app.preFetch(store);
+      }
+      else {
+        // @TODO: warn that no root data is fetched
+      }
+    })
+    .then(function() {
       // @NOTE: push the url and wait for the router to settle
       router.push(url);
       return new Promise(function(resolve, reject) {
@@ -88,7 +97,6 @@ module.exports = function(context) {
     .then(function() {
       // @NOTE: prefetch the rest of the data for components
       var components = router.getMatchedComponents();
-      components.unshift(app); // @NOTE: router does not include the root component
 
       var fetches = components.map(function(component) {
         if (component.preFetch) {

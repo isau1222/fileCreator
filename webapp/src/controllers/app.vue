@@ -27,7 +27,12 @@
     //        only store actions will be called here
     // @NOTE: restrain from cross-origin requests, because it's awkward
     //        to perform them during ssr
-    preFetch: function(store, route) {
+    // @NOTE: this preFetch should fetch all the data necessary for resolving
+    //        router guards
+    // @NOTE: in most components preFetch has a signature of `(store, route)`,
+    //        but for the root component preFetch happens before the router is
+    //        ignited, so it only gets `(store)`
+    preFetch: function(store) {
       return Promise.resolve()
         .then(function() {
           return store.dispatch('auth/update');
