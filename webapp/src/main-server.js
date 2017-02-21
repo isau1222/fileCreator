@@ -14,6 +14,8 @@ function cleanUrl(value) {
     value = '/' + value;
   }
 
+  // @FIXME: there is a known issue that this trims '/' to '',
+  //         and fixing it will break other parts of the app that join urls
   if (value[value.length - 1] === '/') {
     value = value.slice(0, -1);
   }
