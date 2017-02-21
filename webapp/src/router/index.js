@@ -1,3 +1,6 @@
+var store = require('@/store');
+var utils = require('@/utils');
+
 Vue.use(VueRouter);
 
 var Reports = {
@@ -48,6 +51,28 @@ var router = new VueRouter({
       meta: { status: 404 },
     },
   ],
+});
+
+router.beforeEach(function(to, from, next) {
+  var metas = to.matched.map(function(route) {
+    return route.meta;
+  });
+
+  var meta = utils.merge(metas);
+
+  // @TODO: document the `requiresAuthentication` field on routes
+  if (!meta.requiresAuthentication) {
+    return next();
+  }
+
+  // @TODO: maybe watch the store while `inProgress`, and then continue?
+  var isAuthenticated = store.getters['auth/isAuthenticated'];
+  if (isAuthenticated) {
+    return next();
+  }
+  else {
+    return next('/auth');
+  }
 });
 
 // === //
