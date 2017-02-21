@@ -17,7 +17,21 @@ module.exports = {
 
     return sails.hooks.webapp.render(context, function(err, result) {
       if (err) {
-        return res.negotiate(err);
+        if (err instanceof Error) {
+          return res.negotiate(err);
+        }
+        else {
+          // @NOTE: there is no dedicated API to cancel the rendering,
+          //        so sometimes we throw for different reasons (e.g. redirect)
+          // @TODO: document types of throwable objects
+          if (err.type === 'redirect') {
+            return res.redirect(err.path);
+          }
+          else {
+            // @TODO: log app error
+            return res.serverError();
+          }
+        }
       }
 
       else {

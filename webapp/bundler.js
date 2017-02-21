@@ -163,7 +163,21 @@ Bundler.prototype.render = function(context, done) {
       // @NOTE: If there is a runtime error, this branch will execute.
       //        Unfortunately, the stack trace will not give reasonable
       //        filename and line number, but it's better then nothing
-      bundler.opts.processSoftError(err);
+
+      // @NOTE: if it's a regular error, then report it
+      if (err instanceof Error) {
+        bundler.opts.processSoftError(err);
+      }
+
+      // @NOTE: There is no dedicated API to cancel the rendering,
+      //        so sometimes we throw for different reasons (e.g. redirect).
+      //        If that's not one of these cases, then report the error
+      // @TODO: Document types of throwable objects
+      var acceptableThrowableTypes = ['redirect'];
+      if (!acceptableThrowableTypes.includes(err.type)) {
+        bundler.opts.processSoftError(err);
+      }
+
       return done(err);
     }
 

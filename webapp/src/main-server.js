@@ -111,14 +111,24 @@ module.exports = function(context) {
     .then(function() {
       // @NOTE: retrieve current route
       var route = router.currentRoute;
+      var canonical = cleanUrl(publicPath + route.path); // @TODO: account for query string too
+
+      // @TODO: maybe soft match or another way to detect redirects?
+      // @TODO: maybe distinguish between soft redirects (unauthorized) and hard redirects (301)?
+      if (canonical !== furl) {
+        // @NOTE: there is no dedicated API to cancel the rendering, so we throw to signal redirect
+        // @TODO: document types of throwable objects
+        throw {
+          type: 'redirect',
+          path: canonical,
+        };
+      }
 
       // @NOTE: retrieve status code
       var status = route.meta.status;
       if (status == null) {
         status = 200;
       }
-
-      // @TODO: redirects
 
       // @NOTE: after routing and prefetching is done, we report the results
       //        back to the bundler
@@ -129,7 +139,7 @@ module.exports = function(context) {
       context.helmet = {
         lang: 'en',
         title: 'Hello from Vue!',
-        canonical: publicPath + route.path, // @TODO: account for query string too
+        canonical: canonical,
         meta: [
           { name: 'description', content: 'Description' },
         ],
