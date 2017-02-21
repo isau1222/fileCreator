@@ -17,6 +17,44 @@ function noop() {
   // @NOTE: no operation
 }
 
+
+// @DOCS: a utility function to assimilate an error, originated from the virtual machine evaluation context
+function assimilateError(err) {
+  // @NOTE: if it is a regulare error, then pass
+  if (err instanceof Error) {
+    return err;
+  }
+
+  var Constructor = err && err.__proto__ && err.__proto__.constructor;
+
+  // @NOTE: if it does not have a constructor, then pass
+  if (!Constructor) {
+    return err;
+  }
+
+  // @NOTE: if constructor does not look like an error constructor, then pass
+  if (!Constructor.name.endsWith('Error')) {
+    return err;
+  }
+
+  // @NOTE: resistance is futile
+
+  var AssimilatedConstructor = global[Constructor.name];
+  var error = new AssimilatedConstructor(err.message);
+
+  var keys = Object.keys(err);
+  var fields = ['stack', 'code', 'errno', 'syscall'].concat(keys);
+
+  for (var i = 0; i < fields.length; i++) {
+    var field = fields[i];
+    if (err[field]) {
+      error[field] = err[field];
+    }
+  }
+
+  return error;
+}
+
 // === //
 
 module.exports = Bundler;
@@ -163,6 +201,10 @@ Bundler.prototype.render = function(context, done) {
       // @NOTE: If there is a runtime error, this branch will execute.
       //        Unfortunately, the stack trace will not give reasonable
       //        filename and line number, but it's better then nothing
+
+      // @NOTE: we need to assimilate error because bundler is run in the vm,
+      //        so the errors will be foreign
+      err = assimilateError(err);
 
       // @NOTE: if it's a regular error, then report it
       if (err instanceof Error) {
