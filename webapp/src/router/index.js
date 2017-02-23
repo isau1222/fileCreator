@@ -3,6 +3,14 @@ var utils = require('@/utils');
 
 Vue.use(VueRouter);
 
+// @NOTE: utility component that is just a container
+var Container = {
+  name: 'Container',
+  render: function(h) {
+    return h('router-view')
+  },
+};
+
 var Reports = {
   name: 'Reports',
   template: [
