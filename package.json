@@ -23,6 +23,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "passport-remember-me-extended": "0.0.3",
+    "path-to-regexp": "^1.7.0",
     "rc": "1.0.1",
     "read-pkg-up": "^2.0.0",
     "sails": "~0.12.8",

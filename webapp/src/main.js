@@ -1,3 +1,11 @@
+var modules = [
+  require('@/modules/crumbs'),
+];
+
+modules.forEach(function(module) {
+ Vue.use(module);
+});
+
 var api = require('@/api');
 var store = require('@/store');
 var router = require('@/router');

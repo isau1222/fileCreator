@@ -1,5 +1,7 @@
 <template lang="jade">
   div
+    h3 Crumbs
+    pre {{ $crumbs }}
     ul
       li: router-link(to="/") Dashboard
       li: router-link(to="/auth") Auth

@@ -40,23 +40,43 @@ var router = new VueRouter({
     {
       path: '/',
       component: require('@/controllers/dashboard.vue'),
+      meta: {
+        crumb: 'Dashboard',
+      },
     },
     {
       path: '/auth',
       component: require('@/controllers/auth.vue'),
+      meta: {
+        crumb: 'Auth',
+      },
     },
     {
       path: '/reports',
       component: Reports,
+      meta: {
+        crumb: 'Reports',
+      },
       children: [
-        { path: '', component: ReportList },
-        { path: ':reportId', name: 'report', component: Report },
+        {
+          path: '',
+          component: ReportList,
+        },
+        {
+          path: ':reportId',
+          name: 'report',
+          component: Report,
+          meta: {
+            crumb: 'Report',
+          },
+        },
       ],
     },
     {
       path: '*',
       component: require('@/controllers/error-404.vue'),
       meta: {
+        crumb: 'Error',
         status: 404,
       },
     },
