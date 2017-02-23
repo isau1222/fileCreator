@@ -1,6 +1,6 @@
 var pathToRegexp = require('path-to-regexp');
-var isString = require('lodash/isString');
-var utils = require('@/utils');
+var isFunction = require('lodash/isFunction');
+var isPlainObject = require('lodash/isPlainObject');
 
 module.exports = function install(Vue) {
   if (install.installed) {
@@ -21,8 +21,22 @@ module.exports = function install(Vue) {
         .map(function(route) {
           var crumb = route.meta.crumb;
 
-          var href = utils.cleanUrl(route.path);
-          var title = isString(crumb) ? crumb : crumb.title;
+          // @NOTE: unify
+          if (!isPlainObject(crumb)) {
+            crumb = {
+              title: crumb,
+            };
+          }
+
+          // @TODO: figure out how to do this with just vue-router
+          var href = pathToRegexp.compile(route.path)(currentRoute.params);
+
+          var title = crumb.title;
+          if (isFunction(title)) {
+            title = title(currentRoute);
+          }
+
+          // @TODO: figure out how to do this with just vue-router
           var active = pathToRegexp(href).test(curentHref);
 
           return {

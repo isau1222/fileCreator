@@ -67,7 +67,9 @@ var router = new VueRouter({
           name: 'report',
           component: Report,
           meta: {
-            crumb: 'Report',
+            crumb: function(route) {
+              return 'Report #' + route.params.reportId;
+            },
           },
         },
       ],
