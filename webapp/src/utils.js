@@ -19,4 +19,16 @@ module.exports = {
     return Object.assign.apply(Object, items);
   },
 
+  cleanUrl: function(value) {
+    if (value[0] !== '/' && value[0] !== '.') {
+      value = '/' + value;
+    }
+
+    if (value !== '/' && value[value.length - 1] === '/') {
+      value = value.slice(0, -1);
+    }
+
+    return value;
+  },
+
 };

@@ -9,6 +9,7 @@ var api = main.api;
 var router = main.router;
 var store = main.store;
 
+// @TODO: replace with `utils.cleanUrl`
 function cleanUrl(value) {
   if (value[0] !== '/' && value[0] !== '.') {
     value = '/' + value;
