@@ -56,7 +56,9 @@ var router = new VueRouter({
     {
       path: '*',
       component: require('@/controllers/error-404.vue'),
-      meta: { status: 404 },
+      meta: {
+        status: 404,
+      },
     },
   ],
 });
