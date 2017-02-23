@@ -1,6 +1,7 @@
 var pathToRegexp = require('path-to-regexp');
 var isFunction = require('lodash/isFunction');
 var isPlainObject = require('lodash/isPlainObject');
+var utils = require('@/utils');
 
 module.exports = function install(Vue) {
   if (install.installed) {
@@ -29,7 +30,7 @@ module.exports = function install(Vue) {
           }
 
           // @TODO: figure out how to do this with just vue-router
-          var href = pathToRegexp.compile(route.path)(currentRoute.params);
+          var href = pathToRegexp.compile(utils.cleanUrl(route.path))(currentRoute.params);
 
           var title = crumb.title;
           if (isFunction(title)) {
