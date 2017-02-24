@@ -34,13 +34,16 @@ module.exports.webapp = {
   // Which build of vue should be used
   vueAlias: 'vue/dist/vue.common.js',
 
+  // Name for the server bundle
+  serverBundleName: 'bundle-server.json',
+
   // Webpack config for the server bundle
   server: {
     context: WEBAPP_ROOT,
-    devtool: null,
+    devtool: '#cheap-module-source-map',
     entry: './main-server.js',
     output: {
-      filename: 'bundle-server.js',
+      // @NOTE: filename is not needed because we will output with vue-ssr-webpack-plugin instead of the regular way
       path: path.resolve(SAILS_ROOT, '.tmp'),
       externals: Object.keys(pkg.dependencies),
     },
