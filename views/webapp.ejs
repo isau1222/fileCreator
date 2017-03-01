@@ -40,9 +40,11 @@
     <!-- @SECTION: cdn scripts -->
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 
-    <!-- @SECTION: initial state for vuex -->
-    <!-- @TODO: proper escaping, e.g. https://www.npmjs.com/package/serialize-javascript -->
-    <script>window.__INITIAL_STATE__ = <%- JSON.stringify(context.initialState) %>;</script>
+    <% if (context.initialState != null) { %>
+      <!-- @SECTION: initial state for vuex -->
+      <!-- @TODO: proper escaping, e.g. https://www.npmjs.com/package/serialize-javascript -->
+      <script>window.__INITIAL_STATE__ = <%- JSON.stringify(context.initialState) %>;</script>
+    <% } %>
 
   </head>
   <body>
