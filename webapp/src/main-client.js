@@ -14,5 +14,5 @@ var vm = new Vue(app);
 // @NOTE: wait until router has resolved possible async hooks
 router.onReady(function() {
   // @NOTE: mount the instance to the dom
-  vm.$mount('[server-rendered="true"]');
+  vm.$mount('#' + process.env.APP_ID);
 });

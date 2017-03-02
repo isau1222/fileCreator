@@ -1,5 +1,5 @@
 <template lang="jade">
-  div
+  div(:id="APP_ID")
     h3 Crumbs
     pre {{ $crumbs }}
     ul
@@ -20,6 +20,12 @@
   module.exports = {
 
     name: 'App',
+
+    data: function() {
+      return {
+        APP_ID: process.env.APP_ID, // @IMPORTANT
+      };
+    },
 
     // @NOTE: this will be called during SSR
     // @NOTE: this is a static method of the component, and can not access `this`,
