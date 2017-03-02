@@ -9,7 +9,8 @@ module.exports.webapp = {
   // The id of the element the app will be mounted to
   appId: 'webapp',
 
-  // @TODO: option to disable SSR
+  // Whether the app will be prerendered on the server
+  ssrEnabled: true,
 
   // Public path to the base of the app
   publicPath: '/',

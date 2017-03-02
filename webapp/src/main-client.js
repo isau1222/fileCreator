@@ -6,23 +6,57 @@ var store = main.store;
 
 // === //
 
+var rehydration = (window.__INITIAL_STATE__ != null);
+
 var targetSelector = '#' + process.env.APP_ID;
 var target = document.querySelector(targetSelector);
 if (!target) {
   throw new Error('The root element ' + targetSelector + ' is not present');
 }
 
-// === //
-
-// @NOTE: state rehydration
-// @TODO: codepath when no rehydration occures (mimic the SSR codepath)
-store.replaceState(window.__INITIAL_STATE__);
+// == //
 
 // @NOTE: create the instance
 var vm = new Vue(app);
 
-// @NOTE: wait until router has resolved possible async hooks
-router.onReady(function() {
-  // @NOTE: mount the instance to the dom
-  vm.$mount(target);
-});
+Promise.resolve()
+  .then(function() {
+    if (rehydration) {
+      store.replaceState(window.__INITIAL_STATE__);
+    }
+    else {
+      // @NOTE: prefetch the root data, which is necessary for router guards
+      if (app.preFetch) {
+        return app.preFetch(store);
+      }
+      else {
+        // @TODO: warn that no root data is fetched
+      }
+    }
+  })
+  .then(function() {
+    // @NOTE: wait for the router to settle
+    return new Promise(function(resolve, reject) {
+      return router.onReady(resolve);
+    });
+  })
+  .then(function() {
+    if (rehydration) {
+      // @NOTE: do nothing specific, all data was already prefetched
+    }
+    else {
+      // @NOTE: prefetch the rest of the data for components
+      var components = router.getMatchedComponents();
+
+      var fetches = components.map(function(component) {
+        if (component.preFetch) {
+          return component.preFetch(store, router.currentRoute);
+        }
+      });
+
+      return Promise.all(fetches);
+    }
+  })
+  .then(function() {
+    vm.$mount(target);
+  });

@@ -96,10 +96,12 @@ function Bundler(config, opts) {
     ],
   };
 
-  var serverWpConfig = merge.smart(baseWpConfig, this.config.server);
-  var clientWpConfig = merge.smart(baseWpConfig, this.config.client);
+  if (this.config.ssrEnabled) {
+    var serverWpConfig = merge.smart(baseWpConfig, this.config.server);
+    this.serverPath = getBundlePath(serverWpConfig);
+  }
 
-  this.serverPath = getBundlePath(serverWpConfig);
+  var clientWpConfig = merge.smart(baseWpConfig, this.config.client);
   this.clientPath = getBundlePath(clientWpConfig);
 
   this.publicBundlePath = url.resolve(clientWpConfig.output.publicPath, clientWpConfig.output.filename);
@@ -110,26 +112,28 @@ function Bundler(config, opts) {
   var fileLoaderTest = /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/;
   var fileLoaderQuery = 'file-loader?name=[path][name].[ext]?[hash]&publicPath=' + clientWpConfig.output.publicPath;
 
-  var serverWpConfigOverride = {
-    module: {
-      loaders: [
-        {
-          test: fileLoaderTest,
-          loader: fileLoaderQuery + '&emitFile=false',
-        },
-      ],
-    },
-    target: 'node', // Necessary for Vue bundle renderer
-    output: {
-      libraryTarget: 'commonjs2', // Necessary for Vue bundle renderer
-    },
-    plugins: lodash.compact([
-      // @NOTE: it is necessary for the server bundle to be a single file
-      new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1,
-      }),
-    ]),
-  };
+  if (this.config.ssrEnabled) {
+    var serverWpConfigOverride = {
+      module: {
+        loaders: [
+          {
+            test: fileLoaderTest,
+            loader: fileLoaderQuery + '&emitFile=false',
+          },
+        ],
+      },
+      target: 'node', // Necessary for Vue bundle renderer
+      output: {
+        libraryTarget: 'commonjs2', // Necessary for Vue bundle renderer
+      },
+      plugins: lodash.compact([
+        // @NOTE: it is necessary for the server bundle to be a single file
+        new webpack.optimize.LimitChunkCountPlugin({
+          maxChunks: 1,
+        }),
+      ]),
+    };
+  }
 
   var clientWpConfigOverride = {
     module: {
@@ -167,10 +171,19 @@ function Bundler(config, opts) {
     };
   }
 
-  serverWpConfig = merge.smart(serverWpConfig, serverWpConfigOverride);
+  if (this.config.ssrEnabled) {
+    serverWpConfig = merge.smart(serverWpConfig, serverWpConfigOverride);
+  }
+
   clientWpConfig = merge.smart(clientWpConfig, clientWpConfigOverride);
 
-  this.serverCompiler = webpack(serverWpConfig);
+  // @NOTE: for some reason the instantiations of webpack can not be separated
+  //        and intertwined with `merge.smart`, it throws bundling error if attempted
+
+  if (this.config.ssrEnabled) {
+    this.serverCompiler = webpack(serverWpConfig);
+  }
+
   this.clientCompiler = webpack(clientWpConfig);
 
   this.renderer = null;
@@ -195,6 +208,14 @@ Bundler.prototype.render = function(context, done) {
 
   Promise.resolve()
     .then(function() {
+      if (!bundler.config.ssrEnabled) {
+        // @NOTE: if we skip rendering, we want to fill the context with basic body and status code,
+        //        otherwise Vue won't know where to initialize
+        context.body = '<div id="' + bundler.config.appId + '"></div>';
+        context.status = 200;
+        return;
+      }
+
       // @TODO: block if client or server bundle are not ready
       if (bundler.renderer === null) {
         throw new Error('Renderer is not ready');
@@ -254,8 +275,10 @@ Bundler.prototype.render = function(context, done) {
 Bundler.prototype._initWithOnceCompile = function(done) {
   var bundler = this;
 
-  return async.parallel([
-    function(next) {
+  var tasks = [];
+
+  if (bundler.config.ssrEnabled) {
+    tasks.push(function(next) {
       return bundler.serverCompiler.run(function(err, stats) {
         if (err) return next(err);
 
@@ -268,44 +291,49 @@ Bundler.prototype._initWithOnceCompile = function(done) {
 
         return bundler._updateRenderer(next);
       });
-    },
-    function(next) {
-      return bundler.clientCompiler.run(function(err, stats) {
-        if (err) return next(err);
+    });
+  }
 
-        // @NOTE: in `once` mode, server should fail to start if bundling has failed
-        if (stats.hasErrors()) {
-          return next(new Error('Bundling failed: ' + stats.toString('errors-only')));
-        }
+  tasks.push(function(next) {
+    return bundler.clientCompiler.run(function(err, stats) {
+      if (err) return next(err);
 
-        bundler.opts.processClientStats(stats);
+      // @NOTE: in `once` mode, server should fail to start if bundling has failed
+      if (stats.hasErrors()) {
+        return next(new Error('Bundling failed: ' + stats.toString('errors-only')));
+      }
 
-        return next();
-      });
-    },
-  ], done);
+      bundler.opts.processClientStats(stats);
+
+      return next();
+    });
+  });
+
+  return async.parallel(tasks, done);
 };
 
 Bundler.prototype._initWithWatchCompile = function(done) {
   var bundler = this;
 
-  bundler.serverCompiler.plugin('compile', function() {
-    bundler._invalidateRenderer();
-  });
-
-  bundler.serverCompiler.watch({}, function(err, stats) {
-    if (err) return bundler.opts.processSoftError(err);
-
-    bundler.opts.processServerStats(stats);
-
-    if (stats.hasErrors()) {
-      return bundler.opts.processSoftError(new Error('Server bundle contains errors'));
-    }
-
-    return bundler._updateRenderer(function(err) {
-      if (err) return bundler.opts.processSoftError(err);
+  if (bundler.config.ssrEnabled) {
+    bundler.serverCompiler.plugin('compile', function() {
+      bundler._invalidateRenderer();
     });
-  });
+
+    bundler.serverCompiler.watch({}, function(err, stats) {
+      if (err) return bundler.opts.processSoftError(err);
+
+      bundler.opts.processServerStats(stats);
+
+      if (stats.hasErrors()) {
+        return bundler.opts.processSoftError(new Error('Server bundle contains errors'));
+      }
+
+      return bundler._updateRenderer(function(err) {
+        if (err) return bundler.opts.processSoftError(err);
+      });
+    });
+  }
 
   bundler.clientCompiler.watch({}, function(err, stats) {
     if (err) return bundler.opts.processSoftError(err);
