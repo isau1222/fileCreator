@@ -193,49 +193,62 @@ Bundler.prototype.init = function(done) {
 Bundler.prototype.render = function(context, done) {
   var bundler = this;
 
-  if (bundler.renderer === null) {
-    return done(new Error('Renderer is not ready'));
-  }
-
-  return bundler.renderer.renderToString(context, function(err, body) {
-    if (err) {
-      // @NOTE: If there is a runtime error, this branch will execute.
-      //        Unfortunately, the stack trace will not give reasonable
-      //        filename and line number, but it's better then nothing
-
-      // @NOTE: we need to assimilate error because bundler is run in the vm,
-      //        so the errors will be foreign
-      err = assimilateError(err);
-
-      // @NOTE: if it's a regular error, then report it
-      if (err instanceof Error) {
-        bundler.opts.processSoftError(err);
+  Promise.resolve()
+    .then(function() {
+      // @TODO: block if client or server bundle are not ready
+      if (bundler.renderer === null) {
+        throw new Error('Renderer is not ready');
       }
 
-      // @NOTE: There is no dedicated API to cancel the rendering,
-      //        so sometimes we throw for different reasons (e.g. redirect).
-      //        If that's not one of these cases, then report the error
-      // @TODO: Document types of throwable objects
-      var acceptableThrowableTypes = ['redirect'];
-      if (!acceptableThrowableTypes.includes(err.type)) {
-        bundler.opts.processSoftError(err);
-      }
+      return new Promise(function(resolve, reject) {
+        return bundler.renderer.renderToString(context, function(err, body) {
+          if (err) {
+            // @NOTE: If there is a runtime error, this branch will execute.
+            //        Unfortunately, the stack trace will not give reasonable
+            //        filename and line number, but it's better then nothing
 
+            // @NOTE: we need to assimilate error because bundler is run in the vm,
+            //        so the errors will be foreign
+            err = assimilateError(err);
+
+            // @NOTE: if it's a regular error, then report it
+            if (err instanceof Error) {
+              bundler.opts.processSoftError(err);
+            }
+
+            // @NOTE: There is no dedicated API to cancel the rendering,
+            //        so sometimes we throw for different reasons (e.g. redirect).
+            //        If that's not one of these cases, then report the error
+            // @TODO: Document types of throwable objects
+            var acceptableThrowableTypes = ['redirect'];
+            if (!acceptableThrowableTypes.includes(err.type)) {
+              bundler.opts.processSoftError(err);
+            }
+
+            return reject(err);
+          }
+
+          if (context.status == null) {
+            return reject(new Error('Renderer did not return a status code'));
+          }
+
+          context.body = body;
+
+          return resolve();
+        });
+      });
+    })
+    .then(function() {
+      context.includeScripts = [
+        bundler.publicVendorPath,
+        bundler.publicBundlePath,
+      ];
+      return done();
+    })
+    .catch(function(err) {
       return done(err);
-    }
+    });
 
-    if (context.status == null) {
-      return done(new Error('Renderer did not return a status code'));
-    }
-
-    context.body = body;
-    context.includeScripts = [
-      bundler.publicVendorPath,
-      bundler.publicBundlePath,
-    ];
-
-    return done();
-  });
 };
 
 Bundler.prototype._initWithOnceCompile = function(done) {
