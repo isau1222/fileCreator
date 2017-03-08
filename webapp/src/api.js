@@ -30,6 +30,24 @@ VueApi.prototype.isSuccess = function(response) {
   return response && (response.status >= 200) && (response.status < 300);
 };
 
+VueApi.prototype.extractErrorMessage = function(err) {
+  if (this.isConnectivityError(err)) {
+    return err.message;
+  }
+  else if (this.isServerError(err)) {
+    // @TODO: account for when response is not json
+    return err.response.message;
+  }
+  else if (this.isFailure(err)) {
+    // @TODO: account for when response is not json
+    return err.response.message;
+  }
+  else {
+    return err.message;
+    console.warn('Unexpected request failure', err);
+  }
+};
+
 VueApi.install = install;
 
 function install(Vue) {
