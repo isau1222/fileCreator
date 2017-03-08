@@ -127,6 +127,9 @@ function Bundler(config, opts) {
         libraryTarget: 'commonjs2', // Necessary for Vue bundle renderer
       },
       plugins: lodash.compact([
+        new webpack.DefinePlugin({
+          'process.env.VUE_ENV': JSON.stringify('server'),
+        }),
         // @NOTE: it is necessary for the server bundle to be a single file
         new webpack.optimize.LimitChunkCountPlugin({
           maxChunks: 1,
@@ -145,6 +148,9 @@ function Bundler(config, opts) {
       ],
     },
     plugins: lodash.compact([
+      new webpack.DefinePlugin({
+        'process.env.VUE_ENV': JSON.stringify('client'),
+      }),
       // @NOTE: extracts vendor chunk
       new webpack.optimize.CommonsChunkPlugin({
         name: 'vendor',
