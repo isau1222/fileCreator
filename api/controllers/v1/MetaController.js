@@ -15,4 +15,13 @@ module.exports = {
     });
   },
 
+  echo: function(req, res) {
+    // @REFERENCE: http://sailsjs.com/documentation/reference/request-req
+    return res.apiOk({
+      query: req.query,
+      body: req.body,
+      // @NOTE: this query does not have url path params
+    });
+  },
+
 };
