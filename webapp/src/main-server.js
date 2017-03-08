@@ -40,8 +40,18 @@ function makeSailsAdapter(context) {
           'accept-language': context.req.headers['accept-language'],
           'user-agent': context.req.headers['user-agent'],
         }),
-        data: config.data,
       };
+
+      if (config.data != null) {
+        // @NOTE: axios adapter recieves serialized data, but sails expects non-serialized data,
+        //        so we have to deserialize it
+        try {
+          request.data = JSON.parse(config.data);
+        }
+        catch (err) {
+          // @TODO: log application failure
+        }
+      }
 
       context.sails.request(request, function(err, response) {
         if (err) {
