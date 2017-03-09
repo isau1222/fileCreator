@@ -10,6 +10,7 @@ modules.forEach(function(module) {
 var api = require('@/api');
 var store = require('@/store');
 var router = require('@/router');
+var routeData = require('@/route-data');
 var app = require('@/pages/app.vue');
 
 app = Object.assign({}, app, {
@@ -25,4 +26,5 @@ module.exports = {
   api: api,
   router: router,
   store: store,
+  routeData: routeData,
 };

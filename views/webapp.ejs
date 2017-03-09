@@ -46,6 +46,13 @@
       <script>window.__INITIAL_STATE__ = <%- JSON.stringify(context.initialState) %>;</script>
     <% } %>
 
+    <% if (context.routeDataCache != null) { %>
+      <!-- @SECTION: initial state for vuex -->
+      <!-- @TODO: proper serialization, e.g. errors -->
+      <!-- @TODO: proper escaping, e.g. https://www.npmjs.com/package/serialize-javascript -->
+      <script>window.__ROUTE_DATA_CACHE__ = <%- JSON.stringify(context.routeDataCache) %>;</script>
+    <% } %>
+
   </head>
   <body>
 

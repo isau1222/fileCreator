@@ -3,10 +3,11 @@ var app = main.app;
 var api = main.api;
 var router = main.router;
 var store = main.store;
+var routeData = main.routeData;
 
 // === //
 
-var rehydration = (window.__INITIAL_STATE__ != null);
+var rehydration = (window.__INITIAL_STATE__ != null) && (window.__ROUTE_DATA_CACHE__ != null);
 
 var targetSelector = '#' + process.env.APP_ID;
 var target = document.querySelector(targetSelector);
@@ -16,6 +17,11 @@ if (!target) {
 
 // == //
 
+// @NOTE: hacky solution for hacky task :D
+if (rehydration) {
+  routeData.rehydration = true;
+}
+
 // @NOTE: create the instance
 var vm = new Vue(app);
 
@@ -23,6 +29,7 @@ Promise.resolve()
   .then(function() {
     if (rehydration) {
       store.replaceState(window.__INITIAL_STATE__);
+      routeData.cache = window.__ROUTE_DATA_CACHE__;
     }
     else {
       // @NOTE: prefetch the root data, which is necessary for router guards
@@ -42,6 +49,7 @@ Promise.resolve()
   })
   .then(function() {
     if (rehydration) {
+      routeData.rehydration = false;
       // @NOTE: do nothing specific, all data was already prefetched
     }
     else {

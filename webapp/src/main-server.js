@@ -8,6 +8,7 @@ var app = main.app;
 var api = main.api;
 var router = main.router;
 var store = main.store;
+var routeData = main.routeData;
 
 // @TODO: replace with `utils.cleanUrl`
 function cleanUrl(value) {
@@ -157,6 +158,7 @@ module.exports = function(context) {
       };
 
       context.initialState = store.state;
+      context.routeDataCache = routeData.cache;
 
       return vm;
     });
