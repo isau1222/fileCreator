@@ -38,6 +38,11 @@ module.exports = function badRequest(data, options) {
     data = undefined;
   }
 
+  // @NOTE: explicitly set empty data to null, because `'null'` is a valid JSON and `''` is not
+  if (data == null) {
+    data = null;
+  }
+
   // If the user-agent wants JSON, always respond with JSON
   // If views are disabled, revert to json
   if (req.wantsJSON || sails.config.hooks.views === false) {
@@ -69,6 +74,7 @@ module.exports = function badRequest(data, options) {
   // If no second argument provided, try to serve the implied view,
   // but fall back to sending JSON(P) if no view can be inferred.
   else return res.guessView({ data: viewData, title: 'Bad Request' }, function couldNotGuessView () {
+    console.log('@3');
     return res.jsonx(data);
   });
 

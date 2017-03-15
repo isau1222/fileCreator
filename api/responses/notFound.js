@@ -40,6 +40,11 @@ module.exports = function notFound (data, options) {
     data = undefined;
   }
 
+  // @NOTE: explicitly set empty data to null, because `'null'` is a valid JSON and `''` is not
+  if (data == null) {
+    data = null;
+  }
+
   // If the user-agent wants JSON, always respond with JSON
   // If views are disabled, revert to json
   if (req.wantsJSON || sails.config.hooks.views === false) {

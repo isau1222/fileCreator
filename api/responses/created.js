@@ -23,6 +23,11 @@ module.exports = function created (data, options) {
   // Set status code
   res.status(201);
 
+  // @NOTE: explicitly set empty data to null, because `'null'` is a valid JSON and `''` is not
+  if (data == null) {
+    data = null;
+  }
+
   // If appropriate, serve data as JSON(P)
   // If views are disabled, revert to json
   if (req.wantsJSON || sails.config.hooks.views === false) {
