@@ -5,6 +5,7 @@
   "description": "A Sails and Vue application",
   "keywords": [],
   "dependencies": {
+    "assimilate-error": "^0.1.0",
     "async": "^2.1.4",
     "axios": "^0.15.2",
     "bcryptjs": "^2.3.0",
