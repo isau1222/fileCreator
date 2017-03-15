@@ -5,3 +5,5 @@ Generaly, they get data from props and global store, and can dispatch store acti
 A partial usually consists of widgets and other partials.
 
 Partials can NOT use in-component route navigation guards.
+
+Partials are registered automatically under their filenames (folders are not supported yet).

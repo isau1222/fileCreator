@@ -1,5 +1,6 @@
 var modules = [
   require('@/modules/crumbs'),
+  require('@/modules/register-all'),
 ];
 
 modules.forEach(function(module) {
