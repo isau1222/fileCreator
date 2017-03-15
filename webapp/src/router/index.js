@@ -39,14 +39,14 @@ var router = new VueRouter({
   routes: [
     {
       path: '/',
-      component: require('@/controllers/dashboard.vue'),
+      component: require('@/pages/dashboard.vue'),
       meta: {
         crumb: 'Dashboard',
       },
     },
     {
       path: '/auth',
-      component: require('@/controllers/auth.vue'),
+      component: require('@/pages/auth.vue'),
       meta: {
         crumb: 'Auth',
       },
@@ -76,7 +76,7 @@ var router = new VueRouter({
     },
     {
       path: '*',
-      component: require('@/controllers/error-404.vue'),
+      component: require('@/pages/error-404.vue'),
       meta: {
         crumb: 'Error',
         status: 404,

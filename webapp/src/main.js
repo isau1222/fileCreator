@@ -9,7 +9,7 @@ modules.forEach(function(module) {
 var api = require('@/api');
 var store = require('@/store');
 var router = require('@/router');
-var app = require('@/controllers/app.vue');
+var app = require('@/pages/app.vue');
 
 app = Object.assign({}, app, {
   api: api,
