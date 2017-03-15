@@ -26,6 +26,7 @@ VueApi.prototype.isFailure = function(err) {
   return err.config && err.response && (err.response.status >= 400) && (err.response.status < 500);
 };
 
+// @DEPRECATED
 VueApi.prototype.isSuccess = function(response) {
   return response && (response.status >= 200) && (response.status < 300);
 };
