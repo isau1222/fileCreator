@@ -41,7 +41,7 @@ function apiSuccessHandler(response) {
 
   store.dispatch('toast/add', {
     type: 'info',
-    message: 'Request succeded: ' + (response.data.message || '<No message>'),
+    message: 'Request succeded: ' + (response.data && response.data.message || '<No message>'),
   });
 
   return response;
@@ -57,32 +57,39 @@ function apiFailureHandler(err) {
   //        we might want to see the error on production server
   //        without rebundling
 
+  // @FIXME: extract error info with proper api methods
+
+  var error = {
+    message: api.extractErrorMessage(err),
+    stack: api.extractErrorStack(err),
+  };
+
   if (api.isFailure(err)) {
     toast = {
       type: 'error',
-      message: 'Request failed: ' + (err.response.data.message || '<No message>'),
-      error: err.response.data.$error,
+      message: 'Request failed: ' + error.message,
+      error: error,
     };
   }
   else if (api.isServerError(err)) {
     toast = {
       type: 'error',
-      title: 'Server error: ' + (err.response.data.message || '<No message>'),
-      error: err.response.data.$error,
+      title: 'Server error: ' + error.message,
+      error: error,
     };
   }
   else if (api.isConnectivityError(err)) {
     toast = {
       type: 'error',
-      title: 'Connectiviry error: ' + (err.message || '<No message>'),
-      error: serializeError(err),
+      title: 'Connectiviry error: ' + error.message,
+      error: error,
     };
   }
   else {
     toast = {
       type: 'error',
-      title: 'Unexpected error: ' + (err.message || '<No message>'),
-      error: serializeError(err),
+      title: 'Unexpected error: ' + error.message,
+      error: error,
     };
   }
 

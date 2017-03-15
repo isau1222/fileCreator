@@ -1,4 +1,5 @@
 var axios = require('axios');
+var isPlainObject = require('lodash/isPlainObject');
 
 // === //
 
@@ -35,16 +36,60 @@ VueApi.prototype.extractErrorMessage = function(err) {
   if (this.isConnectivityError(err)) {
     return err.message;
   }
-  else if (this.isServerError(err)) {
-    // @TODO: account for when response is not json
-    return err.response.message;
-  }
-  else if (this.isFailure(err)) {
-    // @TODO: account for when response is not json
-    return err.response.message;
+  else if (this.isServerError(err) || this.isFailure(err)) {
+    if (isPlainObject(err.response.data)) {
+      // @NOTE: server responded with proper json
+      if (err.response.data.$error) {
+        // @NOTE: api response, juicy details about the error
+        return err.response.data.$error.message;
+      }
+      else if (err.response.data.message) {
+        // @NOTE: generic sails response
+        return err.response.data.message;
+      }
+      else {
+        // @NOTE: fallback
+        return err.message;
+      }
+    }
+    else {
+      // @NOTE: server responded with primitive value
+      return err.message;
+    }
   }
   else {
     return err.message;
+    console.warn('Unexpected request failure', err);
+  }
+};
+
+VueApi.prototype.extractErrorStack = function(err) {
+  if (this.isConnectivityError(err)) {
+    return err.stack;
+  }
+  else if (this.isServerError(err) || this.isFailure(err)) {
+    if (isPlainObject(err.response.data)) {
+      // @NOTE: server responded with proper json
+      if (err.response.data.$error) {
+        // @NOTE: api response, juicy details about the error
+        return err.response.data.$error.stack;
+      }
+      else if (err.response.data.stack) {
+        // @NOTE: generic sails response
+        return err.response.data.stack;
+      }
+      else {
+        // @NOTE: fallback
+        return err.stack;
+      }
+    }
+    else {
+      // @NOTE: server responded with primitive value
+      return err.stack;
+    }
+  }
+  else {
+    return err.stack;
     console.warn('Unexpected request failure', err);
   }
 };
