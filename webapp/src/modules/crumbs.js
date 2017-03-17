@@ -10,6 +10,11 @@ module.exports = function install(Vue) {
 
   install.installed = true;
 
+  if (Object.getOwnPropertyDescriptor(Vue.prototype, '$crumbs')) {
+    // @NOTE: already defined
+    return;
+  }
+
   Object.defineProperty(Vue.prototype, '$crumbs', {
     get: function() {
       var currentRoute = this.$route;

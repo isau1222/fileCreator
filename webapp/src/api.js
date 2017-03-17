@@ -100,6 +100,11 @@ function install(Vue) {
   if (install.installed) return;
   install.installed = true;
 
+  if (Object.getOwnPropertyDescriptor(Vue.prototype, '$api')) {
+    // @NOTE: already defined
+    return;
+  }
+
   Object.defineProperty(Vue.prototype, '$api', {
     get: function() {
       return this.$root._api;

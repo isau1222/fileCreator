@@ -7,11 +7,8 @@ var assimilateError = require('assimilate-error');
 
 var webpack = require('webpack');
 var merge = require('webpack-merge');
+var VueSsrPlugin = require('vue-ssr-webpack-plugin');
 var createBundleRenderer = require('vue-server-renderer').createBundleRenderer;
-
-function getBundlePath(wpConfig) {
-  return path.join(wpConfig.output.path, wpConfig.output.filename);
-}
 
 function noop() {
   // @NOTE: no operation
@@ -62,11 +59,10 @@ function Bundler(config, opts) {
 
   if (this.config.ssrEnabled) {
     serverWpConfig = merge.smart(baseWpConfig, this.config.server);
-    this.serverPath = getBundlePath(serverWpConfig);
+    this.serverPath = path.join(serverWpConfig.output.path, this.config.serverBundleName);
   }
 
   clientWpConfig = merge.smart(baseWpConfig, this.config.client);
-  this.clientPath = getBundlePath(clientWpConfig);
 
   this.publicBundlePath = url.resolve(clientWpConfig.output.publicPath, clientWpConfig.output.filename);
   this.publicVendorPath = url.resolve(clientWpConfig.output.publicPath, this.config.vendorFilename);
@@ -99,6 +95,9 @@ function Bundler(config, opts) {
         // @NOTE: it is necessary for the server bundle to be a single file
         new webpack.optimize.LimitChunkCountPlugin({
           maxChunks: 1,
+        }),
+        new VueSsrPlugin({
+          filename: this.config.serverBundleName,
         }),
       ]),
     };
@@ -328,10 +327,11 @@ Bundler.prototype._invalidateRenderer = function() {
 Bundler.prototype._updateRenderer = function(done) {
   var bundler = this;
 
-  return fs.readFile(bundler.serverPath, 'utf-8', function(err, bundle) {
+  return fs.readFile(bundler.serverPath, 'utf-8', function(err, bundleJson) {
     if (err) return done(err);
 
     try {
+      var bundle = JSON.parse(bundleJson);
       bundler.renderer = createBundleRenderer(bundle, {
         // @TODO: component caching
       });
