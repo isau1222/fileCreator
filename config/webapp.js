@@ -45,8 +45,8 @@ module.exports.webapp = {
     output: {
       // @NOTE: filename is not needed because we will output with vue-ssr-webpack-plugin instead of the regular way
       path: path.resolve(SAILS_ROOT, '.tmp'),
-      externals: Object.keys(pkg.dependencies),
     },
+    externals: Object.keys(pkg.dependencies),
   },
 
   // Webpack config for the client bundle
