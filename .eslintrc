@@ -1,0 +1,64 @@
+{
+  "extends": "eslint:recommended",
+
+  "plugins": ["import"],
+
+  "rules": {
+
+    "indent": ["error", 2, {
+      "SwitchCase": 1,
+    }],
+
+    "semi": ["error", "always"],
+    "no-extra-semi": "error",
+    "semi-spacing": ["error", {
+      before: false,
+      after: true,
+    }],
+
+    "curly": ["warn", "all"],
+
+    "brace-style": ["warn", "stroustrup"],
+
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "never",
+    }],
+
+    "no-alert": "off",
+    "no-debugger": "warn",
+    "no-console": ["warn", {
+      "allow": ["log", "warn", "error"],
+    }],
+
+    "no-unused-vars": ["warn", {
+      "args": "none",
+    }],
+
+    "no-shadow": "warn",
+
+    "no-unreachable": "warn",
+
+  },
+
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+  },
+
+  "globals": {
+    // sails
+    "sails": true,
+    "async": true,
+    "_": true,
+
+    // vue
+    "Vue": true,
+    "Vuex": true,
+    "VueRouter": true,
+  },
+}

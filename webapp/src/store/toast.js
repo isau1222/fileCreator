@@ -23,6 +23,6 @@ module.exports = {
     },
     'remove': function(context, toastId) {
       context.commit('removed', toastId);
-    }
+    },
   },
 };

@@ -4,7 +4,7 @@ var modules = [
 ];
 
 modules.forEach(function(module) {
- Vue.use(module);
+  Vue.use(module);
 });
 
 var api = require('@/api');

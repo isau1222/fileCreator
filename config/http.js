@@ -9,8 +9,6 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
 
-var passport = require('passport');
-
 module.exports.http = {
 
   /****************************************************************************
@@ -52,7 +50,7 @@ module.exports.http = {
       'www',
       'favicon',
       '404',
-      '500'
+      '500',
     ],
 
   /****************************************************************************

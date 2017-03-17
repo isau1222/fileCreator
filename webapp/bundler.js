@@ -1,7 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 var url = require('url');
-var he = require('he');
 var async = require('async');
 var lodash = require('lodash');
 var assimilateError = require('assimilate-error');
@@ -59,12 +58,14 @@ function Bundler(config, opts) {
     ],
   };
 
+  var serverWpConfig, clientWpConfig;
+
   if (this.config.ssrEnabled) {
-    var serverWpConfig = merge.smart(baseWpConfig, this.config.server);
+    serverWpConfig = merge.smart(baseWpConfig, this.config.server);
     this.serverPath = getBundlePath(serverWpConfig);
   }
 
-  var clientWpConfig = merge.smart(baseWpConfig, this.config.client);
+  clientWpConfig = merge.smart(baseWpConfig, this.config.client);
   this.clientPath = getBundlePath(clientWpConfig);
 
   this.publicBundlePath = url.resolve(clientWpConfig.output.publicPath, clientWpConfig.output.filename);
@@ -75,8 +76,10 @@ function Bundler(config, opts) {
   var fileLoaderTest = /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/;
   var fileLoaderQuery = 'file-loader?name=[path][name].[ext]?[hash]&publicPath=' + clientWpConfig.output.publicPath;
 
+  var serverWpConfigOverride, clientWpConfigOverride;
+
   if (this.config.ssrEnabled) {
-    var serverWpConfigOverride = {
+    serverWpConfigOverride = {
       module: {
         loaders: [
           {
@@ -101,7 +104,7 @@ function Bundler(config, opts) {
     };
   }
 
-  var clientWpConfigOverride = {
+  clientWpConfigOverride = {
     module: {
       loaders: [
         {
@@ -334,7 +337,7 @@ Bundler.prototype._updateRenderer = function(done) {
       });
       return done();
     }
-    catch(err) {
+    catch (err) {
       return done(err);
     }
   });

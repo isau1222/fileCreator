@@ -1,5 +1,3 @@
-var Vuex = require('vuex');
-
 module.exports = {
 
   // @DOCS: utility function that merges objects from a list with `Object.assign`

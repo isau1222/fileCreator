@@ -9,7 +9,7 @@ module.exports = {
   _config: {
     actions: false,
     shortcuts: false,
-    rest: false
+    rest: false,
   },
 
   render: function(req, res) {

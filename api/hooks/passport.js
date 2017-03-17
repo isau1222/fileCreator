@@ -18,7 +18,7 @@ module.exports = function(sails) {
         return next();
       });
     });
-  };
+  }
 
   return {
     routes: {

@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 var Container = {
   name: 'Container',
   render: function(h) {
-    return h('router-view')
+    return h('router-view');
   },
 };
 

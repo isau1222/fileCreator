@@ -47,17 +47,17 @@ function VueRouteData(opts) {
     }
 
     if (!isFunction(opts.fetch)) {
-      console.error('[vue-router-data] `fetch` is expected to be a function, but given', opts.fetch, 'in', otps);
+      console.error('[vue-router-data] `fetch` is expected to be a function, but given', opts.fetch, 'in', opts);
       failed = true;
     }
 
     if (!isFunction(opts.update)) {
-      console.error('[vue-router-data] `update` is expected to be a function, but given', opts.fetch, 'in', otps);
+      console.error('[vue-router-data] `update` is expected to be a function, but given', opts.fetch, 'in', opts);
       failed = true;
     }
 
     if (opts.process && !isFunction(opts.process)) {
-      console.error('[vue-router-data] `update` is expected to be a function, but given', opts.fetch, 'in', otps);
+      console.error('[vue-router-data] `update` is expected to be a function, but given', opts.fetch, 'in', opts);
     }
 
     if (failed) {
@@ -103,7 +103,7 @@ function VueRouteData(opts) {
                   vm = _vm;
                   return resolve();
                 });
-              })
+              });
             }
           })
           .then(function() {
@@ -186,7 +186,7 @@ function VueRouteData(opts) {
                   vm = _vm;
                   return resolve();
                 });
-              })
+              });
             }
           })
           .then(function() {
@@ -230,8 +230,8 @@ function VueRouteData(opts) {
                 return next(target);
               }
               else {
-                return next(function(vm) {
-                  opts.update.call(vm, cached.err, cached.result);
+                return next(function(_vm) {
+                  opts.update.call(_vm, cached.err, cached.result);
                 });
               }
             }
@@ -285,7 +285,7 @@ var opts = {};
 if (process.env.VUE_ENV === 'server') {
   if (process.env.NODE_ENV !== 'production') {
     opts.stack = true;
-  };
+  }
 }
 
 // @NOTE: always include stack of client-originated errors

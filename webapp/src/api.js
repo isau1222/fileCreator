@@ -58,8 +58,8 @@ VueApi.prototype.extractErrorMessage = function(err) {
     }
   }
   else {
-    return err.message;
     console.warn('Unexpected request failure', err);
+    return err.message;
   }
 };
 
@@ -89,8 +89,8 @@ VueApi.prototype.extractErrorStack = function(err) {
     }
   }
   else {
-    return err.stack;
     console.warn('Unexpected request failure', err);
+    return err.stack;
   }
 };
 
