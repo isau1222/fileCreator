@@ -14,7 +14,11 @@ module.exports = function(sails) {
   });
 
   return {
-    initialize: bundler.init.bind(bundler),
+    initialize: function(done) {
+      return sails.after(['hook:orm:loaded', 'hook:pubsub:loaded'], function() {
+        return bundler.init(done);
+      });
+    },
     render: bundler.render.bind(bundler),
   };
 };
