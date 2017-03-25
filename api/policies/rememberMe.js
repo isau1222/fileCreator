@@ -33,7 +33,7 @@ module.exports = function(req, res, next) {
 
         else {
           // @TODO: log security event
-          return res.redirect(req.url);
+          return res.redirect(307, req.url); // @NOTE: with 307 client MUST NOT change the request method
           // @NOTE: `next` would have been called here if we didn't redirect
         }
       });
