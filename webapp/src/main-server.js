@@ -123,7 +123,7 @@ module.exports = function(context) {
     .then(function() {
       // @NOTE: retrieve current route
       var route = router.currentRoute;
-      var canonical = cleanUrl(publicPath + route.path); // @TODO: account for query string too
+      var canonical = cleanUrl(publicPath + route.fullPath); // @TODO: better mechanism to extract canonical?
 
       // @TODO: maybe soft match or another way to detect redirects?
       // @TODO: maybe distinguish between soft redirects (unauthorized) and hard redirects (301)?
