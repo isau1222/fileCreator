@@ -7,54 +7,74 @@
 
 var passport = require('passport');
 
+// @ASSERT: this function does not throw/reject
 function makeSessionPayload(req) {
-  return {
-    isAuthenticated: req.isAuthenticated(),
-    user: req.user || null,
-  };
+  var user = req.user || null;
+  var access = sails.services.access.makeAclPayload(user);
+
+  return Promise.all([user, access])
+    .then(function(all) {
+      return {
+        isAuthenticated: req.isAuthenticated(),
+        user: all[0],
+        access: all[1],
+      };
+    });
 }
 
 module.exports = {
 
   login: function(req, res) {
+
     // @TODO: log security event
 
     if (req.isAuthenticated()) {
-      // @TODO: log security incident
-      return res.apiBadRequest('Already authenticated', makeSessionPayload(req));
+      return makeSessionPayload(req).then(function(payload) {
+        return res.apiBadRequest('Already authenticated', payload);
+      });
     }
 
     return passport.authenticate('local', function(err, user, challenge) {
       if (err) {
         // @TODO: log security incident
-        return res.apiBadRequest('Authentication failed', makeSessionPayload(req), { $error: err });
+        return makeSessionPayload(req).then(function(payload) {
+          return res.apiBadRequest('Authentication failed', payload, { $error: err });
+        });
       }
 
       else if (!user) {
         // @TODO: log security incident, include challenge
         var message = challenge ? challenge.message : 'Authentication failed';
-        return res.apiBadRequest(message, makeSessionPayload(req));
+        return makeSessionPayload(req).then(function(payload) {
+          return res.apiBadRequest(message, payload);
+        });
       }
 
       else {
         return req.login(user, function(err) {
           if (err) {
             // @TODO: log security incident
-            return res.apiBadRequest('Authentication failed', makeSessionPayload(req), { $error: err });
+            return makeSessionPayload(req).then(function(payload) {
+              return res.apiBadRequest('Authentication failed', payload, { $error: err });
+            });
           }
 
           else {
             return sails.models.passport.issueToken(user, function(err, token) {
               if (err) {
                 // @TODO: log security incident
-                return res.apiBadRequest('Authentication failed', makeSessionPayload(req), { $error: err });
+                return makeSessionPayload(req).then(function(payload) {
+                  return res.apiBadRequest('Authentication failed', payload, { $error: err });
+                });
               }
 
               else {
                 // @TODO: send user info
                 // @TODO: log security event
                 res.cookie(sails.config.passport.rememberMe.key, token, { path: '/', httpOnly: true, maxAge: 604800000 });
-                return res.apiOk(makeSessionPayload(req));
+                return makeSessionPayload(req).then(function(payload) {
+                  return res.apiOk(payload);
+                });
               }
             });
           }
@@ -72,7 +92,9 @@ module.exports = {
 
     if (!req.isAuthenticated()) {
       // @TODO: log security incident
-      return res.apiBadRequest('Not authenticated yet', makeSessionPayload(req));
+      return makeSessionPayload(req).then(function(payload) {
+        return res.apiBadRequest('Not authenticated yet', payload);
+      });
     }
 
     else {
@@ -83,20 +105,26 @@ module.exports = {
 
       if (!token) {
         // @TODO: log security event
-        return res.apiOk(makeSessionPayload(req));
+        return makeSessionPayload(req).then(function(payload) {
+          return res.apiOk(payload);
+        });
       }
 
       if (token) {
         return sails.models.passport.destroy({ token: token }, function(err) {
           if (err) {
             // @TODO: log security incident
-            return res.apiBadRequest('Deauthentification failed', makeSessionPayload(req), { $error: err });
+            return makeSessionPayload(req).then(function(payload) {
+              return res.apiBadRequest('Deauthentification failed', payload, { $error: err });
+            });
           }
 
           else {
             // @TODO: log security event
             res.clearCookie(key);
-            return res.apiOk(makeSessionPayload(req));
+            return makeSessionPayload(req).then(function(payload) {
+              return res.apiOk(payload);
+            });
           }
         });
       }
@@ -104,6 +132,8 @@ module.exports = {
   },
 
   status: function(req, res) {
-    return res.apiOk(makeSessionPayload(req));
+    return makeSessionPayload(req).then(function(payload) {
+      return res.apiOk(payload);
+    });
   },
 };
