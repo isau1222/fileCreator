@@ -5,6 +5,15 @@ var bower = require('bower-files')();
 var SAILS_ROOT = path.resolve(__dirname, '..');
 var ASSETS_ROOT = path.resolve(SAILS_ROOT, 'assets');
 
+var bowerFiles = bower
+  .ext(['js', 'css'])
+  .files;
+
+console.log('Including files from bower:');
+bowerFiles.forEach(function(file) {
+  console.log(' - ' + file);
+});
+
 module.exports.assets = {
 
   // @TODO: compile stategies `once` and `reuse`
@@ -14,9 +23,14 @@ module.exports.assets = {
     devtool: '#cheap-module-inline-source-map',
     context: ASSETS_ROOT,
     entry: Array.prototype.concat.apply([], [
-      bower.ext(['js', 'css']).files,
+
+      // Bower files
+      bowerFiles,
+
+      // Vendor files
       match('./vendor/**/*.js'),
       match('./vendor/**/*.css'),
+
     ]),
     output: {
       path: path.resolve(SAILS_ROOT, '.tmp/public/assets'),
