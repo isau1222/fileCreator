@@ -1,7 +1,7 @@
 {
   "extends": "eslint:recommended",
 
-  "plugins": ["import"],
+  "plugins": ["vue", "import"],
 
   "rules": {
 
