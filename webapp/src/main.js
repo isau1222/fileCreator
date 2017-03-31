@@ -11,7 +11,7 @@ var api = require('@/api');
 var store = require('@/store');
 var router = require('@/router');
 var routeData = require('@/route-data');
-var app = require('@/pages/app.vue');
+var app = require('@/pages/app');
 
 app = Object.assign({}, app, {
   api: api,
