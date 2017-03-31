@@ -3,7 +3,7 @@
 // @NOTE: this is quite fragile
 var settle = require('axios/lib/core/settle');
 
-var main = require('@/main');
+var main = require('@/main.js');
 var app = main.app;
 var api = main.api;
 var router = main.router;

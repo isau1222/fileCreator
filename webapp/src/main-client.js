@@ -1,4 +1,6 @@
-var main = require('@/main');
+require('@/main.scss');
+
+var main = require('@/main.js');
 var app = main.app;
 var api = main.api;
 var router = main.router;

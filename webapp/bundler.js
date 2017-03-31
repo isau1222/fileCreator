@@ -111,6 +111,7 @@ function Bundler(config, opts) {
           test: fileLoaderTest,
           loader: fileLoaderQuery,
         },
+        { test: /\.scss$/, loader: 'style-loader!css!sass' },
       ],
     },
     plugins: lodash.compact([
