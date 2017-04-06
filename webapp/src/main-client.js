@@ -1,11 +1,10 @@
 require('@/styles/main.scss');
 
-var main = require('@/main.js');
-var app = main.app;
-var api = main.api;
-var router = main.router;
-var store = main.store;
-var routeData = main.routeData;
+var main = require('@/main');
+var api = require('@/api');
+var router = require('@/router');
+var store = require('@/store');
+var routeData = require('@/route-data');
 
 // === //
 
@@ -25,7 +24,7 @@ if (rehydration) {
 }
 
 // @NOTE: create the instance
-var vm = new Vue(app);
+var vm = new Vue(main);
 
 Promise.resolve()
   .then(function() {
@@ -35,8 +34,8 @@ Promise.resolve()
     }
     else {
       // @NOTE: prefetch the root data, which is necessary for router guards
-      if (app.preFetch) {
-        return app.preFetch(store);
+      if (main.preFetch) {
+        return main.preFetch(store);
       }
       else {
         // @TODO: warn that no root data is fetched
