@@ -1,11 +1,5 @@
-var modules = [
-  require('@/modules/crumbs'),
-  require('@/modules/register-all'),
-];
-
-modules.forEach(function(module) {
-  Vue.use(module);
-});
+var vueModules = require.context('@/vue-modules', true, /\.js$/);
+_.each(vueModules.keys(), path => vueModules(path));
 
 var rootVue = require('@/pages/app.vue');
 module.exports = _.extend({}, rootVue, {

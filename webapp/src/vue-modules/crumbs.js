@@ -3,17 +3,7 @@ var isFunction = require('lodash/isFunction');
 var isPlainObject = require('lodash/isPlainObject');
 var utils = require('@/utils');
 
-module.exports = function install(Vue) {
-  if (install.installed) {
-    return;
-  }
-
-  install.installed = true;
-
-  if (Object.getOwnPropertyDescriptor(Vue.prototype, '$crumbs')) {
-    // @NOTE: already defined
-    return;
-  }
+if (!Object.getOwnPropertyDescriptor(Vue.prototype, '$crumbs')) {
 
   Object.defineProperty(Vue.prototype, '$crumbs', {
     get: function() {
@@ -53,4 +43,5 @@ module.exports = function install(Vue) {
         });
     },
   });
-};
+
+}

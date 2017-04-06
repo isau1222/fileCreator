@@ -1,16 +1,8 @@
-module.exports = function install(Vue) {
-  if (install.installed) {
-    return;
-  }
+var requirePartial = require.context('@/partials', true, /\.vue$/);
+registerComponents(requirePartial, 'partial');
 
-  install.installed = true;
-
-  var requirePartial = require.context('@/partials', true, /\.vue$/);
-  registerComponents(requirePartial, 'partial');
-
-  var requireWidget = require.context('@/widgets', true, /\.vue$/);
-  registerComponents(requireWidget, 'widget');
-};
+var requireWidget = require.context('@/widgets', true, /\.vue$/);
+registerComponents(requireWidget, 'widget');
 
 function registerComponents(req, keyword) {
   var paths = req.keys();
