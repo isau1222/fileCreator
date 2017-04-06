@@ -1,4 +1,4 @@
-require('@/main.scss');
+require('@/styles/main.scss');
 
 var main = require('@/main.js');
 var app = main.app;
