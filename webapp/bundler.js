@@ -14,6 +14,12 @@ function noop() {
   // @NOTE: no operation
 }
 
+// @NOTE: sometimes webpack errors are weird, man
+function extractWebpackError(stats) {
+  var error = stats.compilation.errors && stats.compilation.errors[0];
+  return assimilateError(error, true);
+}
+
 // === //
 
 module.exports = Bundler;
@@ -26,6 +32,7 @@ function Bundler(config, opts) {
 
   this.config = config;
   this.opts = opts;
+  this.blocks = {};
 
   var baseWpConfig = {
     module: {
@@ -181,6 +188,9 @@ Bundler.prototype.render = function(context, done) {
 
   Promise.resolve()
     .then(function() {
+      return bundler._waitAll();
+    })
+    .then(function() {
       if (!bundler.config.ssrEnabled) {
         // @NOTE: if we skip rendering, we want to fill the context with basic body and status code,
         //        otherwise Vue won't know where to initialize
@@ -248,41 +258,47 @@ Bundler.prototype.render = function(context, done) {
 Bundler.prototype._initWithOnceCompile = function(done) {
   var bundler = this;
 
-  var tasks = [];
-
   if (bundler.config.ssrEnabled) {
-    tasks.push(function(next) {
-      return bundler.serverCompiler.run(function(err, stats) {
-        if (err) return next(err);
+    bundler._setPending('server-renderer');
 
-        // @NOTE: in `once` mode, server should fail to start if bundling has failed
-        if (stats.hasErrors()) {
-          return next(new Error('Bundling failed: ' + stats.toString('errors-only')));
-        }
+    bundler.serverCompiler.run(function(err, stats) {
+      if (err) return bundler._reject('server-renderer', err);
 
-        bundler.opts.processServerStats(stats);
+      // @NOTE: in `once` mode, server should fail to start if bundling has failed
+      if (stats.hasErrors()) {
+        return bundler._reject('server-renderer', extractWebpackError(stats));
+      }
 
-        return bundler._updateRenderer(next);
+      bundler.opts.processServerStats(stats);
+
+      return bundler._updateRenderer(function() {
+        bundler._resolve('server-renderer');
       });
     });
   }
 
-  tasks.push(function(next) {
-    return bundler.clientCompiler.run(function(err, stats) {
-      if (err) return next(err);
+  bundler._setPending('client-renderer');
 
-      // @NOTE: in `once` mode, server should fail to start if bundling has failed
-      if (stats.hasErrors()) {
-        return next(new Error('Bundling failed: ' + stats.toString('errors-only')));
-      }
+  bundler.clientCompiler.run(function(err, stats) {
+    if (err) return bundler._reject('client-renderer', err);
 
-      bundler.opts.processClientStats(stats);
+    // @NOTE: in `once` mode, server should fail to start if bundling has failed
+    if (stats.hasErrors()) {
+      return bundler._reject('client-renderer', extractWebpackError(stats));
+    }
 
-      return next();
-    });
+    bundler.opts.processClientStats(stats);
+
+    bundler._resolve('client-renderer');
   });
 
-  return async.parallel(tasks, done);
+  bundler._waitAll()
+    .then(function(result) {
+      return done(null, result);
+    })
+    .catch(function(err) {
+      return done(err);
+    });
 };
 
 Bundler.prototype._initWithWatchCompile = function(done) {
@@ -290,37 +306,99 @@ Bundler.prototype._initWithWatchCompile = function(done) {
 
   if (bundler.config.ssrEnabled) {
     bundler.serverCompiler.plugin('compile', function() {
+      bundler._setPending('server-renderer');
       bundler._invalidateRenderer();
     });
 
     bundler.serverCompiler.watch({}, function(err, stats) {
-      if (err) return bundler.opts.processSoftError(err);
-
-      bundler.opts.processServerStats(stats);
-
-      if (stats.hasErrors()) {
-        return bundler.opts.processSoftError(new Error('Server bundle contains errors'));
+      if (err) {
+        bundler._reject('server-renderer', err);
+        return bundler.opts.processSoftError(err);
       }
 
-      return bundler._updateRenderer(function(err) {
-        if (err) return bundler.opts.processSoftError(err);
+      if (stats.hasErrors()) {
+        var err2 = extractWebpackError(stats);
+        bundler._reject('server-renderer', err2);
+        return bundler.opts.processSoftError(err2);
+      }
+
+      return bundler._updateRenderer(function(err3) {
+        if (err3) {
+          bundler._reject('server-renderer', err3);
+          return bundler.opts.processSoftError(err3);
+        }
+
+        bundler.opts.processServerStats(stats);
+        bundler._resolve('server-renderer');
       });
     });
   }
 
-  bundler.clientCompiler.watch({}, function(err, stats) {
-    if (err) return bundler.opts.processSoftError(err);
+  bundler.clientCompiler.plugin('compile', function() {
+    bundler._setPending('client-renderer');
+  });
 
-    bundler.opts.processClientStats(stats);
+  bundler.clientCompiler.watch({}, function(err, stats) {
+    if (err) {
+      bundler._reject('client-renderer', err);
+      return bundler.opts.processSoftError(err);
+    }
 
     if (stats.hasErrors()) {
-      return bundler.opts.processSoftError(new Error('Client bundle contains errors'));
+      var err2 = extractWebpackError(stats);
+      bundler._reject('client-renderer', err2);
+      return bundler.opts.processSoftError(err2);
     }
+
+    bundler.opts.processClientStats(stats);
+    bundler._resolve('client-renderer');
   });
 
   // @NOTE: we don't actually wait for the bundle to compile
   return done();
 };
+
+// === //
+
+Bundler.prototype._setPending = function(key) {
+  var resolve, reject;
+  var promise = new Promise(function(_resolve, _reject) {
+    resolve = _resolve;
+    reject = _reject;
+  });
+
+  promise.catch(function(err) {
+    // @NOTE: this is necessary to avoid "unhandled promise rejection" error
+  });
+
+  this.blocks[key] = {
+    promise: promise,
+    resolve: resolve,
+    reject: reject,
+  };
+};
+
+Bundler.prototype._resolve = function(key, value) {
+  this.blocks[key].resolve(value);
+};
+
+Bundler.prototype._reject = function(key, err) {
+  this.blocks[key].reject(err);
+};
+
+Bundler.prototype._waitAll = function() {
+  var bundler = this;
+
+  var promises = [];
+  Object.keys(this.blocks)
+    .forEach(function(key) {
+      promises.push(bundler.blocks[key].promise);
+    });
+
+  return Promise.all(promises);
+};
+
+// === //
 
 Bundler.prototype._invalidateRenderer = function() {
   this.renderer = null;
