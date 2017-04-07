@@ -60,5 +60,6 @@
     "Vue": true,
     "Vuex": true,
     "VueRouter": true,
+    "App": true,
   },
 }

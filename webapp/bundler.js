@@ -53,6 +53,7 @@ function Bundler(config, opts) {
         Vue: 'vue',
         Vuex: 'vuex',
         VueRouter: 'vue-router',
+        App: '@/app',
       }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(this.config.NODE_ENV),
