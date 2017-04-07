@@ -23,8 +23,8 @@ if (rehydration) {
   routeData.rehydration = true;
 }
 
-// @NOTE: create the instance
-var vm = new Vue(main);
+// @NOTE: the instance will be stored in this variable
+var vm;
 
 Promise.resolve()
   .then(function() {
@@ -43,6 +43,9 @@ Promise.resolve()
     }
   })
   .then(function() {
+    // @NOTE: create the instance
+    vm = new Vue(main);
+
     // @NOTE: wait for the router to settle
     return new Promise(function(resolve, reject) {
       return router.onReady(resolve);

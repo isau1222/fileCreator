@@ -88,7 +88,8 @@ module.exports = function(context) {
   var furl = cleanUrl(context.req.url); // @NOTE: full url
   var url = furl.slice(publicPath.length);
 
-  var vm = new Vue(main);
+  // @NOTE: the instance will be stored in this variable
+  var vm;
 
   return Promise.resolve()
     .then(function() {
@@ -101,6 +102,9 @@ module.exports = function(context) {
       }
     })
     .then(function() {
+      // @NOTE: create the instance
+      vm = new Vue(main);
+
       // @NOTE: push the url and wait for the router to settle
       router.push(url);
       return new Promise(function(resolve, reject) {
