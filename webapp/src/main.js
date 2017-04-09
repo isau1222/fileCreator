@@ -1,4 +1,5 @@
 var each = require('lodash/each');
+var findLast = require('lodash/findLast');
 
 var vueModules = require.context('@/vue-modules', true, /\.js$/);
 each(vueModules.keys(), path => vueModules(path));
@@ -36,7 +37,12 @@ module.exports = {
     // @TODO: when vue-router supports getting proper matched records,
     //        move the `layout` field to the route record instead of route record meta
 
-    var layout = this.$route.meta.layout || defaultLayout;
+    var found = findLast(this.$route.matched, function(route) {
+      return route.meta.layout;
+    });
+
+    var layout = found ? found.meta.layout : defaultLayout;
+
     return h(layout);
   },
 
