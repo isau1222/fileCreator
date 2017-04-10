@@ -40,6 +40,7 @@ function Bundler(config, opts) {
         // @NOTE: necessary because webpack does not support .json files out of box
         { test: /\.json$/, loader: 'json' },
         { test: /\.vue$/, loader: 'vue' },
+        { test: /\.js/, loader: 'babel', exclude: /node_modules/ },
       ],
     },
     resolve: {
