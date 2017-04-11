@@ -19,6 +19,7 @@ module.exports.webapp = {
   apiPublicPath: '/api',
 
   // Whether the server should compile bundles
+  // - `skip` will skip the compilation and use existing bundle
   // - `once` will compile bundles once
   // - `watch` will recompile bundles on changes
   // @TODO: `reuse` strategy, compile if not present

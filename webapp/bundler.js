@@ -172,6 +172,10 @@ function Bundler(config, opts) {
 }
 
 Bundler.prototype.init = function(done) {
+  if (this.config.compile === 'skip') {
+    return this._initWithSkipCompile(done);
+  }
+
   if (this.config.compile === 'once') {
     return this._initWithOnceCompile(done);
   }
@@ -181,7 +185,7 @@ Bundler.prototype.init = function(done) {
   }
 
   else {
-    return done(new Error('Unknown `compile` option value'));
+    return done(new Error('Unknown webapp `compile` option value: ' + this.config.compile));
   }
 };
 
@@ -255,6 +259,34 @@ Bundler.prototype.render = function(context, done) {
       return done(err);
     });
 
+};
+
+Bundler.prototype._initWithSkipCompile = function(done) {
+  var bundler = this;
+
+  if (bundler.config.ssrEnabled) {
+    bundler._setPending('server-renderer');
+
+    bundler._updateRenderer(function(err) {
+      if (err) {
+        bundler._reject('server-renderer', err);
+        return bundler.opts.processSoftError(err);
+      }
+
+      bundler._resolve('server-renderer');
+    });
+  }
+
+  bundler._setPending('client-renderer');
+  bundler._resolve('client-renderer');
+
+  bundler._waitAll()
+    .then(function(result) {
+      return done(null, result);
+    })
+    .catch(function(err) {
+      return done(err);
+    });
 };
 
 Bundler.prototype._initWithOnceCompile = function(done) {
