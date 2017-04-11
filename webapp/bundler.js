@@ -271,9 +271,13 @@ Bundler.prototype._initWithOnceCompile = function(done) {
         return bundler._reject('server-renderer', extractWebpackError(stats));
       }
 
-      bundler.opts.processServerStats(stats);
+      return bundler._updateRenderer(function(err2) {
+        if (err2) {
+          bundler._reject('server-renderer', err2);
+          return bundler.opts.processSoftError(err2);
+        }
 
-      return bundler._updateRenderer(function() {
+        bundler.opts.processServerStats(stats);
         bundler._resolve('server-renderer');
       });
     });
