@@ -294,7 +294,6 @@ Bundler.prototype._initWithOnceCompile = function(done) {
     }
 
     bundler.opts.processClientStats(stats);
-
     bundler._resolve('client-renderer');
   });
 
