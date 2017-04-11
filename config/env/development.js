@@ -21,4 +21,12 @@ module.exports = {
   //   connection: 'someMongodbServer'
   // }
 
+  assets: {
+    compile: process.env.COMPILE_ASSETS || 'once',
+  },
+
+  webapp: {
+    compile: process.env.COMPILE_WEBAPP || 'watch',
+  },
+
 };
