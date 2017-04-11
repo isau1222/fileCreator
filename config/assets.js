@@ -16,7 +16,11 @@ bowerFiles.forEach(function(file) {
 
 module.exports.assets = {
 
-  // @TODO: compile stategies `once` and `reuse`
+  // Whether the server should compile the bundle
+  // - `skip` will skip the compilation and use existing bundle
+  // - `once` will compile bundles once
+  // @TODO: `reuse` strategy, compile if not present
+  compile: 'once',
 
   // Webpack config for assets bundle
   wpConfig: {

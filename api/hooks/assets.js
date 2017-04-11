@@ -12,6 +12,16 @@ module.exports = function(sails) {
       return sails.after(['hook:orm:loaded', 'hook:pubsub:loaded'], function() {
         var config = sails.config.assets;
 
+        // @TODO: refactor into a bundler
+
+        if (config.compile === 'skip') {
+          return done();
+        }
+
+        if (config.compile !== 'once') {
+          return done(new Error('Unknown assets `compile` option value: ' + config.compile));
+        }
+
         var cssLoaderString = config.wpConfig.devtool
           ? 'css-loader?sourceMap'
           : 'css-loader'; // @NOTE: in production we don't want sourcemaps
