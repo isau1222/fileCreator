@@ -30,6 +30,12 @@
 
     name: 'Auth',
 
+    route: {
+      meta: {
+        crumb: 'Auth',
+      },
+    },
+
     data: function() {
       return {
         username: '',

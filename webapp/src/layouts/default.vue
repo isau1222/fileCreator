@@ -9,7 +9,7 @@
         router-link(to="/reports") Reports
         ul
           li(v-for="io in 5")
-            router-link(:to="{ name: 'report', params: { reportId: io } }") Report \#{{ io }}
+            router-link(:to="{ name: 'reports-reportId', params: { reportId: io } }") Report \#{{ io }}
     router-view
 </template>
 

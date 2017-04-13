@@ -11,6 +11,12 @@
 
     name: 'Dashboard',
 
+    route: {
+      meta: {
+        crumb: 'Dashboard',
+      },
+    },
+
     computed: Vuex.mapGetters('auth', {
       inProgress: 'inProgress',
       user: 'user',

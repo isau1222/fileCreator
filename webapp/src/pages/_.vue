@@ -7,5 +7,12 @@
 
     name: 'Error404',
 
+    route: {
+      meta: {
+        crumb: 'Error',
+        status: 404,
+      },
+    },
+
   };
 </script>
