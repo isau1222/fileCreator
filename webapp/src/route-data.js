@@ -1,7 +1,3 @@
-var isFunction = require('lodash/isFunction');
-
-// === //
-
 function VueRouteData(opts) {
   var self = this;
 
@@ -46,17 +42,17 @@ function VueRouteData(opts) {
       failed = true;
     }
 
-    if (!isFunction(opts.fetch)) {
+    if (!_.isFunction(opts.fetch)) {
       console.error('[vue-router-data] `fetch` is expected to be a function, but given', opts.fetch, 'in', opts);
       failed = true;
     }
 
-    if (!isFunction(opts.update)) {
+    if (!_.isFunction(opts.update)) {
       console.error('[vue-router-data] `update` is expected to be a function, but given', opts.fetch, 'in', opts);
       failed = true;
     }
 
-    if (opts.process && !isFunction(opts.process)) {
+    if (opts.process && !_.isFunction(opts.process)) {
       console.error('[vue-router-data] `update` is expected to be a function, but given', opts.fetch, 'in', opts);
     }
 
@@ -156,7 +152,7 @@ function VueRouteData(opts) {
         var shouldFetch;
         var shouldProceed = false;
 
-        if (isFunction(opts.reuse)) {
+        if (_.isFunction(opts.reuse)) {
           shouldFetch = !opts.reuse(to, from);
         }
         else {

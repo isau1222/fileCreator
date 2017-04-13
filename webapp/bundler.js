@@ -54,6 +54,7 @@ function Bundler(config, opts) {
         Vue: 'vue',
         Vuex: 'vuex',
         VueRouter: 'vue-router',
+        _: 'lodash',
         App: '@/app',
       }),
       new webpack.DefinePlugin({

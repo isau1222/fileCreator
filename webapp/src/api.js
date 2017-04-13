@@ -1,5 +1,4 @@
 var axios = require('axios');
-var isPlainObject = require('lodash/isPlainObject');
 
 // === //
 
@@ -37,7 +36,7 @@ VueApi.prototype.extractErrorMessage = function(err) {
     return err.message;
   }
   else if (this.isServerError(err) || this.isFailure(err)) {
-    if (isPlainObject(err.response.data)) {
+    if (_.isPlainObject(err.response.data)) {
       // @NOTE: server responded with proper json
       if (err.response.data.$error) {
         // @NOTE: api response, juicy details about the error
