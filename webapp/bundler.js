@@ -14,10 +14,11 @@ function noop() {
   // @NOTE: no operation
 }
 
-// @NOTE: sometimes webpack errors are weird, man
+// @NOTE: utility function to extract first error from the webpack stats
 function extractWebpackError(stats) {
-  var error = stats.compilation.errors && stats.compilation.errors[0];
-  return assimilateError(error, true);
+  var details = stats.toJson();
+  var errors = details.errors;
+  return errors[0];
 }
 
 // === //
