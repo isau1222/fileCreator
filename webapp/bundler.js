@@ -17,8 +17,18 @@ function noop() {
 // @NOTE: utility function to extract first error from the webpack stats
 function extractWebpackError(stats) {
   var details = stats.toJson();
-  var errors = details.errors;
-  return errors[0];
+  var errors = details.errors; // @NOTE: this is a list of messages, not a list of actual errors
+
+  // @NOTE: filter out stack, because it's useless
+  var message = errors[0]
+    .split('\n')
+    .filter(function(line) {
+      return !line.includes('    at ');
+    })
+    .join('\n');
+
+  // @NOTE: convert to proper error
+  return new Error(message);
 }
 
 // === //
