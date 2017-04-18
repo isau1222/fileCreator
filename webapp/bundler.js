@@ -354,7 +354,8 @@ Bundler.prototype._initWithWatchCompile = function(done) {
   var bundler = this;
 
   if (bundler.config.ssrEnabled) {
-    bundler.serverCompiler.plugin('compile', function() {
+    bundler._setPending('server-renderer');
+    bundler.serverCompiler.plugin('invalid', function() {
       bundler._setPending('server-renderer');
       bundler._invalidateRenderer();
     });
@@ -383,7 +384,8 @@ Bundler.prototype._initWithWatchCompile = function(done) {
     });
   }
 
-  bundler.clientCompiler.plugin('compile', function() {
+  bundler._setPending('client-renderer');
+  bundler.clientCompiler.plugin('invalid', function() {
     bundler._setPending('client-renderer');
   });
 
