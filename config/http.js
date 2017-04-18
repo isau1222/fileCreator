@@ -9,6 +9,12 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
 
+var Converter = require('ansi-to-html');
+var converter = new Converter();
+function ansiToHtml(text) {
+  return converter.toHtml(text);
+}
+
 module.exports.http = {
 
   /****************************************************************************
@@ -35,6 +41,8 @@ module.exports.http = {
       'cookieParser',
       'session',
 
+      'setLocals',
+
       // @NOTE: we can not use passport middleware, because it would only
       //        work for proper http request, and would not work for
       //        `sails.request`, so instead we mimic this middleware
@@ -58,6 +66,11 @@ module.exports.http = {
   * Example custom middleware; logs each request to the console.              *
   *                                                                           *
   ****************************************************************************/
+
+    setLocals: function(req, res, next) {
+      res.locals.ansiToHtml = ansiToHtml;
+      return next();
+    },
 
     // myRequestLogger: function (req, res, next) {
     //     console.log("Requested :: ", req.method, req.url);
