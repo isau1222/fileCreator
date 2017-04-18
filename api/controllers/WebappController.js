@@ -29,7 +29,7 @@ module.exports = {
           }
           else {
             // @TODO: log app error
-            return res.serverError();
+            return res.serverError(err);
           }
         }
       }
