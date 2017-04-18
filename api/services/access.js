@@ -12,7 +12,7 @@ module.exports = {
           .mapValues(function(entries) {
             return _(entries)
               .map('action')
-              .unique()
+              .uniq()
               .value();
           })
           .value();
