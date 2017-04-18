@@ -15,6 +15,10 @@ var LocalStrategy = require('passport-local').Strategy;
 
 module.exports.bootstrap = function(done) {
 
+  // == Globals == //
+
+  global._ = require('lodash');
+
   // == Passport == //
 
   passport.serializeUser(function(user, next) {

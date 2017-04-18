@@ -18,7 +18,8 @@ module.exports.globals = {
   *                                                                           *
   ****************************************************************************/
 
-  _: true,
+  // @NOTE: we want lodash 4, so instead of this we manually expose it in bootstrap
+  // _: true,
 
   /****************************************************************************
   *                                                                           *
