@@ -40,6 +40,10 @@ function Bundler(config, opts) {
   if (opts.processSoftError === undefined) opts.processSoftError = noop;
   if (opts.processServerStats === undefined) opts.processServerStats = noop;
   if (opts.processClientStats === undefined) opts.processClientStats = noop;
+  if (opts.delayWatch === undefined) opts.delayWatch = function(next) {
+    // @NOTE: no delay by default
+    return next();
+  };
 
   this.config = config;
   this.opts = opts;
@@ -353,54 +357,56 @@ Bundler.prototype._initWithOnceCompile = function(done) {
 Bundler.prototype._initWithWatchCompile = function(done) {
   var bundler = this;
 
-  if (bundler.config.ssrEnabled) {
-    bundler.serverCompiler.plugin('compile', function() {
-      bundler._setPending('server-renderer');
-      bundler._invalidateRenderer();
+  bundler.opts.delayWatch(function() {
+    if (bundler.config.ssrEnabled) {
+      bundler.serverCompiler.plugin('compile', function() {
+        bundler._setPending('server-renderer');
+        bundler._invalidateRenderer();
+      });
+
+      bundler.serverCompiler.watch({}, function(err, stats) {
+        if (err) {
+          bundler._reject('server-renderer', err);
+          return bundler.opts.processSoftError(err);
+        }
+
+        if (stats.hasErrors()) {
+          var err2 = extractWebpackError(stats);
+          bundler._reject('server-renderer', err2);
+          return bundler.opts.processSoftError(err2);
+        }
+
+        return bundler._updateRenderer(function(err3) {
+          if (err3) {
+            bundler._reject('server-renderer', err3);
+            return bundler.opts.processSoftError(err3);
+          }
+
+          bundler.opts.processServerStats(stats);
+          bundler._resolve('server-renderer');
+        });
+      });
+    }
+
+    bundler.clientCompiler.plugin('compile', function() {
+      bundler._setPending('client-renderer');
     });
 
-    bundler.serverCompiler.watch({}, function(err, stats) {
+    bundler.clientCompiler.watch({}, function(err, stats) {
       if (err) {
-        bundler._reject('server-renderer', err);
+        bundler._reject('client-renderer', err);
         return bundler.opts.processSoftError(err);
       }
 
       if (stats.hasErrors()) {
         var err2 = extractWebpackError(stats);
-        bundler._reject('server-renderer', err2);
+        bundler._reject('client-renderer', err2);
         return bundler.opts.processSoftError(err2);
       }
 
-      return bundler._updateRenderer(function(err3) {
-        if (err3) {
-          bundler._reject('server-renderer', err3);
-          return bundler.opts.processSoftError(err3);
-        }
-
-        bundler.opts.processServerStats(stats);
-        bundler._resolve('server-renderer');
-      });
+      bundler.opts.processClientStats(stats);
+      bundler._resolve('client-renderer');
     });
-  }
-
-  bundler.clientCompiler.plugin('compile', function() {
-    bundler._setPending('client-renderer');
-  });
-
-  bundler.clientCompiler.watch({}, function(err, stats) {
-    if (err) {
-      bundler._reject('client-renderer', err);
-      return bundler.opts.processSoftError(err);
-    }
-
-    if (stats.hasErrors()) {
-      var err2 = extractWebpackError(stats);
-      bundler._reject('client-renderer', err2);
-      return bundler.opts.processSoftError(err2);
-    }
-
-    bundler.opts.processClientStats(stats);
-    bundler._resolve('client-renderer');
   });
 
   // @NOTE: we don't actually wait for the bundle to compile
