@@ -8,6 +8,7 @@ var assimilateError = require('assimilate-error');
 var webpack = require('webpack');
 var merge = require('webpack-merge');
 var VueSsrPlugin = require('vue-ssr-webpack-plugin');
+var ProgressBarPlugin = require('progress-bar-webpack-plugin');
 var createBundleRenderer = require('vue-server-renderer').createBundleRenderer;
 
 function noop() {
@@ -125,6 +126,7 @@ function Bundler(config, opts) {
         new VueSsrPlugin({
           filename: this.config.serverBundleName,
         }),
+        new ProgressBarPlugin(),
       ]),
     };
   }
@@ -154,6 +156,7 @@ function Bundler(config, opts) {
           warnings: false,
         },
       }),
+      new ProgressBarPlugin(),
     ]),
     output: {
       devtoolModuleFilenameTemplate: 'webpack-src:///[resource-path]',
