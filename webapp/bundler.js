@@ -52,17 +52,33 @@ function Bundler(config, opts) {
 
   var baseWpConfig = {
     module: {
-      loaders: _.compact([
-        // @NOTE: necessary because webpack does not support .json files out of box
-        { test: /\.json$/, loader: 'json' },
-        { test: /\.vue$/, loader: 'vue' },
-        this.config.transpile && { test: /\.js/, loader: 'babel', exclude: /node_modules/ },
+      rules: _.compact([
+        {
+          test: /\.vue$/,
+          use: {
+            loader: 'vue-loader',
+            options: {
+              loaders: {
+                js: this.config.transpile ? 'babel-loader' : '',
+              },
+            },
+          },
+        },
+        this.config.transpile && {
+          test: /\.js/,
+          exclude: /node_modules/,
+          use: 'babel-loader',
+        },
       ]),
     },
     resolve: {
-      extensions: ['', '.js', '.json', '.vue'],
+      extensions: ['.js', '.json', '.vue'],
+      mainFields: ['main'], // @NOTE: prefer `require` over `import`, see [https://webpack.js.org/configuration/resolve/#resolve-mainfields]
       alias: {
         '@': path.resolve(__dirname, 'src'),
+        'vue': this.config.runtimeBuild
+          ? 'vue/dist/vue.runtime.common.js'
+          : 'vue/dist/vue.common.js',
       },
     },
     plugins: [
@@ -80,11 +96,6 @@ function Bundler(config, opts) {
         'process.env.APP_API_PUBLIC_PATH': JSON.stringify(this.config.apiPublicPath),
       }),
     ],
-    vue: {
-      loaders: {
-        js: this.config.transpile ? 'babel' : '',
-      },
-    },
   };
 
   var serverWpConfig, clientWpConfig;
@@ -102,17 +113,25 @@ function Bundler(config, opts) {
   // @NOTE: overrides can not change public paths and bundle filename and paths
 
   var fileLoaderTest = /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/;
-  var fileLoaderQuery = 'file-loader?name=[path][name].[ext]?[hash]&publicPath=' + clientWpConfig.output.publicPath;
+  var fileLoaderOptions = {
+    name: '[path][name].[ext]?[hash]',
+    publicPath: clientWpConfig.output.publicPath,
+  };
 
   var serverWpConfigOverride, clientWpConfigOverride;
 
   if (this.config.ssrEnabled) {
     serverWpConfigOverride = {
       module: {
-        loaders: [
+        rules: [
           {
             test: fileLoaderTest,
-            loader: fileLoaderQuery + '&emitFile=false',
+            use: {
+              loader: 'file-loader',
+              options: Object.assign({}, fileLoaderOptions, {
+                emitFile: false,
+              }),
+            },
           },
         ],
       },
@@ -138,12 +157,23 @@ function Bundler(config, opts) {
 
   clientWpConfigOverride = {
     module: {
-      loaders: [
+      rules: [
         {
           test: fileLoaderTest,
-          loader: fileLoaderQuery,
+          use: {
+            loader: 'file-loader',
+            options: fileLoaderOptions,
+          },
         },
-        { test: /\.scss$/, loader: 'style-loader!css!sass' },
+        {
+          test: /\.scss$/,
+          // @FIXME: minify css for production
+          use: [
+            'style-loader',
+            'css-loader',
+            'sass-loader',
+          ],
+        },
       ],
     },
     plugins: lodash.compact([
@@ -155,7 +185,6 @@ function Bundler(config, opts) {
         name: 'vendor',
         filename: this.config.vendorFilename,
       }),
-      // @NOTE: uglifyJs appears to minify css too
       this.config.uglify && new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false,
@@ -168,14 +197,6 @@ function Bundler(config, opts) {
       devtoolFallbackModuleFilenameTemplate: 'webpack-src:///[resource-path]',
     },
   };
-
-  if (this.config.vueAlias) {
-    clientWpConfigOverride.resolve = {
-      alias: {
-        vue: this.config.vueAlias,
-      },
-    };
-  }
 
   if (this.config.ssrEnabled) {
     serverWpConfig = merge.smart(serverWpConfig, serverWpConfigOverride);

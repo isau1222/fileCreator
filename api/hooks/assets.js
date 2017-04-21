@@ -22,24 +22,27 @@ module.exports = function(sails) {
           return done(new Error('Unknown assets `compile` option value: ' + config.compile));
         }
 
-        var cssLoaderString = config.wpConfig.devtool
-          ? 'css-loader?sourceMap'
-          : 'css-loader'; // @NOTE: in production we don't want sourcemaps
-
         var baseWpConfig = {
           // @NOTE: entries are defined in the sails config
           module: {
-            loaders: [
+            rules: [
               {
                 test: /\.css$/,
-                // loader: ['style-loader', cssLoaderString].join('!'),
-                loader: ExtractTextPlugin.extract('style-loader', cssLoaderString),
+                use: ExtractTextPlugin.extract({
+                  fallback: 'style-loader',
+                  use: {
+                    loader: 'css-loader',
+                    options: {
+                      sourceMap: !!config.wpConfig.devtool,
+                      minimize: !!config.uglify,
+                    },
+                  },
+                }),
               },
             ],
           },
           plugins: _.compact([
             new ExtractTextPlugin(config.cssFilename),
-            // @NOTE: uglifyJs appears to minify css too
             config.uglify && new webpack.optimize.UglifyJsPlugin({
               compress: {
                 warnings: false,
@@ -96,11 +99,17 @@ module.exports = function(sails) {
 
         var wpConfigOverride = {
           module: {
-            loaders: [
+            rules: [
               {
                 test: /\.(png|jpg|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
                 // @NOTE: file-loader does not appear to respect the public path, so we prepend it manually
-                loader: 'file-loader?name=[path][name].[ext]?[hash]&publicPath=' + wpConfig.output.publicPath,
+                use: {
+                  loader: 'file-loader',
+                  options: {
+                    name: '[path][name].[ext]?[hash]',
+                    publicPath: wpConfig.output.publicPath,
+                  },
+                },
               },
             ],
           },

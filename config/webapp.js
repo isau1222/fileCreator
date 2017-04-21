@@ -42,8 +42,9 @@ module.exports.webapp = {
   // The name of the vendor client bundle
   vendorFilename: 'vendor-client.js',
 
-  // Which build of vue should be used
-  vueAlias: 'vue/dist/vue.common.js',
+  // Whether the app should use a runtime-only build of Vue
+  // See [Runtime+Compiler vs. Runtime-only](https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only)
+  runtimeBuild: false,
 
   // Name for the server bundle
   serverBundleName: 'bundle-server.json',
