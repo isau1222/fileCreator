@@ -44,7 +44,7 @@ module.exports = {
 
   assets: {
     wpConfig: {
-      devtool: null,
+      devtool: false,
     },
     uglify: true,
   },
@@ -55,10 +55,10 @@ module.exports = {
     uglify: true,
     NODE_ENV: 'production',
     server: {
-      devtool: null,
+      devtool: false,
     },
     client: {
-      devtool: null,
+      devtool: false,
     },
   },
 
