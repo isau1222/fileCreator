@@ -52,12 +52,12 @@ function Bundler(config, opts) {
 
   var baseWpConfig = {
     module: {
-      loaders: [
+      loaders: _.compact([
         // @NOTE: necessary because webpack does not support .json files out of box
         { test: /\.json$/, loader: 'json' },
         { test: /\.vue$/, loader: 'vue' },
-        { test: /\.js/, loader: 'babel', exclude: /node_modules/ },
-      ],
+        this.config.transpile && { test: /\.js/, loader: 'babel', exclude: /node_modules/ },
+      ]),
     },
     resolve: {
       extensions: ['', '.js', '.json', '.vue'],
@@ -80,6 +80,11 @@ function Bundler(config, opts) {
         'process.env.APP_API_PUBLIC_PATH': JSON.stringify(this.config.apiPublicPath),
       }),
     ],
+    vue: {
+      loaders: {
+        js: this.config.transpile ? 'babel' : '',
+      },
+    },
   };
 
   var serverWpConfig, clientWpConfig;

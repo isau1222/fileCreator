@@ -28,9 +28,15 @@ module.exports.webapp = {
   // Node environment (often used for dev/prod conditional compiling)
   NODE_ENV: 'development',
 
+  // Whether the server should transpile files with babel
+  // - `true` will transpile
+  // - `false` will keep as is
+  transpile: false,
+
   // Whether the server should minify compiled files
   // - `true` will minify
   // - `false` will keep as is
+  // @NOTE: UglifyJS2 chokes on es6+ code, so this will only work with `transpile: true`
   uglify: false,
 
   // The name of the vendor client bundle

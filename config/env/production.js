@@ -51,6 +51,7 @@ module.exports = {
 
   webapp: {
     compile: 'once',
+    transpile: true,
     uglify: true,
     NODE_ENV: 'production',
     server: {
