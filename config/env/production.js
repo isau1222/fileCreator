@@ -43,6 +43,7 @@ module.exports = {
   },
 
   assets: {
+    compile: process.env.COMPILE_ASSETS || 'once',
     wpConfig: {
       devtool: false,
     },
@@ -50,7 +51,7 @@ module.exports = {
   },
 
   webapp: {
-    compile: 'once',
+    compile: process.env.COMPILE_WEBAPP || 'once',
     transpile: true,
     uglify: true,
     NODE_ENV: 'production',
