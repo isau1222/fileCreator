@@ -73,7 +73,6 @@ function Bundler(config, opts) {
     },
     resolve: {
       extensions: ['.js', '.json', '.vue'],
-      mainFields: ['main'], // @NOTE: prefer `require` over `import`, see [https://webpack.js.org/configuration/resolve/#resolve-mainfields]
       alias: {
         '@': path.resolve(__dirname, 'src'),
         'vue': this.config.runtimeBuild
@@ -135,6 +134,9 @@ function Bundler(config, opts) {
           },
         ],
       },
+      resolve: {
+        mainFields: ['main'], // @NOTE: prefer `require` over `import`, see [https://webpack.js.org/configuration/resolve/#resolve-mainfields]
+      },
       target: 'node', // Necessary for Vue bundle renderer
       output: {
         libraryTarget: 'commonjs2', // Necessary for Vue bundle renderer
@@ -175,6 +177,9 @@ function Bundler(config, opts) {
           ],
         },
       ],
+    },
+    resolve: {
+      mainFields: ['browser', 'main'], // @NOTE: prefer `require` over `import`, see [https://webpack.js.org/configuration/resolve/#resolve-mainfields]
     },
     plugins: lodash.compact([
       new webpack.DefinePlugin({
