@@ -10,8 +10,10 @@ module.exports = {
       })
       .then(function(user) {
         var query = { user: user.id };
+      .then(function(admin) {
+        var query = { user: admin.id, strategy: 'local' };
         var record = {
-          user: user.id,
+          user: admin.id,
           strategy: 'local',
           password: sails.config.filler.adminPassword,
         };
