@@ -60,6 +60,10 @@ function Bundler(config, opts) {
             options: {
               loaders: {
                 js: this.config.transpile ? 'babel-loader' : '',
+
+                // @REFERENCE: https://github.com/vuejs/vue-loader/blob/v11.0.0/docs/en/configurations/pre-processors.md#sass-loader-caveat
+                scss: ['vue-style-loader', 'css-loader', 'sass-loader'], // <style lang="scss">
+                sass: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax'], // <style lang="sass">
               },
             },
           },
