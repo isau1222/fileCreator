@@ -8,8 +8,6 @@ module.exports = {
         var record = { username: sails.config.filler.adminUsername };
         return sails.models.user.findOrCreate(query, record);
       })
-      .then(function(user) {
-        var query = { user: user.id };
       .then(function(admin) {
         var query = { user: admin.id, strategy: 'local' };
         var record = {
