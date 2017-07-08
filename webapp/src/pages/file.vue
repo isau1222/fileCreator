@@ -124,14 +124,9 @@ module.exports = {
           var params = '?';
 
           for(var name in values) {
-            // alert(name);
-            if (name != 'name'){
-              var value = values[name];
-              alert(value);
-              params += name + '=' + value + '&';
-            }
+            var value = values[name];
+            params += name + '=' + value + '&';
           }
-
           return params;
         }
 
