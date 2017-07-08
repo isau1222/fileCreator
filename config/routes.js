@@ -32,6 +32,8 @@ module.exports.routes = {
     skipRegex: /^\/api(\/|$)/, // @NOTE: matches `/api` and `/api/` and `/api/abc`, but not `/api-docs`
   },
 
+  // 'post /api/v1/file/getFile': 'file.getFile',
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

@@ -5,6 +5,7 @@
     ul
       li: router-link(to="/") Dashboard
       li: router-link(to="/auth") Auth
+      li: router-link(to="/file") File
       li
         router-link(to="/reports") Reports
         ul
