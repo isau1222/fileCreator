@@ -5,19 +5,19 @@
     <div>
       <select v-model="selected">
         <option disabled value="">Выберите один из вариантов</option>
-        <option v-for="(value, propertyName) in types">
-        {{ propertyName }}
+        <option v-for="(value, propertyName) in items">
+        {{ value.name }}
         </option>
       </select>
     </div>
 
-    <form v-if="selected" method="post" v-on:submit.prevent="loadFile">
+    <form v-if="selected" v-on:submit.prevent="loadFile">
       <h2>
         {{selected}}
       </h2>
-      <div v-for="(value, propertyName) in chosenForm">
-        <div v-if="propertyName != 'type'">
-          {{ propertyName }} <input  type="text" v-model="chosenForm[propertyName]"> <br>
+      <div v-for="(value, propertyName) in chosenItem.data">
+        <div>
+          {{ value.meta }} <input  type="text" v-model="chosenItem.data[propertyName].data"> <br>
         </div>
       </div>
       Отправить: <input type="submit" value="Отправить">
@@ -28,9 +28,6 @@
 
 <script>
 var utils = require('@/utils');
-var api = require('@/api');
-// var fileSaver = require('@/file-saver');
-// var streamSaver;
 
 module.exports = {
 
@@ -50,40 +47,63 @@ module.exports = {
         firstName: '',
         lastName: '',
       },
-      types: {
+      items: {
         shkola: {
           type: 'shkola',
-          firstName: '',
-          lastName: '' ,
+          name: 'Школа',
+          data:{
+            firstName: {
+              meta: 'Имя',
+              data: '',
+            },
+            lastName: {
+              meta: 'Фамилия',
+              data: '',
+            },
+          },
         },
         univer: {
           type: 'univer',
-          firstName: '',
-          lastName: '' ,
-          phone: '' ,
+          name: 'Университет',
+          data:{
+            firstName: {
+              meta: 'Имя',
+              data: '',
+            },
+            lastName: {
+              meta: 'Фамилия',
+              data: '',
+            },
+            phone: {
+              meta: 'Телефон',
+              data: '',
+            },
+          },
         },
       },
-      // [{
-      //   firstName: '',
-      //   lastName: '',
-      // },
-      // {
-      //   firstName: '',
-      //   lastName: '',
-      // },]
     };
   },
   computed: {
-    // геттер вычисляемого значения
-    chosenForm: function () {
-      // `this` указывает на экземпляр vm
-      // return 'asdasasd';
-      return this.types[this.selected];
+    chosenItem: function () {
+      for(var item in this.items){
+        if (this.items[item].name == this.selected){
+          return this.items[item];
+        }
+      }
     },
   },
   methods: utils.merge([
     {
       loadFile() {
+
+        // var copy = {};
+        // Object.assign(copy, this.items.univer);
+        // copy.phone = '777';
+        // console.log(copy);
+        // console.log(this.items.univer);
+        // return;
+
+
         // if (!this.streamSaver || !this.fileSaver){
         //   return;
         // }
@@ -117,30 +137,29 @@ module.exports = {
 
         // saveByteArray([sampleBytes], 'example.txt');
         //
-        // console.log(this.chosenForm);
+        // console.log(this.chosenItem);
         // return;
-        // this.chosenForm.type = this.selected;
+        // this.chosenItem.type = this.selected;
+
+
+
         function getParamsFromJSON(values){
           var params = '?';
 
           for(var name in values) {
-            var value = values[name];
+            var value = values[name].data;
             params += name + '=' + value + '&';
           }
           return params;
         }
 
-        // function addType(string, obj){
-        //   return string += 'type' + '=' + obj.type + '&';
-        // }
-
         var path = 'v1/file/getFile';
-        var params = getParamsFromJSON(this.chosenForm);
-        // params = addType(params, this.chosenForm);
+        var params = getParamsFromJSON(this.chosenItem.data);
+        params += 'type' + '=' + this.chosenItem.type + '&';
         console.log(params);
         window.open('api/' + path + params, "_self");
         this.$router.push(-1);
-
+        // window.history.back();
 
         //
         // api.post(path)

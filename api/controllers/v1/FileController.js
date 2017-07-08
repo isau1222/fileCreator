@@ -12,14 +12,20 @@ var path = require('path');
 
 var files = 'assets/files';
 
+var types = {
+  shkola: 'shkola.docx',
+  univer: 'univer.docx',
+};
+
 module.exports = {
   getFile: function(req, res) {
     var data = req.params.all();
+    var filename = types[data.type];
 
     try {
       //Load the docx file as a binary
       var content = fs
-          .readFileSync(path.resolve(files, `${req.param('type')}.docx`), 'binary');
+          .readFileSync(path.resolve(files, filename), 'binary');
 
       var zip = new JSZip(content);
 
@@ -48,7 +54,7 @@ module.exports = {
     let datastream = new stream.PassThrough();
     datastream.end(buf);
 
-    res.attachment(`${req.param('type')}.docx`); // Set disposition and send it.
+    res.attachment(filename); // Set disposition and send it.
 
     return datastream.pipe(res);
   },
