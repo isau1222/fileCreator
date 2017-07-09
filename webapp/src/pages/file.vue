@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h4 class="error" v-if="error">{{error}}</h4>
+
     <h1>HELLO</h1>
 
     <div>
@@ -25,6 +27,13 @@
   </div>
 </template>
 
+
+<style lang="scss">
+  .error{
+    color: red;
+  }
+</style>
+
 <script>
 var utils = require('@/utils');
 var api = require('@/api');
@@ -43,6 +52,7 @@ module.exports = {
   data() {
     return {
       selected: '',
+      error: null,
       chosenItem: '',
       type: null,
       info:{
@@ -144,9 +154,11 @@ module.exports = {
         api.post(path + params)
             .then(response => {
               location.replace(path + params);
+              this.error = null;
             })
             .catch(err => {
-              console.log(err.response.data.message);
+              this.error = err.response.data.message;
+              // console.log(err.response.data.message);
             });
       },
     },
