@@ -25,6 +25,9 @@ module.exports.routes = {
   // @NOTE: order matters, redirects should be after the controller,
   //        otherwise there will be a redirect loop
 
+  // 'GET /file/createFile': 'file.createFile',
+  'GET /file/getFile': 'file.getFile',
+
   'GET /*': {
     controller: 'WebappController',
     action: 'render',
@@ -32,7 +35,6 @@ module.exports.routes = {
     skipRegex: /^\/api(\/|$)/, // @NOTE: matches `/api` and `/api/` and `/api/abc`, but not `/api-docs`
   },
 
-  // 'post /api/v1/file/getFile': 'file.getFile',
 
   /***************************************************************************
   *                                                                          *

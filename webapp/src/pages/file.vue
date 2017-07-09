@@ -11,9 +11,9 @@
       </select>
     </div>
 
-    <form v-if="selected" v-on:submit.prevent="loadFile">
+    <form v-if="chosenItem" v-on:submit.prevent="loadFile">
       <h2>
-        {{selected}}
+        {{chosenItem.name}}
       </h2>
       <div v-for="(value, propertyName) in chosenItem.data">
         <div>
@@ -22,12 +22,12 @@
       </div>
       Отправить: <input type="submit" value="Отправить">
     </form>
-
   </div>
 </template>
 
 <script>
 var utils = require('@/utils');
+var api = require('@/api');
 
 module.exports = {
 
@@ -42,6 +42,7 @@ module.exports = {
   data() {
     return {
       selected: '',
+      chosenItem: '',
       type: null,
       info:{
         firstName: '',
@@ -80,14 +81,42 @@ module.exports = {
             },
           },
         },
+        otziv: {
+          type: 'otziv',
+          name: 'Отзыв',
+          data:{
+            firstName: {
+              meta: 'Имя',
+              data: '',
+            },
+            lastName: {
+              meta: 'Фамилия',
+              data: '',
+            },
+            phone: {
+              meta: 'Телефон',
+              data: '',
+            },
+          },
+        },
       },
     };
   },
-  computed: {
-    chosenItem: function () {
+  // computed: {
+  //   chosenItem: function () {
+  //     for(var item in this.items){
+  //       if (this.items[item].name == this.selected){
+  //         return this.items[item];
+  //       }
+  //     }
+  //   },
+  // },
+  watch: {
+    selected(val) {
       for(var item in this.items){
         if (this.items[item].name == this.selected){
-          return this.items[item];
+          this.chosenItem = this.items[item];
+          return;
         }
       }
     },
@@ -95,53 +124,6 @@ module.exports = {
   methods: utils.merge([
     {
       loadFile() {
-
-        // var copy = {};
-        // Object.assign(copy, this.items.univer);
-        // copy.phone = '777';
-        // console.log(copy);
-        // console.log(this.items.univer);
-        // return;
-
-
-        // if (!this.streamSaver || !this.fileSaver){
-        //   return;
-        // }
-        // console.log(streamsaver);
-        // console.log(this.info);
-
-        // var url = Object.keys(this.info).map(function(k) {
-        //   if (!this.info[k].isFunction()){
-        //     return encodeURIComponent(k) + '=' + encodeURIComponent(this.info[k]);
-        //   }
-        // }).join('&');
-        // console.log(url);
-          // window.open(path,"_self")
-          // this.$router.push(-1);
-
-        // var sampleBytes = new Int8Array(4096);
-
-        // var saveByteArray = (function () {
-        //     var a = document.createElement("a");
-        //     document.body.appendChild(a);
-        //     a.style = "display: none";
-        //     return function (data, name) {
-        //         var blob = new Blob(data, {type: "octet/stream"}),
-        //             url = window.URL.createObjectURL(blob);
-        //         a.href = url;
-        //         a.download = name;
-        //         a.click();
-        //         window.URL.revokeObjectURL(url);
-        //     };
-        // }());
-
-        // saveByteArray([sampleBytes], 'example.txt');
-        //
-        // console.log(this.chosenItem);
-        // return;
-        // this.chosenItem.type = this.selected;
-
-
 
         function getParamsFromJSON(values){
           var params = '?';
@@ -153,64 +135,22 @@ module.exports = {
           return params;
         }
 
-        var path = 'v1/file/getFile';
+        var postPath = 'file/createFile';
         var params = getParamsFromJSON(this.chosenItem.data);
         params += 'type' + '=' + this.chosenItem.type + '&';
         console.log(params);
-        window.open('api/' + path + params, "_self");
-        this.$router.push(-1);
-        // window.history.back();
 
-        //
-        // api.post(path)
-        //   .then(res => {
-        //     // saveByteArray([res.data], 'example.xlsx');
-        //     console.log(res.data);
-        //     // var blob = new Blob([res], {type: ''});
-        //     // this.fileSaver.saveAs(blob, 'A.xlsx');
-        //     // console.log(res.data);
-        //     // const fileStream = streamsaver.createWriteStream('filename.xlsx');
-        //     // const writer = fileStream.getWriter();
-        //     // Later you will be able to just simply do
-        //     // res.body.pipeTo(fileStream)
-
-        //     // const reader = res.data.getReader();
-        //     // console.log(reader);
-
-
-        //     // const pump = () => reader.read()
-        //     //     .then(({ value, done }) => {
-        //     //       if (done){
-        //     //         console.log('done!');
-        //     //         writer.close();
-        //     //       }else{
-        //     //         console.log('writing...');
-        //     //         writer.write(value).then(pump);
-        //     //       }
-        //     //     })
-        //     //     .catch(err => {
-        //     //       console.log(err);
-        //     //     });
-        //     // // Start the reader
-        //     // pump()
-        //     //   .then(() =>
-        //     //     console.log('Closed the stream, Done writing')
-        //     //   )
-        //     //   .catch(err => {
-        //     //     console.log(err);
-        //     //   });
-        //   })
-        //   .catch(err => {
-        //     console.log(err);
-        //   });
+        api.post(postPath + params)
+          .then(res => {
+            var getPath = res.data;
+            window.open(getPath, "_self");
+            this.$router.push(-1);
+          })
+          .catch(err => {
+            alert(err.response.data.message);
+          });
       },
     },
   ]),
-
-  mounted() {
-    this.streamSaver = require('streamsaver');
-    this.fileSaver = require('file-saver');
-    // this.loadFile(streamSaver);
-  },
 };
 </script>

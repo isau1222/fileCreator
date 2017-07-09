@@ -15,10 +15,12 @@ var files = 'assets/files';
 var types = {
   shkola: 'shkola.docx',
   univer: 'univer.docx',
+  otziv: 'otziv.docx',
 };
 
 module.exports = {
-  getFile: function(req, res) {
+  createFile: function(req, res) {
+
     var data = req.params.all();
     var filename = types[data.type];
 
@@ -43,20 +45,35 @@ module.exports = {
         properties: error.properties,
       };
       console.log(JSON.stringify({error: e}));
+      return res.apiBadRequest('Something bad(');
       // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-      // throw error;
-      return;
     }
     var buf = doc.getZip()
                  .generate({type: 'nodebuffer'});
 
-    const stream = require('stream');
-    let datastream = new stream.PassThrough();
-    datastream.end(buf);
+    req.session.buf = buf;
+    req.session.filename = filename;
 
-    res.attachment(filename); // Set disposition and send it.
+    return res.ok('file/getFile');
+  },
 
-    return datastream.pipe(res);
+  getFile: function(req, res) {
+
+    try{
+      var buf = new Buffer.from(JSON.stringify(req.session.buf));
+      var filename = req.session.filename;
+
+      res.attachment(filename); // Set disposition and send it.
+
+      const stream = require('stream');
+      let datastream = new stream.PassThrough();
+      datastream.end(buf);
+
+      return datastream.pipe(res);
+    }
+    catch (error){
+      return res.redirect(307, 'file');
+    }
   },
 };
 
