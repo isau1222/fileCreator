@@ -18,62 +18,92 @@ var types = {
   otziv: 'otziv.docx',
 };
 
+function getDoc(filePath, name, data){
+  var content = fs
+      .readFileSync(path.resolve(filePath, name), 'binary');
+
+  var zip = new JSZip(content);
+  var doc = new Docxtemplater();
+
+  return doc.loadZip(zip).setData(data).render();
+}
+
 module.exports = {
-  createFile: function(req, res) {
+  getFile: function(req, res) {
 
     var data = req.params.all();
     var filename = types[data.type];
 
-    try {
-      //Load the docx file as a binary
-      var content = fs
-          .readFileSync(path.resolve(files, filename), 'binary');
+    if (req.method == 'POST'){
 
-      var zip = new JSZip(content);
+      try {
 
-      var doc = new Docxtemplater();
-      doc.loadZip(zip);
-      doc.setData(data);
-      // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-      doc.render();
+        var doc = getDoc(files, filename, data);
+      }
+      catch (error) {
+        var e = {
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+          properties: error.properties,
+        };
+        console.log(JSON.stringify({error: e}));
+        return res.apiBadRequest('Something bad(');
+      }
+      return res.ok('file/getFile');
+    }else{
+
+      try {
+        var doc = getDoc(files, filename, data);
+      }
+      catch (error) {
+        var e = {
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+          properties: error.properties,
+        };
+        console.log(JSON.stringify({error: e}));
+        return res.redirect(400, 'file');
+      }
+
+      try {
+        var buf = doc.getZip()
+                     .generate({type: 'nodebuffer'});
+
+        res.attachment(filename); // Set disposition and send it.
+
+        const stream = require('stream');
+        let datastream = new stream.PassThrough();
+        datastream.end(buf);
+        return datastream.pipe(res);
+      }
+      catch (error) {
+        console.log(error);
+        return res.redirect(400, 'file');
+      }
     }
-    catch (error) {
-      var e = {
-        message: error.message,
-        name: error.name,
-        stack: error.stack,
-        properties: error.properties,
-      };
-      console.log(JSON.stringify({error: e}));
-      return res.apiBadRequest('Something bad(');
-      // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-    }
-    var buf = doc.getZip()
-                 .generate({type: 'nodebuffer'});
-
-    req.session.buf = buf;
-    req.session.filename = filename;
-
-    return res.ok('file/getFile');
   },
 
-  getFile: function(req, res) {
+  // getFile: function(req, res) {
 
-    try{
-      var buf = new Buffer.from(JSON.stringify(req.session.buf));
-      var filename = req.session.filename;
+  //   try{
+  //     let datastream = new Buffer.from(JSON.stringify(req.session.datastream));
+  //     var filename = req.session.filename;
 
-      res.attachment(filename); // Set disposition and send it.
+  //     res.attachment(filename); // Set disposition and send it.
 
-      const stream = require('stream');
-      let datastream = new stream.PassThrough();
-      datastream.end(buf);
-
-      return datastream.pipe(res);
-    }
-    catch (error){
-      return res.redirect(307, 'file');
-    }
-  },
+  //     // const stream = require('stream');
+  //     // let datastream = new stream.PassThrough();
+  //     // datastream.end(buf);
+  //     // req.session.buf = null;
+  //     // req.session.filename = null;
+  //     return datastream.pipe(res);
+  //   }
+  //   catch (error){
+  //     console.log(error);
+  //     return res.redirect(307, 'file');
+  //   }
+  // },
 };
 

@@ -25,7 +25,6 @@ module.exports.routes = {
   // @NOTE: order matters, redirects should be after the controller,
   //        otherwise there will be a redirect loop
 
-  // 'GET /file/createFile': 'file.createFile',
   'GET /file/getFile': 'file.getFile',
 
   'GET /*': {

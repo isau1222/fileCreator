@@ -28,6 +28,7 @@
 <script>
 var utils = require('@/utils');
 var api = require('@/api');
+// var axios = require('axios');
 
 module.exports = {
 
@@ -135,20 +136,18 @@ module.exports = {
           return params;
         }
 
-        var postPath = 'file/createFile';
+        var path = 'file/getFile';
         var params = getParamsFromJSON(this.chosenItem.data);
         params += 'type' + '=' + this.chosenItem.type + '&';
         console.log(params);
 
-        api.post(postPath + params)
-          .then(res => {
-            var getPath = res.data;
-            window.open(getPath, "_self");
-            this.$router.push(-1);
-          })
-          .catch(err => {
-            alert(err.response.data.message);
-          });
+        api.post(path + params)
+            .then(response => {
+              location.replace(path + params);
+            })
+            .catch(err => {
+              console.log(err.response.data.message);
+            });
       },
     },
   ]),
