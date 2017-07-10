@@ -3,17 +3,17 @@ var Docxtemplater = require('docxtemplater');
 var fs = require('fs');
 var path = require('path');
 
-const pathToTemplates = 'templates/';
+const pathToTemplates = __dirname + '/assets/templates/';
 
 var method_FileNameDictionary = {
   'expertConclusion': 'Экспертное заключение.docx',
-}
+};
 
 function saveBuffer(buf, fileName) {
-  fs.writeFileSync(path.resolve(__dirname, fileName), buf);
+  fs.writeFileSync(pathToTemplates + fileName, buf);
 }
 
-function readDoc(fileName, cb) {
+function readDoc(fileName) {
   return new Promise((resolve, reject) => {
     fs.readFile(path.resolve(__dirname, pathToTemplates + fileName), 'binary',
       (err, data) => {
@@ -26,9 +26,6 @@ function readDoc(fileName, cb) {
         resolve(doc.loadZip(zip));
       })
   })
-    .catch(err => {
-      return cb(err);
-    })
 }
 
 function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
@@ -89,8 +86,7 @@ function nameNormalizer(name) {
  * @param {string} json.expertFinalConclusion - [Экспертное заключение.Выводы]
  * @param {string} json.infoAboutSamplesFromLaboratory - [Экспертиза.Сведения о пробах из лаборатории]
  * @param {string} json.expertInitials - [Экспертное заключение.Эксперт]
- * @param {object} cb
- * @return {Promise} next .then get {nodebuffer, fileName}
+ * @return {Promise} next .then get {buf, fileName}
  */
 function printExpertConclusion(json) {
   var converter = (data) => {
