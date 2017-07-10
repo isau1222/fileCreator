@@ -29,17 +29,9 @@ function readDoc(fileName) {
 }
 
 function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
-
-
   return readDoc(fileName)
     .then(doc => {
       var obj = JSON.parse(json);
-      var asd = {
-        task: {
-          startDate: '',
-          date: '',
-        }
-      }
       if (jsonObjConverter)
         obj = jsonObjConverter(obj);
       fileName = nameCreator(obj);
@@ -71,6 +63,7 @@ function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
 function nameNormalizer(name) {
   return name.replace(/[/\*?|:<>"]{1}/g, '_');
 }
+
 /**
  * 
  * @param {object} json 
