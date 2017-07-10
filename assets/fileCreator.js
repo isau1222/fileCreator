@@ -12,16 +12,19 @@ function nameNormalizer(name) {
   return name.replace(/[/\*?|:<>"]{1}/g, '_');
 }
 
-var method_FileNameDictionary = {
-  expertConclusion: 'Экспертное заключение.docx',
-  claimLetter: 'Претензионное письмо',
-  protocolOfAdminisrativeOffense: 'Протокол об АП.docx',
-};
-
-var types_methodForCreatingDictionary = {
-  protocolOfAdminisrativeOffense: printProtocolOfAdminisrativeOffense,
-  claimLetter: printClaimLetter,
-  expertConclusion: printExpertConclusion,
+var typesDictionary = {
+  protocolOfAdminisrativeOffense: {
+    func: printProtocolOfAdminisrativeOffense,
+    fileName: 'Протокол об АП.docx',
+  },
+  claimLetter: {
+    func: printClaimLetter,
+    fileName:  'Претензионное письмо',
+  },
+  expertConclusion: {
+    func: printExpertConclusion,
+    fileName: 'Экспертное заключение.docx',
+  },
 };
 
 function readDoc(fileName) {
@@ -189,8 +192,8 @@ function printProtocolOfAdminisrativeOffense() {
 }
 
 function printFromType(type, json) {
-  var fileName = method_FileNameDictionary[type];
-  var { converter, nameCreator } = types_methodForCreatingDictionary[type]();
+  var fileName = typesDictionary[type].fileName;
+  var { converter, nameCreator } = typesDictionary[type].func();
   return createDocBuffer(fileName, json, converter, nameCreator);
 }
 
