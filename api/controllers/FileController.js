@@ -4,6 +4,31 @@
  * @description :: Server-side logic for managing files
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+// function getData(data){
+
+//   for (var prop in data){
+//     // console.log(prop);
+//     if (data[prop].type == 'name'){
+//       for (var i = 0; i < padejs.length; i++){
+//         var newProp = prop + '_' + padejs[i];
+//         // console.log(newProp);
+//         // data[newProp] = data[prop].data + '_' + padejs[i];
+//         data[newProp] = data[prop].data + '_' + padejs[i];
+//       }
+
+//     }else if(data[prop].type == 'phone'){
+//       console.log('PHONE!!');
+//     }
+//     // for (var i = 0; i < padejs.length; i++){
+//     //   var newProp = prop + '_' + padejs[i];
+//     //   console.log(newProp);
+//     //   // data[prop]
+//     // }
+//     data[prop] = data[prop].data;
+//   }
+//   return data;
+// }
+
 var JSZip = require('jszip');
 var Docxtemplater = require('docxtemplater');
 
@@ -18,27 +43,33 @@ var types = {
   otziv: 'otziv.docx',
 };
 
-function getDoc(filePath, name, data){
+function getDoc(filePath, filename, data){
   var content = fs
-      .readFileSync(path.resolve(filePath, name), 'binary');
+      .readFileSync(path.resolve(filePath, filename), 'binary');
 
   var zip = new JSZip(content);
   var doc = new Docxtemplater();
 
-  return doc.loadZip(zip).setData(data).render();
+  var genData = {};
+  for (var prop in data){
+    genData[prop] = data[prop].data;
+  }
+
+  return doc.loadZip(zip).setData(genData).render();
 }
 
 module.exports = {
   getFile: function(req, res) {
 
-    var data = req.params.all();
-    var filename = types[data.type];
+    var params = JSON.parse(req.param('params'));
+    // var data = req.params.all();
+    var filename = types[params.type];
 
     if (req.method == 'POST'){
 
       try {
 
-        var doc = getDoc(files, filename, data);
+        var doc = getDoc(files, filename, params.data);
       }
       catch (error) {
         var e = {
@@ -54,7 +85,7 @@ module.exports = {
     }else{
 
       try {
-        var doc = getDoc(files, filename, data);
+        var doc = getDoc(files, filename, params.data);
       }
       catch (error) {
         var e = {

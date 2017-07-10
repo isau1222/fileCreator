@@ -104,8 +104,12 @@ module.exports = {
               meta: 'Фамилия',
               data: '',
             },
-            phone: {
-              meta: 'Телефон',
+            patronymic: {
+              meta: 'Отчество',
+              data: '',
+            },
+            smth: {
+              meta: 'Smth',
               data: '',
             },
           },
@@ -145,11 +149,19 @@ module.exports = {
           }
           return params;
         }
+        // var jsonObject = JSON.parse(this.chosenItem.data);
+        // console.log(jsonObject);
+        var str = JSON.stringify(this.chosenItem);
+        console.log(str);
+        // return;
+
 
         var path = 'file/getFile';
-        var params = getParamsFromJSON(this.chosenItem.data);
-        params += 'type' + '=' + this.chosenItem.type + '&';
-        console.log(params);
+        // var params = getParamsFromJSON(this.chosenItem.data);
+        // params += 'type' + '=' + this.chosenItem.type + '&';
+        // console.log(params);
+        //
+        var params = '?params=' + str;
 
         api.post(path + params)
             .then(response => {
