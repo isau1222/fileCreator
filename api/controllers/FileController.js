@@ -5,6 +5,12 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var expressions = require("angular-expressions");
+var angularParser = function(tag){
+  var expr = expressions.compile(tag);
+  return {get:expr};
+}
+
 //путь к файлам
 var files = 'assets/templates';
 
@@ -15,6 +21,26 @@ var fileNameDictionary = {
 
 //обработчики методов. должны вернуть новую дату и имя будущего файлы
 var methodHandlers = {
+
+/**
+ *
+ * @param {object} json
+ * @param {string} json.expertConclusionDate - [Экспертное заключение.Дата]
+ * @param {string} json.expertConclusionNumber - [Экспертное заключение.Номер]
+ * @param {string} json.firstWhoDidExpertise - [Экспертное заключение.Кем проведена экспертиза.ФИО + Должность + Сведения об аккредитации]
+ * @param {string} [json.secondWhoDidExpertise] - [Экспертное заключение.Эксперт.ФИО + Должность + Сведения об аккредитации],
+ * @param {string} json.expertiseNumber - [Экспертиза.Номер определения о назначении экспертизы]
+ * @param {string} json.expertiseDate - [Экспертиза.Дата определения о назначении экспертизы]
+ * @param {string} json.verifyAgency - [Проверка.Орган, осущ. проверку. Наимеенование + Адрес]
+ * @param {string} json.listOfDocuments - [Экспертиза.перечень поступивших материалов]
+ * @param {string} json.expertConclusionEstablish - [Экспертное заключение.В ходе экспертизы установлено]
+ * @param {string} json.expertFinalConclusion - [Экспертное заключение.Выводы]
+ * @param {string} json.infoAboutSamplesFromLaboratory - [Экспертиза.Сведения о пробах из лаборатории]
+ * @param {string} json.expertInitials - [Экспертное заключение.Эксперт]
+ * @return {Promise} next .then get {buf, fileName}
+ */
+
+
   uvedom_o_proverke: function(data){
 
     var today = new Date();
@@ -56,6 +82,7 @@ function getBuffer(type, json) {
       var fileName = result.fileName;
       var dataJson = result.json;
 
+      doc.setOptions({parser:angularParser})
       doc.setData(dataJson);
 
       try {
@@ -77,8 +104,6 @@ function getBuffer(type, json) {
       };
     })
 }
-
-
 
 
 //controller////controller////controller////controller////controller////controller////controller////controller////controller////controller//
