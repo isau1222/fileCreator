@@ -47,12 +47,12 @@ var types = {
 
 var addProps = {
   uvedom_o_proverke: function(data){
-    // var today = new Date();
-    // var dd = today.getDate();
-    // var mm = today.getMonth()+1; //January is 0!
-    // var yyyy = today.getFullYear();
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
 
-    // data['currentDate'] =  dd + '.' + mm + '.' + yyyy;
+    data['currentDate'] =  dd + '.' + mm + '.' + yyyy;
     return data;
   },
 };
