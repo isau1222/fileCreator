@@ -6,8 +6,9 @@ var path = require('path');
 const pathToTemplates = __dirname + '/templates/';
 
 function nameNormalizer(name) {
-  if (!name)
+  if (!name) {
     return '';
+  }
   return name.replace(/[/\*?|:<>"]{1}/g, '_');
 }
 
@@ -64,7 +65,7 @@ function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
           name: error.name,
           stack: error.stack,
           properties: error.properties,
-        }
+        };
         console.log(JSON.stringify({ error: e }));
         // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
         throw error;
@@ -74,7 +75,7 @@ function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
         buf: doc.getZip().generate({ type: 'nodebuffer' }),
         fileName,
       };
-    })
+    });
 }
 
 //в квадратных скобках необязательный аргумент
@@ -95,7 +96,7 @@ function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
  * @param {string} json.expertInitials - [Экспертное заключение.Эксперт]
  * @return {Promise} next .then get {buf, fileName}
  */
-function printExpertConclusion(json) {
+function printExpertConclusion() {
   var converter = (data) => {
     if (data.secondWhoDidExpertise)
       data.secondWhoDidExpertise += ',';
@@ -105,11 +106,12 @@ function printExpertConclusion(json) {
   };
 
   var nameCreator = (data) => {
-    return 'Экспертное заключение' + nameNormalizer(data.expertConclusionNumber) + '.docx'
+    return 'Экспертное заключение' + nameNormalizer(data.expertConclusionNumber) + '.docx';
   };
-
-  var fileName = method_FileNameDictionary[this.type];
-  return createDocBuffer(fileName, json, converter, nameCreator);
+  return {
+    converter,
+    nameCreator,
+  };
 }
 
 /**
@@ -134,7 +136,7 @@ function printExpertConclusion(json) {
  * @param {string} json.phoneOfCurrentUser - [Субъект ГД текущего пользователя.телефон]
  * @return {Promise} next .then get {buf, fileName}
  */
-function printClaimLetter(json) {
+function printClaimLetter() {
 
   var converter = undefined;
 
@@ -142,9 +144,10 @@ function printClaimLetter(json) {
     return 'Претензионное письмо' + nameNormalizer(data.claimNumber)
       + ' в адрес ' + nameNormalizer(data.claimLetterToAddress) + '.docx';
   };
-
-  var fileName = method_FileNameDictionary[this.type];
-  return createDocBuffer(fileName, json, converter, nameCreator)
+  return {
+    converter,
+    nameCreator,
+  };
 }
 
 /**
@@ -170,28 +173,27 @@ function printClaimLetter(json) {
  * @param {string} json.reasonForCreatingCase - [Дело об АП.Повод для возбуждения дела]
  * @return {Promise} next .then get {buf, fileName}
  */
-function printProtocolOfAdminisrativeOffense(json) {
+function printProtocolOfAdminisrativeOffense() {
   var converter = (data) => {
     data['currentUserSubjectFullname'.toUpperCase()] = data.currentUserSubjectFullname;
-    console.log(data);
     return data;
   };
   var nameCreator = (data) => {
     return 'Протокол об административном правонарушении.docx';
   };
 
-
-  var fileName = method_FileNameDictionary[this.type];
-  return createDocBuffer(fileName, json, converter, nameCreator);
+  return {
+    converter,
+    nameCreator,
+  };
 }
 
 function printFromType(type, json) {
-  return types_methodForCreatingDictionary[type].call({ type }, json);
+  var fileName = method_FileNameDictionary[type];
+  var { converter, nameCreator } = types_methodForCreatingDictionary[type]();
+  return createDocBuffer(fileName, json, converter, nameCreator);
 }
 
 module.exports = {
-  printExpertConclusion,
-  printClaimLetter,
-  printProtocolOfAdminisrativeOffense,
   printFromType,
 };
