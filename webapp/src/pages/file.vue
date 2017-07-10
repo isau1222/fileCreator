@@ -242,7 +242,6 @@ module.exports = {
         }
         // var jsonObject = JSON.parse(this.chosenItem.data);
         // console.log(jsonObject);
-        var str = JSON.stringify(this.chosenItem);
         // console.log(str);
         // return;
 
@@ -251,8 +250,20 @@ module.exports = {
         // var params = getParamsFromJSON(this.chosenItem.data);
         // params += 'type' + '=' + this.chosenItem.type + '&';
         // console.log(params);
+function genData(data){
 
-        var params = '?params=' + str;
+  var genData = {};
+  for (var prop in data){
+    genData[prop] = data[prop].data;
+  }
+
+  // genData = addProps[type](genData);
+  return genData;
+}
+
+        var str = JSON.stringify(genData(this.chosenItem.data));
+        var params = '?type=' + this.chosenItem.type + '&json=' + str;
+        // console.log(params);
         location.replace(path + params);
         // api.post(path + params)
         //     .then(response => {
