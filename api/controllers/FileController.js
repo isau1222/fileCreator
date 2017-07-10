@@ -35,13 +35,43 @@ var Docxtemplater = require('docxtemplater');
 var fs = require('fs-extra');
 var path = require('path');
 
-var files = 'assets/files';
+var files = 'assets/templates';
 
 var types = {
-  shkola: 'shkola.docx',
-  univer: 'univer.docx',
-  otziv: 'otziv.docx',
+  // shkola: 'shkola.docx',
+  // univer: 'univer.docx',
+  // otziv: 'otziv.docx',
+  uvedom_o_proverke: 'Уведомление о проведении проверки.docx',
 };
+
+
+var addProps = {
+  uvedom_o_proverke: function(data){
+    // var today = new Date();
+    // var dd = today.getDate();
+    // var mm = today.getMonth()+1; //January is 0!
+    // var yyyy = today.getFullYear();
+
+    // data['currentDate'] =  dd + '.' + mm + '.' + yyyy;
+    return data;
+  },
+};
+
+// function addProps(data){
+//   var gendata = data;
+//   return gendata;
+// }
+//
+function genData(data, type){
+
+  var genData = {};
+  for (var prop in data){
+    genData[prop] = data[prop].data;
+  }
+
+  genData = addProps[type](genData);
+  return genData;
+}
 
 function getDoc(filePath, filename, data){
   var content = fs
@@ -50,26 +80,24 @@ function getDoc(filePath, filename, data){
   var zip = new JSZip(content);
   var doc = new Docxtemplater();
 
-  var genData = {};
-  for (var prop in data){
-    genData[prop] = data[prop].data;
-  }
-
-  return doc.loadZip(zip).setData(genData).render();
+  return doc.loadZip(zip).setData(data).render();
 }
 
 module.exports = {
+
   getFile: function(req, res) {
 
     var params = JSON.parse(req.param('params'));
     // var data = req.params.all();
     var filename = types[params.type];
 
+    var newData = genData(params.data, params.type);
+
     if (req.method == 'POST'){
 
       try {
 
-        var doc = getDoc(files, filename, params.data);
+        var doc = getDoc(files, filename, newData);
       }
       catch (error) {
         var e = {
@@ -85,7 +113,7 @@ module.exports = {
     }else{
 
       try {
-        var doc = getDoc(files, filename, params.data);
+        var doc = getDoc(files, filename, newData);
       }
       catch (error) {
         var e = {
@@ -99,10 +127,11 @@ module.exports = {
       }
 
       try {
-        var buf = doc.getZip()
-                     .generate({type: 'nodebuffer'});
 
         res.attachment(filename); // Set disposition and send it.
+
+        var buf = doc.getZip()
+             .generate({type: 'nodebuffer'});
 
         const stream = require('stream');
         let datastream = new stream.PassThrough();

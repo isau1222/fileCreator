@@ -26,6 +26,7 @@ module.exports.routes = {
   //        otherwise there will be a redirect loop
 
   'GET /file/getFile': 'file.getFile',
+  // 'GET /file/uvedomOProverke': 'file.uvedomOProverke',
 
   'GET /*': {
     controller: 'WebappController',
