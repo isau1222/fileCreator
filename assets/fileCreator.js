@@ -5,13 +5,23 @@ var path = require('path');
 
 const pathToTemplates = __dirname + '/templates/';
 
+function nameNormalizer(name) {
+  if (!name)
+    return '';
+  return name.replace(/[/\*?|:<>"]{1}/g, '_');
+}
+
 var method_FileNameDictionary = {
-  'expertConclusion': 'Экспертное заключение.docx',
+  expertConclusion: 'Экспертное заключение.docx',
+  claimLetter: 'Претензионное письмо',
+  protocolOfAdminisrativeOffense: 'Протокол об АП.docx',
 };
 
-function saveBuffer(buf, fileName) {
-  fs.writeFileSync(pathToTemplates + fileName, buf);
-}
+var types_methodForCreatingDictionary = {
+  protocolOfAdminisrativeOffense: printProtocolOfAdminisrativeOffense,
+  claimLetter: printClaimLetter,
+  expertConclusion: printExpertConclusion,
+};
 
 function readDoc(fileName) {
   return new Promise((resolve, reject) => {
@@ -30,15 +40,23 @@ function readDoc(fileName) {
 function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
   return readDoc(fileName)
     .then(doc => {
-      var obj = JSON.parse(json);
-      if (jsonObjConverter)
+      var obj;
+      if (typeof json === 'string') {
+        obj = JSON.parse(json);
+      }
+      else {
+        obj = json;
+      }
+      if (jsonObjConverter) {
         obj = jsonObjConverter(obj);
+      }
       fileName = nameCreator(obj);
+
       doc.setData(obj);
 
       try {
         // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-        doc.render()
+        doc.render();
       }
       catch (error) {
         var e = {
@@ -59,13 +77,7 @@ function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
     })
 }
 
-function nameNormalizer(name) {
-  if (!name)
-    return '';
-  return name.replace(/[/\*?|:<>"]{1}/g, '_');
-
-}
-
+//в квадратных скобках необязательный аргумент
 /**
  * 
  * @param {object} json 
@@ -91,12 +103,13 @@ function printExpertConclusion(json) {
       data.secondWhoDidExpertise = "";
     return data;
   };
+
   var nameCreator = (data) => {
     return 'Экспертное заключение' + nameNormalizer(data.expertConclusionNumber) + '.docx'
   };
 
-  var fileName = method_FileNameDictionary['expertConclusion'];
-  return createDocBuffer(fileName, json, converter, nameCreator)
+  var fileName = method_FileNameDictionary[this.type];
+  return createDocBuffer(fileName, json, converter, nameCreator);
 }
 
 /**
@@ -124,18 +137,61 @@ function printExpertConclusion(json) {
 function printClaimLetter(json) {
 
   var converter = undefined;
+
   var nameCreator = (data) => {
     return 'Претензионное письмо' + nameNormalizer(data.claimNumber)
-      +' в адрес '+nameNormalizer(data.claimLetterToAddress) + '.docx';
+      + ' в адрес ' + nameNormalizer(data.claimLetterToAddress) + '.docx';
   };
 
-  var fileName = method_FileNameDictionary['expertConclusion'];
+  var fileName = method_FileNameDictionary[this.type];
   return createDocBuffer(fileName, json, converter, nameCreator)
 }
 
+/**
+ * 
+ * @param {object} json 
+ * @param {string} json.currentUserSubjectFullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.currentUserSubjectAddress - [Адрес Субъекта ГД текущего пользователя]
+ * @param {string} json.administrativeOffenseNumber - [Дело об АП.№ постановления (протокола, определения)]
+ * @param {string} json.administrativeOffenseDate - [Дело об АП.Дата постановления (протокола, определения)]
+ * @param {string} json.administrativeOffensePlace - [Дело об АП.Место]
+ * @param {string} json.inspectorPosition - [Дело об АП.должность инспектора] 
+ * @param {string} json.inspectorFullname - [Дело об АП.ФИО инспектора] 
+ * @param {string} json.inspectorSertificateNumber - [Дело об АП.реквизиты служебного удостоверения]
+ * @param {string} json.infoAboutWitnessesAndVictims - [Дело об АП.Сведения о свидетелях и потерпевших]
+ * @param {string} json.suspectFullname - [Дело об АП.Наименование лица, в отношении которого возбуждено дело]
+ * @param {string} json.placeOfViolation - [Результат.Фактическое место проведения]
+ * @param {string} json.typeOfViolation - [Нарушение.Тип нарушения] 
+ * @param {string} json.natureOfViolation - [Нарушение.Характер нарушения]
+ * @param {array} json.violatedActs - массив нарушенных правовых актов
+ * @param {string} json.violatedActs.actNumber - [Положения нарушенных правовых актов.Номер пункта/статьи] 
+ * @param {string} json.violatedActs.actName -  [Наименование НПА из справочника]
+ * @param {string} json.violatedActs.fullText - [Положения нарушенных правовых актов.Текст статьи, пункта НПА из справочника]
+ * @param {string} json.reasonForCreatingCase - [Дело об АП.Повод для возбуждения дела]
+ * @return {Promise} next .then get {buf, fileName}
+ */
+function printProtocolOfAdminisrativeOffense(json) {
+  var converter = (data) => {
+    data['currentUserSubjectFullname'.toUpperCase()] = data.currentUserSubjectFullname;
+    console.log(data);
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Протокол об административном правонарушении.docx';
+  };
 
+
+  var fileName = method_FileNameDictionary[this.type];
+  return createDocBuffer(fileName, json, converter, nameCreator);
+}
+
+function printFromType(type, json) {
+  return types_methodForCreatingDictionary[type].call({ type }, json);
+}
 
 module.exports = {
   printExpertConclusion,
   printClaimLetter,
+  printProtocolOfAdminisrativeOffense,
+  printFromType,
 };
