@@ -1,6 +1,6 @@
 var {
   nameNormalizer,
-  createDocBuffer
+  createDocBuffer,
 } = require('./assetWorkers.js');
 
 var typesDictionary = {
@@ -15,6 +15,10 @@ var typesDictionary = {
   expertConclusion: {
     func: printExpertConclusion,
     fileName: 'Экспертное заключение.docx',
+  },
+  decreeAboutAdministrativePunishment: {
+    func: printDecreeAboutAdministrativePunishment,
+    fileName: 'Постановление о назначении административного наказания.docx',
   },
 };
 
@@ -227,14 +231,45 @@ var json = {
  * @return {Promise} next .then get {buf, fileName}
  */
 function printProtocolOfAO() {
-  var converter = (data) => {
-    data.CURRENTUSER = {};
-    data.CURRENTUSER.SUBJECT = {};
-    data.CURRENTUSER.SUBJECT.FULLNAME = data.currentUser.subject.fullname;
-    return data;
-  };
+  var converter = undefined;
   var nameCreator = (data) => {
     return 'Протокол об административном правонарушении.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ * 
+ * @param {object} json 
+ * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.currentUser.subject.address - [Адрес Субъекта ГД текущего пользователя]
+ * @param {string} json.solution.date - [Решение по делу.вид решения с кодом 03.Дата решения]
+ * @param {string} json.AO.place - [Дело об АП.Место]
+ * @param {string} json.AO.inspector.position - [Дело об АП.должность инспектора] 
+ * @param {string} json.AO.inspector.fullname - [Дело об АП.ФИО инспектора] 
+ * @param {string} json.AO.inspector.sertificateNumber - [Дело об АП.реквизиты служебного удостоверения]
+ * @param {string} json.AO.suspectFullname - [Дело об АП.Наименование лица, в отношении которого возбуждено дело]
+ * @param {string} json.result.placeOfViolation - [Результат.Фактическое место проведения]
+ * @param {string} json.violation.type - [Нарушение.Тип нарушения] 
+ * @param {string} json.violation.nature - [Нарушение.Характер нарушения]
+ * @param {string} json.AO.number - [Дело об АП.№ постановления (протокола, определения)]
+ * @param {string} json.AO.date - [Дело об АП.Дата постановления (протокола, определения)]
+ * @param {string} json.AO.amountOfFineUL - [Дело об АП.Сумма штрафа ЮЛ] 
+ * @param {string} json.AO.amountOfFineFLIPDL - [Дело об АП.Сумма штрафа  ФЛ/ИП/ДЛ]
+ * @param {string} json.AO.wayOfDelivery - [Дело об АП.Способ вручения]
+ * @param {string} json.AO.whoGotAndInfoAboutPostOffice - [Дело об АП. Кто получил/Сведения о почтовом отправлении]
+ * @param {string} json.AO.proofOfPayment - [Дело об АП.Дата факт.оплаты]
+ * @param {string} json.AO.paymentRequisites -[Дело об АП.Реквизиты платежного документа]
+ * @return {Promise} next .then get {buf, fileName}
+ */
+function printDecreeAboutAdministrativePunishment() {
+  var converter = undefined;
+  var nameCreator = (data) => {
+    return 'Постановление о назначении административного наказания.docx';
   };
 
   return {
