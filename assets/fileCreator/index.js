@@ -44,8 +44,11 @@ var typesDictionary = {
     func: predpisanie,
     fileName: 'Предписание.docx',
   },
+  agreementInProcuracy: {
+    func: printAgreementInProcuracy,
+    fileName: 'Заявление о согласовании в прокуратуре.docx',
+  }
 };
-
 /* json emitation for test:
 var json = {
       expertConclusion: {
@@ -459,6 +462,40 @@ function printActOfSurvey() {
   };
   var nameCreator = (data) => {
     return 'Акт_' + nameNormalizer(data.act.number) + '.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ *
+ * @PIO-70-1
+ * @param {object} json
+ * @param {string} json.currentDate - [Текущая_дата]
+ * @param {string} json.procuracyAgency - [Наименование органа прокуратуры, согл. проверку]
+ * @param {string} json.subjectGDAndAddress - [Субъект ГД + Адрес (из справочника)]
+ * @param {string} json.company
+ * @param {string} json.company.fullnameAndAddressAndNumber - [сущность «Предприятие».Наименование предприятия/ФИО ИП +юридический адрес + ОГРН/ОГРИП + ИНН]
+ * @param {string} json.company.realAddress - [Адрес фактического осуществления деятельности]
+ * @param {string} json.verification.registerDate - [сущность "Проверка".Дата государственной регистрации]
+ * @param {string} json.verification.lastVerificationDate - [сущность "Проверка".Дата окончания последней проверки]
+ * @param {string} json.verification.dateOfBeginActivity - [сущность "Проверка" .Дата начала осуществления хозяйственной деятельности]
+ * @param {string} json.verification.anotherBasis - [сущность "Проверка".иные основания]
+ * @param {string} json.verification.beginDate - [Плановое начало проверки]
+ * @param {string} json.leader - [ФИО руководителя Субъекта ГД]
+ * 
+ * @return {Promise} next .then get {buf, fileName}
+ */
+
+function printAgreementInProcuracy() {
+  var converter = (data) => {
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Заявление о согласовании в прокуратуре.docx';
   };
 
   return {
