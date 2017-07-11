@@ -20,6 +20,10 @@ var typesDictionary = {
     func: printDecreeAboutAdministrativePunishment,
     fileName: 'Постановление о назначении административного наказания.docx',
   },
+  actOfVerification: {
+    func: printActOfVerification,
+    fileName: 'Акт проведения проверки.docx',
+  },
 };
 
 /* json emitation for test:
@@ -270,6 +274,87 @@ function printDecreeAboutAdministrativePunishment() {
   var converter = undefined;
   var nameCreator = (data) => {
     return 'Постановление о назначении административного наказания.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ * 
+ * @param {object} json 
+ * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.currentUser.subject.addressAndPhone -[Адрес и телефон из справочника «Субъекты ГД»]
+ * @param {string} json.act.draftingPlace - [Место составления акта] 
+ * @param {string} json.act.date.dateFormat - [Дата, время составления акта в формате даты]
+ * @param {string} json.act.date.timeFormat - [Дата, время составления акта в формате время]
+ * @param {string} json.act.number - [№ акта]
+ * @param {string} json.verification.place - [Фактическое место проведения]
+ * @param {string} json.basis.task.number - [Основание:Задание.Номер] 
+ * @param {string} json.basis.task.date -  [Основание:Задание.Дата]
+ * @param {string} json.verification.type - [Проверка.вид] 
+ * @param {string} json.verification.form - [Проверка.форма проведения]
+ * @param {string} json.verification.company.name -  [Проверка.Предприятие.Название организации]
+ * @param {string} json.verification.terms - сроки проверки
+ * @param {string} json.verification.terms.from - [Сроки фактического проведения проверки от]
+ * @param {string} json.verification.terms.to - [Сроки фактического проведения проверки до]
+ * @param {string} json.verification.terms.duration.days - [вычислить кол-во дней между сроками факт. проведения проверки от и до, вычесть субботу и вс] 
+ * @param {string} json.verification.terms.duration.hours - [Срок проведения, ч.] 
+ * @param {string} json.verification.requisitesOfApproval - [Проверка.Реквизиты согласования]
+ * @param {string} json.verification.procuracyAgency - [Проверка.наименование органа прокуратуры, согл. проверку]
+ * @param {string} json.verification.inspector.fullname - [ФИО инспектора]
+ * @param {string} json.verification.inspector.sertificateNumber - [Реквизиты служ. удостоверения]
+ * @param {string} json.verification.peopleWhoDidVerification - [Лица, проводившие проверку]
+ * @param {string} json.verification.propleWhoWereOnVerification - [Руководитель, иные представители проверяемого лица, присутствовавшие при проверке]
+ * @param {string} json.verification.result - [Результат] 
+ * @param {string} json.verification.reasonsOfImpossibility - [Причины невозможности проведения проверки]
+ * @param {array} json.verification.[violationTypes] - нарушения, сортированные по типам
+ * @param {array} json.verification.violationTypes.type - [Нарушение.тип нарушения]
+ * @param {array} json.verification.violationTypes.nature - [Нарушение.Характер нарушения]
+ * @param {array} json.verification.violationTypes.violatedActs - нарушенные правовые акты
+ * @param {string} json.verification.violationTypes.violatedActs.number - [Положения нарушенных правовых актов.Номер пункта/статьи] 
+ * @param {string} json.verification.violationTypes.violatedActs.name - [Наименование НПА]
+ * @param {string} json.verification.violationTypes.violatedActs.fullText - [Положения нарушенных правовых актов.Текст]
+ * @param {string} json.verification.violationTypes.peopleWhoDidIt - [Нарушение.Лица, допустившие нарушение]
+ * @param {string} json.act.acquaintance - [Ознакомление/Отказ только для значения «Отказ»]
+ * 
+ * @return {Promise} next .then get {buf, fileName}
+ */
+function printActOfVerification() {
+  var converter = (data) => {
+    if (data.basis) {
+      data.hasBasis = true;
+    }
+    else {
+      data.hasBasis = false;
+    }
+    if (data.verification.result === "Невыявлены  нарушения" ||
+      data.verification.result === "Невозможно провести проверку") {
+      data.verification.pointer = '.';
+    }
+    else {
+      data.verification.pointer = ':';
+    }
+    if (data.verification.violationTypes) {
+      for (var violType of data.verification.violationTypes) {
+        if (violType.violatedActs) {
+          for (var violActIndex in violType.violatedActs) {
+            if (violActIndex === '0') {
+              violType.violatedActs[violActIndex].violatedFirstInfo = "Согласно:";
+            }
+            else {
+              violType.violatedActs[violActIndex].violatedFirstInfo = "";
+            }
+          }
+        }
+      }
+    }
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Акт_'+nameNormalizer(data.act.number)+'docx';
   };
 
   return {
