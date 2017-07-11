@@ -366,7 +366,7 @@ function printActOfVerification() {
     return data;
   };
   var nameCreator = (data) => {
-    return 'Акт_'+nameNormalizer(data.act.number)+'docx';
+    return 'Акт_'+nameNormalizer(data.act.number)+'.docx';
   };
 
   return {
