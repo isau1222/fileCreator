@@ -54,11 +54,6 @@ module.exports = {
       selected: '',
       error: null,
       chosenItem: '',
-      type: null,
-      info:{
-        firstName: '',
-        lastName: '',
-      },
       items: {
         checkingNotification: {
           type: 'checkingNotification',
@@ -190,6 +185,32 @@ module.exports = {
             gettingDate: 'Дата получения',
             sendingDate: 'Дата отправления',
             postalNumber: '№ почтового отправления',
+          },
+        },
+        specialistProvision: {
+          type: 'specialistProvision',
+          name: 'Заявление на предоставление специалиста',
+          data:{
+            verification:{
+              verifyAgency:{
+                fullname: 'ООО РИЭЛ ГЕО ПРОДЖЕКТ',
+                address: 'Улица пушкина, дом колотушкина',
+                phone: '8(800)555-35-35',
+                subjectName: 'Наименование субъекта ГД',
+              },
+              company:{
+                fullName: 'Наименование_предприятия',
+              },
+              type: 'плановая',
+              territory: 'Территория',
+            },
+            specialistParticipation:{
+              reqDate: 'Заявка на дату',
+              selectionObject:{
+                name: 'Объект отбора.Название',
+              },
+              issuedBy: 'Кем утв.заявка',
+            },
           },
         },
       },

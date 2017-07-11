@@ -47,7 +47,19 @@ var typesDictionary = {
   agreementInProcuracy: {
     func: printAgreementInProcuracy,
     fileName: 'Заявление о согласовании в прокуратуре.docx',
-  }
+  },
+  specialistProvision: {
+    func: specialistProvision,
+    fileName: 'Заявление на предоставление специалиста.docx',
+  },
+  specialistSamplesAccept: {
+    func: specialistSamplesAccept,
+    fileName: 'Об участии специалиста в отборе проб.docx',
+  },
+  specialistSamplesDecline: {
+    func: specialistSamplesDecline,
+    fileName: 'О невозможности участия специалиста в отборе проб.docx',
+  },
 };
 /* json emitation for test:
 var json = {
@@ -237,7 +249,7 @@ var json = {
 };*/
 
 /**
- * 
+ *
  * @PIO-141-1
  * @param {object} json
  * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
@@ -423,7 +435,7 @@ function printActOfVerification() {
  * @param {string} json.verification.violationTypes.violatedActs.name - [Наименование НПА]
  * @param {string} json.verification.violationTypes.violatedActs.fullText - [Положения нарушенных правовых актов.Текст]
  * @param {string} json.verification.violationTypes.peopleWhoDidIt - [Нарушение.Лица, допустившие нарушение]
- 
+
  * @param {string} json.act.acquaintance - [Ознакомление/Отказ только для значения «Отказ»]
  *
  * @return {Promise} next .then get {buf, fileName}
@@ -655,6 +667,107 @@ function predpisanie() {
   };
   var nameCreator = (data) => {
     return 'Предписание_' + nameNormalizer(data.number) + '.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ * @PIO-166-1
+ * @param {object} json
+ * @param {string} json.verification.verifyAgency.fullname - [Проверка.Орган, осущ.проверку.Наименование]
+ * @param {string} json.verification.verifyAgency.address - [Проверка.Орган, осущ.проверку.Адрес субъекта ГД]
+ * @param {string} json.verification.verifyAgency.phone - [Проверка.Орган, осущ.проверку. телефон субъекта ГД]
+ * @param {string} json.verification.verifyAgency.subjectName - [Проверка.Орган,осущ.проверку. Наименование субъекта ГД]
+ * @param {string} json.specialistParticipation - Участие специалиста
+ * @param {string} json.specialistParticipation.reqDate - [Участие специалиста.Заявка на дату]
+ * @param {string} json.verification.type - [Проверка.Вид проверки]
+ * @param {string} json.verification.company.fullName - [Проверка.Предприятие.Наименование_предприятия]
+ * @param {string} json.verification.territory - [Проверка.Территория]
+ * @param {string} json.specialistParticipation.selectionObject.name - [Участие специалиста.Объект отбора.Название]
+ * @param {string} json.specialistParticipation.issuedBy - [Участие специалиста.Кем утв.заявка]
+ */
+function specialistProvision() {
+  var converter = (data) => {
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Заявление на предоставление специалиста' + nameNormalizer('1337') + '.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ * @PIO-166-2
+ * @param {object} json
+ * @param {string} json.subject.name - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.subject.address - [Адрес Субъекта ГД текущего пользователя]
+ * @param {string} json.subject.phone - [телефон Субъекта ГД]
+ * @param {string} json.number - [Номер]
+ * @param {string} json.act.draftingPlace - [Место составления акта]
+ * @param {string} json.act.date - [Дата вынесения]
+ * @param {string} json.result.actNumber - [Результат.№ акта (через нарушение)]
+ * @param {string} json.result.actDate - [Результат.Дата составления акта]
+ * @param {string} json.inspector.post - [Должность инспектора]
+ * @param {string} json.inspector.fio - [ФИО инспектора]
+ * @param {string} json.inspector.sertificateNumber - [Реквизиты служебного удостоверения]
+ * @param {string} json.violation.persons - [Нарушение. Список лиц, допустивших нарушение]
+ * @param {string} json.content - [Содержание предписания]
+ * @param {string} json.time - [Срок исполнения]
+ * @param {string} json.reason - [Основание]
+ * @param {string} json.gettingDate - [Дата получения]
+ * @param {string} json.sendingDate - [Дата отправления]
+ * @param {string} json.postalNumber - [№ почтового отправления]
+ */
+function specialistSamplesAccept() {
+  var converter = (data) => {
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Об участии специалиста в отборе проб' + nameNormalizer('1337') + '.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ * @PIO-166-3
+ * @param {object} json
+ * @param {string} json.subject.name - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.subject.address - [Адрес Субъекта ГД текущего пользователя]
+ * @param {string} json.subject.phone - [телефон Субъекта ГД]
+ * @param {string} json.number - [Номер]
+ * @param {string} json.act.draftingPlace - [Место составления акта]
+ * @param {string} json.act.date - [Дата вынесения]
+ * @param {string} json.result.actNumber - [Результат.№ акта (через нарушение)]
+ * @param {string} json.result.actDate - [Результат.Дата составления акта]
+ * @param {string} json.inspector.post - [Должность инспектора]
+ * @param {string} json.inspector.fio - [ФИО инспектора]
+ * @param {string} json.inspector.sertificateNumber - [Реквизиты служебного удостоверения]
+ * @param {string} json.violation.persons - [Нарушение. Список лиц, допустивших нарушение]
+ * @param {string} json.content - [Содержание предписания]
+ * @param {string} json.time - [Срок исполнения]
+ * @param {string} json.reason - [Основание]
+ * @param {string} json.gettingDate - [Дата получения]
+ * @param {string} json.sendingDate - [Дата отправления]
+ * @param {string} json.postalNumber - [№ почтового отправления]
+ */
+function specialistSamplesDecline() {
+  var converter = (data) => {
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'О невозможности участия специалиста в отборе проб' + nameNormalizer('1337') + '.docx';
   };
 
   return {

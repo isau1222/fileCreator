@@ -14,7 +14,7 @@ module.exports = {
     var json = req.param('json');
 
     if (!type || !json){
-      return res.send('Something bad!');
+      return res.send('Такого файла нет!');
     }
 
     assets.printFromType(type, json)
