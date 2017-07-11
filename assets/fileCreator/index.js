@@ -66,7 +66,7 @@ var typesDictionary = {
 var XLSXTypesDictionary = {
   annualPlanOfPlannedInspections: {
     func: printAnnualPlanOfPlannedInspections,
-    fileName: 'test.xlsx',
+    fileName: 'Ежегодный план плановых проверок.xlsx',
   },
 };
 /* json emitation for test:
