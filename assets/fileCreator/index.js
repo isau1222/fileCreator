@@ -64,6 +64,7 @@ var json = {
 //в квадратных скобках необязательный аргумент
 /**
  *
+ * @PIO-369
  * @param {object} json
  * @param {object} json.expertConclusion - экспертное заключение.
  * @param {string} json.expertConclusion.date - [Экспертное заключение.Дата]
@@ -143,6 +144,7 @@ var json = {
 */
 /**
  *
+ * @PIO-155
  * @param {object} json
  * @param {object} json.verification - проверка
  * @param {object} json.verification.verifyAgency - проеряющий орган
@@ -228,7 +230,8 @@ var json = {
 };*/
 
 /**
- *
+ * 
+ * @PIO-141-1
  * @param {object} json
  * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
  * @param {string} json.currentUser.subject.address - [Адрес Субъекта ГД текущего пользователя]
@@ -264,6 +267,7 @@ function printProtocolOfAO() {
 
 /**
  *
+ * @PIO-141-2
  * @param {object} json
  * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
  * @param {string} json.currentUser.subject.address - [Адрес Субъекта ГД текущего пользователя]
@@ -301,6 +305,7 @@ function printDecreeAboutAdministrativePunishment() {
 
 /**
  *
+ * @PIO-110-1
  * @param {object} json
  * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
  * @param {string} json.currentUser.subject.addressAndPhone -[Адрес и телефон из справочника «Субъекты ГД»]
@@ -382,6 +387,7 @@ function printActOfVerification() {
 
 /**
  *
+ * @PIO-110-2
  * @param {object} json
  * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
  * @param {string} json.currentUser.subject.addressAndPhone -[Адрес и телефон из справочника «Субъекты ГД»]
