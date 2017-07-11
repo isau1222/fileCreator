@@ -38,7 +38,7 @@ var typesDictionary = {
   },
   actOfSurvey: {
     func: printActOfSurvey,
-    fileName: 'Акт обследования (рейд)',
+    fileName: 'Акт обследования (рейд).docx',
   },
   predpisanie: {
     func: predpisanie,
@@ -306,7 +306,6 @@ function printDecreeAboutAdministrativePunishment() {
   };
 }
 
-
 /**
  *
  * @PIO-110-1
@@ -333,7 +332,7 @@ function printDecreeAboutAdministrativePunishment() {
  * @param {string} json.verification.inspector.fullname - [ФИО инспектора]
  * @param {string} json.verification.inspector.sertificateNumber - [Реквизиты служ. удостоверения]
  * @param {string} json.verification.peopleWhoDidVerification - [Лица, проводившие проверку]
- * @param {string} json.verification.propleWhoWereOnVerification - [Руководитель, иные представители проверяемого лица, присутствовавшие при проверке]
+ * @param {string} json.verification.peopleWhoWereOnVerification - [Руководитель, иные представители проверяемого лица, присутствовавшие при проверке]
  * @param {string} json.verification.result - [Результат]
  * @param {string} json.verification.reasonsOfImpossibility - [Причины невозможности проведения проверки]
  * @param {array} json.verification.[violationTypes] - нарушения, сортированные по типам
@@ -380,7 +379,7 @@ function printActOfVerification() {
     return data;
   };
   var nameCreator = (data) => {
-    return 'Акт_'+nameNormalizer(data.act.number)+'.docx';
+    return 'Акт_' + nameNormalizer(data.act.number) + '.docx';
   };
 
   return {
@@ -388,6 +387,8 @@ function printActOfVerification() {
     nameCreator,
   };
 }
+
+
 
 /**
  *
@@ -424,6 +425,7 @@ function printActOfVerification() {
  *
  * @return {Promise} next .then get {buf, fileName}
  */
+
 function printActOfSurvey() {
   var converter = (data) => {
     if (data.basis) {
@@ -456,7 +458,7 @@ function printActOfSurvey() {
     return data;
   };
   var nameCreator = (data) => {
-    return 'Акт_'+nameNormalizer(data.act.number)+'.docx';
+    return 'Акт_' + nameNormalizer(data.act.number) + '.docx';
   };
 
   return {
