@@ -6,9 +6,9 @@ var path = require('path');
 const pathToTemplates = __dirname + '/../templates/';
 
 var expressions = require("angular-expressions");
-var angularParser = function(tag){
+var angularParser = function (tag) {
   var expr = expressions.compile(tag);
-  return {get:expr};
+  return { get: expr };
 };
 
 function nameNormalizer(name) {
@@ -25,17 +25,18 @@ function readDoc(fileName) {
         if (err) {
           return reject(err);
         }
-        var zip = new JSZip(data);
-        var doc = new Docxtemplater();
-        resolve(doc.loadZip(zip));
+        resolve(data);
       });
   });
 }
 
 function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
   return readDoc(fileName)
-    .then(doc => {
-      doc.setOptions({parser:angularParser});
+    .then(data => {
+      var zip = new JSZip(data);
+      var doc = new Docxtemplater();
+      doc = doc.loadZip(zip);
+      doc.setOptions({ parser: angularParser });
       var obj;
       if (typeof json === 'string') {
         obj = JSON.parse(json);
@@ -73,7 +74,50 @@ function createDocBuffer(fileName, json, jsonObjConverter, nameCreator) {
     });
 }
 
+var XLSXTemplate = require('xlsx-template');
+
+function createXLSXBuffer(fileName, json, jsonObjConverter, nameCreator) {
+  return readDoc(fileName)
+    .then(data => {
+      var obj;
+      if (typeof json === 'string') {
+        obj = JSON.parse(json);
+      }
+      else {
+        obj = json;
+      }
+      if (jsonObjConverter) {
+        obj = jsonObjConverter(obj);
+      }
+      fileName = nameCreator(obj);
+
+
+      var template = new XLSXTemplate(data);
+      var sheetNumber = 1;
+      try {
+        template.substitute(sheetNumber, obj);
+      }
+      catch (error) {
+        var e = {
+          message: error.message,
+          name: error.name,
+          stack: error.stack,
+          properties: error.properties,
+        };
+        console.log(JSON.stringify({ error: e }));
+        // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+        throw error;
+      }
+
+      return {
+        buf: template.generate({ type: 'nodebuffer' }),
+        fileName,
+      };
+    });
+}
+
 module.exports = {
   nameNormalizer,
   createDocBuffer,
+  createXLSXBuffer,
 };

@@ -1,6 +1,7 @@
 var {
   nameNormalizer,
   createDocBuffer,
+  createXLSXBuffer,
 } = require('./assetWorkers.js');
 
 var typesDictionary = {
@@ -59,6 +60,13 @@ var typesDictionary = {
   specialistSamplesDecline: {
     func: specialistSamplesDecline,
     fileName: 'О невозможности участия специалиста в отборе проб.docx',
+  },
+};
+
+var XLSXTypesDictionary = {
+  annualPlanOfPlannedInspections: {
+    func: printAnnualPlanOfPlannedInspections,
+    fileName: 'test.xlsx',
   },
 };
 /* json emitation for test:
@@ -516,6 +524,20 @@ function printAgreementInProcuracy() {
   };
 }
 
+function printAnnualPlanOfPlannedInspections() {
+  var converter = (data) => {
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Ежегодный план плановых проверок.xlsx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
 /**
  * @PIO-103
  * @param {object} json
@@ -755,12 +777,25 @@ function specialistSamplesDecline() {
  * @return {Promise} next .then get {buf, fileName}
  */
 function printFromType(type, json) {
-  var fileName = typesDictionary[type].fileName;
-  var {
-    converter,
-    nameCreator,
-  } = typesDictionary[type].func();
-  return createDocBuffer(fileName, json, converter, nameCreator);
+  if (typesDictionary[type]) {
+    let fileName = typesDictionary[type].fileName;
+    let {
+      converter,
+      nameCreator,
+    } = typesDictionary[type].func();
+    return createDocBuffer(fileName, json, converter, nameCreator);
+  }
+  else if (XLSXTypesDictionary[type]) {
+    let fileName = XLSXTypesDictionary[type].fileName;
+    let {
+      converter,
+      nameCreator,
+    } = XLSXTypesDictionary[type].func();
+    return createXLSXBuffer(fileName, json, converter, nameCreator);
+  }
+  else {
+    throw new Error('Unrecognized type!');
+  }
 }
 
 module.exports = {
