@@ -188,8 +188,7 @@ module.exports = {
         var str = JSON.stringify(this.chosenItem.data);
         var params = '?type=' + this.chosenItem.type + '&json=' + str;
         // location.replace(path + params);
-        window.open(path + params);
-
+        window.open(path+ params);
         // api.post(path + params)
         //     .then(response => {
         //       console.log(response);

@@ -14,8 +14,7 @@ module.exports = {
     var json = req.param('json');
 
     if (!type || !json){
-      return res.apiBadRequest();
-      // return res.redirect('back');
+      return res.send('Something bad!');
     }
 
     assets.printFromType(type, json)

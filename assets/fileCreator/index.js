@@ -59,17 +59,17 @@ var json = {
 */
 //в квадратных скобках необязательный аргумент
 /**
- * 
- * @param {object} json 
+ *
+ * @param {object} json
  * @param {object} json.expertConclusion - экспертное заключение.
  * @param {string} json.expertConclusion.date - [Экспертное заключение.Дата]
  * @param {string} json.expertConclusion.number - [Экспертное заключение.Номер]
  * @param {object} json.expertise - экспертиза
  * @param {string} json.expertConclusion.firstWhoDidExpertise - [Экспертное заключение.Кем проведена экспертиза.ФИО + Должность + Сведения об аккредитации]
  * @param {string} [json.expertConclusion.secondWhoDidExpertise] - [Экспертное заключение.Эксперт.ФИО + Должность + Сведения об аккредитации],
- * @param {string} json.expertise.number - [Экспертиза.Номер определения о назначении экспертизы] 
- * @param {string} json.expertise.date - [Экспертиза.Дата определения о назначении экспертизы] 
- * @param {string} json.expertise.verifyAgency - [Проверка.Орган, осущ. проверку. Наимеенование + Адрес]  
+ * @param {string} json.expertise.number - [Экспертиза.Номер определения о назначении экспертизы]
+ * @param {string} json.expertise.date - [Экспертиза.Дата определения о назначении экспертизы]
+ * @param {string} json.expertise.verifyAgency - [Проверка.Орган, осущ. проверку. Наимеенование + Адрес]
  * @param {string} json.expertise.listOfDocuments - [Экспертиза.перечень поступивших материалов]
  * @param {string} json.expertConclusion.establish - [Экспертное заключение.В ходе экспертизы установлено]
  * @param {string} json.expertConclusion.final - [Экспертное заключение.Выводы]
@@ -138,8 +138,8 @@ var json = {
     };
 */
 /**
- * 
- * @param {object} json 
+ *
+ * @param {object} json
  * @param {object} json.verification - проверка
  * @param {object} json.verification.verifyAgency - проеряющий орган
  * @param {string} json.verification.verifyAgency.fullname - [Проверка.Орган, осущ.проверку.Наименование]
@@ -154,7 +154,7 @@ var json = {
  * @param {string} json.result - результаты проверки
  * @param {string} json.result.terms - сроки проверки
  * @param {string} json.result.terms.from - [Результат. Сроки фактического проведения проверки: от]
- * @param {string} json.result.terms.to - [Сроки фактического проведения проверки: до] 
+ * @param {string} json.result.terms.to - [Сроки фактического проведения проверки: до]
  * @param {string} json.verification.type - [Проверка.вид проверки]
  * @param {string} json.verification.companyForVerificate - [Проверка.Предприятие]
  * @param {string} json.result.place - [Результат.фактическое место проведения проверки]
@@ -212,7 +212,7 @@ var json = {
       {
         actNumber:'231',
         actName: 'Имя первого акта',
-        fullText: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, voluptatem?', 
+        fullText: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, voluptatem?',
       },
       {
         actNumber:'22',
@@ -224,23 +224,23 @@ var json = {
 };*/
 
 /**
- * 
- * @param {object} json 
+ *
+ * @param {object} json
  * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
  * @param {string} json.currentUser.subject.address - [Адрес Субъекта ГД текущего пользователя]
  * @param {string} json.AO.number - [Дело об АП.№ постановления (протокола, определения)]
  * @param {string} json.AO.date - [Дело об АП.Дата постановления (протокола, определения)]
  * @param {string} json.AO.place - [Дело об АП.Место]
- * @param {string} json.AO.inspector.position - [Дело об АП.должность инспектора] 
- * @param {string} json.AO.inspector.fullname - [Дело об АП.ФИО инспектора] 
+ * @param {string} json.AO.inspector.position - [Дело об АП.должность инспектора]
+ * @param {string} json.AO.inspector.fullname - [Дело об АП.ФИО инспектора]
  * @param {string} json.AO.inspector.sertificateNumber - [Дело об АП.реквизиты служебного удостоверения]
  * @param {string} json.AO.infoAboutWitnessesAndVictims - [Дело об АП.Сведения о свидетелях и потерпевших]
  * @param {string} json.AO.suspectFullname - [Дело об АП.Наименование лица, в отношении которого возбуждено дело]
  * @param {string} json.result.placeOfViolation - [Результат.Фактическое место проведения]
- * @param {string} json.violation.type - [Нарушение.Тип нарушения] 
+ * @param {string} json.violation.type - [Нарушение.Тип нарушения]
  * @param {string} json.violation.nature - [Нарушение.Характер нарушения]
  * @param {array} json.violation.violatedActs - массив нарушенных правовых актов
- * @param {string} json.violation.violatedActs.actNumber - [Положения нарушенных правовых актов.Номер пункта/статьи] 
+ * @param {string} json.violation.violatedActs.actNumber - [Положения нарушенных правовых актов.Номер пункта/статьи]
  * @param {string} json.violation.violatedActs.actName -  [Наименование НПА из справочника]
  * @param {string} json.violation.violatedActs.fullText - [Положения нарушенных правовых актов.Текст статьи, пункта НПА из справочника]
  * @param {string} json.AO.reasonForCreatingCase - [Дело об АП.Повод для возбуждения дела]
@@ -259,22 +259,22 @@ function printProtocolOfAO() {
 }
 
 /**
- * 
- * @param {object} json 
+ *
+ * @param {object} json
  * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
  * @param {string} json.currentUser.subject.address - [Адрес Субъекта ГД текущего пользователя]
  * @param {string} json.solution.date - [Решение по делу.вид решения с кодом 03.Дата решения]
  * @param {string} json.AO.place - [Дело об АП.Место]
- * @param {string} json.AO.inspector.position - [Дело об АП.должность инспектора] 
- * @param {string} json.AO.inspector.fullname - [Дело об АП.ФИО инспектора] 
+ * @param {string} json.AO.inspector.position - [Дело об АП.должность инспектора]
+ * @param {string} json.AO.inspector.fullname - [Дело об АП.ФИО инспектора]
  * @param {string} json.AO.inspector.sertificateNumber - [Дело об АП.реквизиты служебного удостоверения]
  * @param {string} json.AO.suspectFullname - [Дело об АП.Наименование лица, в отношении которого возбуждено дело]
  * @param {string} json.result.placeOfViolation - [Результат.Фактическое место проведения]
- * @param {string} json.violation.type - [Нарушение.Тип нарушения] 
+ * @param {string} json.violation.type - [Нарушение.Тип нарушения]
  * @param {string} json.violation.nature - [Нарушение.Характер нарушения]
  * @param {string} json.AO.number - [Дело об АП.№ постановления (протокола, определения)]
  * @param {string} json.AO.date - [Дело об АП.Дата постановления (протокола, определения)]
- * @param {string} json.AO.amountOfFineUL - [Дело об АП.Сумма штрафа ЮЛ] 
+ * @param {string} json.AO.amountOfFineUL - [Дело об АП.Сумма штрафа ЮЛ]
  * @param {string} json.AO.amountOfFineFLIPDL - [Дело об АП.Сумма штрафа  ФЛ/ИП/ДЛ]
  * @param {string} json.AO.wayOfDelivery - [Дело об АП.Способ вручения]
  * @param {string} json.AO.whoGotAndInfoAboutPostOffice - [Дело об АП. Кто получил/Сведения о почтовом отправлении]
@@ -295,43 +295,43 @@ function printDecreeAboutAdministrativePunishment() {
 }
 
 /**
- * 
- * @param {object} json 
+ *
+ * @param {object} json
  * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
  * @param {string} json.currentUser.subject.addressAndPhone -[Адрес и телефон из справочника «Субъекты ГД»]
- * @param {string} json.act.draftingPlace - [Место составления акта] 
+ * @param {string} json.act.draftingPlace - [Место составления акта]
  * @param {string} json.act.date.dateFormat - [Дата, время составления акта в формате даты]
  * @param {string} json.act.date.timeFormat - [Дата, время составления акта в формате время]
  * @param {string} json.act.number - [№ акта]
  * @param {string} json.verification.place - [Фактическое место проведения]
- * @param {string} json.basis.task.number - [Основание:Задание.Номер] 
+ * @param {string} json.basis.task.number - [Основание:Задание.Номер]
  * @param {string} json.basis.task.date -  [Основание:Задание.Дата]
- * @param {string} json.verification.type - [Проверка.вид] 
+ * @param {string} json.verification.type - [Проверка.вид]
  * @param {string} json.verification.form - [Проверка.форма проведения]
  * @param {string} json.verification.company.name -  [Проверка.Предприятие.Название организации]
  * @param {string} json.verification.terms - сроки проверки
  * @param {string} json.verification.terms.from - [Сроки фактического проведения проверки от]
  * @param {string} json.verification.terms.to - [Сроки фактического проведения проверки до]
- * @param {string} json.verification.terms.duration.days - [вычислить кол-во дней между сроками факт. проведения проверки от и до, вычесть субботу и вс] 
- * @param {string} json.verification.terms.duration.hours - [Срок проведения, ч.] 
+ * @param {string} json.verification.terms.duration.days - [вычислить кол-во дней между сроками факт. проведения проверки от и до, вычесть субботу и вс]
+ * @param {string} json.verification.terms.duration.hours - [Срок проведения, ч.]
  * @param {string} json.verification.requisitesOfApproval - [Проверка.Реквизиты согласования]
  * @param {string} json.verification.procuracyAgency - [Проверка.наименование органа прокуратуры, согл. проверку]
  * @param {string} json.verification.inspector.fullname - [ФИО инспектора]
  * @param {string} json.verification.inspector.sertificateNumber - [Реквизиты служ. удостоверения]
  * @param {string} json.verification.peopleWhoDidVerification - [Лица, проводившие проверку]
  * @param {string} json.verification.propleWhoWereOnVerification - [Руководитель, иные представители проверяемого лица, присутствовавшие при проверке]
- * @param {string} json.verification.result - [Результат] 
+ * @param {string} json.verification.result - [Результат]
  * @param {string} json.verification.reasonsOfImpossibility - [Причины невозможности проведения проверки]
  * @param {array} json.verification.[violationTypes] - нарушения, сортированные по типам
  * @param {array} json.verification.violationTypes.type - [Нарушение.тип нарушения]
  * @param {array} json.verification.violationTypes.nature - [Нарушение.Характер нарушения]
  * @param {array} json.verification.violationTypes.violatedActs - нарушенные правовые акты
- * @param {string} json.verification.violationTypes.violatedActs.number - [Положения нарушенных правовых актов.Номер пункта/статьи] 
+ * @param {string} json.verification.violationTypes.violatedActs.number - [Положения нарушенных правовых актов.Номер пункта/статьи]
  * @param {string} json.verification.violationTypes.violatedActs.name - [Наименование НПА]
  * @param {string} json.verification.violationTypes.violatedActs.fullText - [Положения нарушенных правовых актов.Текст]
  * @param {string} json.verification.violationTypes.peopleWhoDidIt - [Нарушение.Лица, допустившие нарушение]
  * @param {string} json.act.acquaintance - [Ознакомление/Отказ только для значения «Отказ»]
- * 
+ *
  * @return {Promise} next .then get {buf, fileName}
  */
 function printActOfVerification() {
@@ -407,7 +407,7 @@ function checkingNotification() {
     return data;
   };
   var nameCreator = (data) => {
-    return 'Уведомление по проверке' + data.task.number + '.docx';
+    return 'Уведомление по проверке' + nameNormalizer(data.task.number) + '.docx';
   };
 
   return {
@@ -451,7 +451,7 @@ function directiveNotification() {
     return data;
   };
   var nameCreator = (data) => {
-    return 'Задание по проверке' + data.number + '.docx';
+    return 'Задание по проверке' + nameNormalizer(data.number) + '.docx';
   };
 
   return {
@@ -489,7 +489,7 @@ function raidTask() {
     return data;
   };
   var nameCreator = (data) => {
-    return 'Задание по проверке' + data.number + '.docx';
+    return 'Задание по проверке' + nameNormalizer(data.number) + '.docx';
   };
 
   return {
