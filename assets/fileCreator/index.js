@@ -24,6 +24,18 @@ var typesDictionary = {
     func: printActOfVerification,
     fileName: 'Акт проведения проверки.docx',
   },
+  checkingNotification: {
+    func: checkingNotification,
+    fileName: 'Уведомление о проведении проверки.docx',
+  },
+  directiveNotification: {
+    func: directiveNotification,
+    fileName: 'Распоряжение о проведении проверки.docx',
+  },
+  raidTask: {
+    func: raidTask,
+    fileName: 'Рейдовое задание.docx',
+  },
 };
 
 /* json emitation for test:
@@ -363,6 +375,134 @@ function printActOfVerification() {
   };
 }
 
+/**
+ * @PIO-103
+ * @param {object} json
+ * @param {string} json.subject.name - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.subject.address - [Адрес Субъекта ГД текущего пользователя]
+ * @param {string} json.creationDate - [ДАТА_СОЗДАНИЯ]
+ * @param {string} json.company.name - [Предприятие.Наименование организации]
+ * @param {string} json.company.urAddress - [Предприятие.Юридический адрес]
+ * @param {string} json.company.ogrn - [Предприятие. ОГРН\ОГРНИП]
+ * @param {string} json.company.inn - [Предприятие.ИНН]
+ * @param {string} json.company.dealAddress - [Предприятие.Адрес фактического осуществления деятельности]
+ * @param {string} json.task.date - [Задание.ДАТА]
+ * @param {string} json.task.number - [ЗАДАНИЕ.НОМЕР]
+ * @param {string} json.task.rights - [Задание.Правовые основания для проведения проверки]
+ * @param {string} json.task.startDate - [Задание.ДАТА_НАЧАЛА]
+ * @param {string} json.verification.type - [вид проверки]
+ * @param {string} json.verification.form - [форма проверки]
+ * @param {string} json.fio - [Фамилия И. О.]
+ * @param {string} json.currentDate - [текущая дата]
+ * @return {Promise} next .then get {buf, fileName}
+ */
+function checkingNotification() {
+  var converter = (data) => {
+    // var today = new Date();
+    // var dd = today.getDate();
+    // var mm = today.getMonth()+1; //January is 0!
+    // var yyyy = today.getFullYear();
+    // data['currentDate'] =  dd + '.' + mm + '.' + yyyy;
+
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Уведомление по проверке' + data.task.number + '.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ * @PIO-95-1
+ * @param {object} json
+ * @param {string} json.subject.name - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.subject.address - [Адрес Субъекта ГД текущего пользователя]
+ * @param {string} json.subject.head - [Руководитель Субъекта ГД]
+ * @param {string} json.date - [ДАТА]
+ * @param {string} json.number - [НОМЕР]
+ * @param {string} json.verification.type - [вид проверки]
+ * @param {string} json.verification.form - [форма проверки]
+ * @param {string} json.company.name - [Предприятие.Наименование организации]
+ * @param {string} json.company.inn - [Предприятие.ИНН]
+ * @param {string} json.company.urAddress - [Предприятие.Юридический адрес]
+ * @param {string} json.company.dealAddress - [Предприятие.Адрес фактического осуществления деятельности]
+ * @param {string} json.post - [Должность]
+ * @param {string} json.inspector - [Инспектор (ФИО)]
+ * @param {string} json.serviceCertificate - [Служебное удостоверение]
+ * @param {string} json.involvedPersons - [Лица, привлекаемые к участию]
+ * @param {string} json.cheking.target - [Проверка.Цель]
+ * @param {string} json.cheking.tasks - [Проверка.Задачи]
+ * @param {string} json.cheking.object - [Проверка.Предмет проверки]
+ * @param {int} json.cheking.days - [Проверка.Cрок проведения (дн)]
+ * @param {string} json.cheking.startDate - [Проверка.Дата начала]
+ * @param {string} json.cheking.endDate - [Проверка.Дата окончания]
+ * @param {string} json.cheking.rights - [Проверка.Правовые основания для проведения]
+ * @param {string} json.controlActivities - [Мероприятия по контролю за соблюдением обязательных требований]
+ * @param {string} json.reglamentList - [Список адм. регламентов по осуществлению проверки]
+ * @param {string} json.documentList - [Список обязательных документов]
+ * @return {Promise} next .then get {buf, fileName}
+ */
+function directiveNotification() {
+  var converter = (data) => {
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Задание по проверке' + data.number + '.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ * @PIO-95-2
+ * @param {object} json
+ * @param {string} json.subject.name - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.subject.address - [Адрес Субъекта ГД текущего пользователя]
+ * @param {string} json.date - [ДАТА]
+ * @param {string} json.number - [НОМЕР]
+ * @param {string} json.cheking.target - [Проверка.ПРОВЕРКА_ЦЕЛЬ]
+ * @param {string} json.cheking.rights - [Проверка.ПРАВОВЫЕ-ОСНОВАНИЯ]
+ * @param {string} json.cheking.startDate - [Проверка.Дата начала]
+ * @param {string} json.cheking.endDate - [Проверка.Дата окончания]
+ * @param {string} json.controlActivities - [Мероприятия по контролю за соблюдением обязательных требований]
+ * @param {string} json.cheking.territory - [ПРОВЕРКА_ТЕРРИТОРИЯ]
+ * @param {string} json.cheking.route - [ПРОВЕРКА_МАРШРУТ]
+ * @param {string} json.post - [Должность]
+ * @param {string} json.inspector - [Инспектор (ФИО)]
+ * @param {string} json.serviceCertificate - [Служебное удостоверение]
+ * @param {string} json.involvedPersons - [Лица, привлекаемые к участию]
+ * @param {int} json.days - [срок составления акта (дн)]
+ * @param {string} json.subject.head - [Руководитель Субъекта ГД]
+ * @param {string} json.fio - [ФИО текущего пользователя]
+ * @param {string} json.subject.phone - [телефон субъекта ГД]
+ * @return {Promise} next .then get {buf, fileName}
+ */
+function raidTask() {
+  var converter = (data) => {
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Задание по проверке' + data.number + '.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ * @param {string} type
+ * @param {object} json
+ * @return {Promise} next .then get {buf, fileName}
+ */
 function printFromType(type, json) {
   var fileName = typesDictionary[type].fileName;
   var {
