@@ -10,15 +10,18 @@ var assets = require('../../assets/fileCreator/index.js');
 module.exports = {
   getFile: function(req, res) {
 
-    var type = req.param('type');
-    var json = req.param('json');
+    // var type = req.param('type');
+    // var json = req.param('json');
 
-    if (!type || !json){
-      return res.apiBadRequest();
-      // return res.redirect('back');
-    }
+        // var type = req.param('type');
+    var json = {verification: ''};
 
-    assets.printFromType(type, json)
+    // if (!type || !json){
+    //   return res.apiBadRequest();
+    //   // return res.redirect('back');
+    // }
+
+    assets.printFromType('actOfVerification', json)
       .then(({buf, fileName})=>{
         res.attachment(fileName);
 
