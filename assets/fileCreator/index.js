@@ -1,4 +1,5 @@
 var {
+
   nameNormalizer,
   createDocBuffer,
   createXLSXBuffer,
@@ -69,25 +70,7 @@ var XLSXTypesDictionary = {
     fileName: 'Ежегодный план плановых проверок.xlsx',
   },
 };
-/* json emitation for test:
-var json = {
-      expertConclusion: {
-        date: '30.11.1997',
-        number: '73',
-        establish: 'установлено что-то там',
-        final: 'важный вывод тут',
-        firstWhoDidExpertise: 'Аникин Андрей Сергеевич',
-      },
-      expertise: {
-        number: '32',
-        date: '02.12.1997',
-        verifyAgency: 'ООО Проверочка',
-        listOfDocuments: '3 пробирки, затупленный нож',
-        infoAboutSamplesFromLaboratory: 'некая информация об образцах',
-        expertInitials: 'Аникин А.С.',
-      },
-    };
-*/
+
 //в квадратных скобках необязательный аргумент
 /**
  *
@@ -131,44 +114,6 @@ function printExpertConclusion() {
   };
 }
 
-
-/* json emitation for test:
-var json = {
-      verification: {
-        verifyAgency: {
-          fullname: 'общество с ограниченной ответственностью Проверочка',
-          name: 'ООО Проверочка',
-          address: 'Ул. жуковского, дом 34',
-          leader: 'Аникин Андрей Сергеевич',
-          phone: '7903002002002',
-        },
-        type: 'типпроверкикакой-то',
-        companyForVerificate: 'ООО РИэл Гео Проджект',
-      },
-      result: {
-        terms: {
-          from: '30.11.2017',
-          to: '20.12.1017',
-        },
-        place: 'Ул. Строителей, дом 1',
-      },
-      damage: {
-        summary:'разбито 3 стула',
-      },
-      claimLetter: {
-        date: '01.01.2018',
-        number: '123',
-        toAddress:'ул. Тверская, д.4',
-        toName: 'Аникин Андрей Сергеевич',
-      },
-      currentUser: {
-        fullname: 'Рогозин Владислав Валерьевич',
-        subject: {
-          phone: '+79652704783',
-        }
-      },
-    };
-*/
 /**
  *
  * @PIO-155
@@ -213,48 +158,6 @@ function printClaimLetter() {
     nameCreator,
   };
 }
-
-/*  json emitation for test:
-var json = {
-  currentUser: {
-    subject: {
-      fullname: 'какой-то субъект',
-      address: 'ул. Тверская, д.5',
-    },
-  },
-  AO: {
-    number: '12',
-    date: '30.11.2000',
-    place: 'ул. Орлова, д. 89',
-    inspector: {
-      position: 'сержант',
-      fullname: 'Полное Имя Сержанта',
-      sertificateNumber: '13312334-89',
-    },
-    infoAboutWitnessesAndVictims: 'Некая информация о свидетелях и жертвах',
-    suspectFullname: 'Полное Имя Подозреваемоего',
-    reasonForCreatingCase: 'Очень важная причина',
-  },
-  result: {
-    placeOfViolation: 'место правонарушения',
-  },
-  violation: {
-    type: 'тип правонарушения',
-    nature: 'характер правонарушения',
-    violatedActs: [
-      {
-        actNumber:'231',
-        actName: 'Имя первого акта',
-        fullText: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, voluptatem?',
-      },
-      {
-        actNumber:'22',
-        actName: 'Имя второго акта',
-        fullText: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, voluptatem?',
-      },
-    ],
-  },
-};*/
 
 /**
  *
@@ -524,8 +427,38 @@ function printAgreementInProcuracy() {
   };
 }
 
+
+/**
+ * @param {object} json
+ * @param {string} json.year - [ГОД]
+ * @param {string} json.verification.confirmPerson - [сущность "Проверка".Лицо, утверждающее план проверок]
+ * @param {string} json.verification.documentRequisites - [сущность "Проверка".Реквизиты документа, утверждающего проверку]
+ * @param {array} json.companies - массив компаний
+ * @param {array} json.companies
+ * @param {array} json.companies.name - [сущность "Предприятие".НАИМЕНОВАНИЕ ПРЕДПРИЯТИЯ]
+ * @param {array} json.companies.juridicalAddress - [сущность "Предприятие". Юридический адрес (место жительства ИП)]
+ * @param {array} json.companies.realAddress - [сущность "Предприятие" .Адрес фактического осуществления деятельности]
+ * @param {array} json.companies.OGRNOrOGRNIP - [сущность "Предприятие".ОГРН/ОГРНИП]
+ * @param {array} json.companies.INN - [сущность "Предприятие".ИНН]
+ * @param {array} json.companies.verification.goal - [сущность "проверка".цель]
+ * @param {array} json.companies.verification.registerDate - [сущность "Проверка".Дата государственной регистрации]
+ * @param {array} json.companies.verification.lastVerificationDate - [сущность "Проверка".Дата окончания последней проверки]
+ * @param {array} json.companies.verification.dateOfBeginActivity - [сущность "Проверка".Дата начала осуществления хозяйственной деятельности]
+ * @param {array} json.companies.verification.anotherBasis - [сущность "Проверка".Иные основания]
+ * @param {array} json.companies.verification.beginDate.formatMM - [сущность "Проверка". Плановое начало проверки в формате "ММ" ]
+ * @param {array} json.companies.verification.duration.days - [сущность "Проверка".Срок проведения плановой проверки (дн)]
+ * @param {array} json.companies.verification.duration.hours - [сущность "проверка".Срок проведения плановой проверки (раб.часов)]
+ * @param {array} json.companies.verification.code - [сущность "Проверка". форма проведения проверки - код (из справочника форм)]
+ * @param {array} json.companies.verification.controlAgency - [сущность "Проверка".Органы контроля, участвующие в проверке совместно]
+ * @param {array} json.companies.dangerCalss - [сущность "предприятие". класс опасности]
+ * @param {array} json.companies.ERP - [сущность "проверка".Номер по ЕРП]
+ */
 function printAnnualPlanOfPlannedInspections() {
   var converter = (data) => {
+    for (var companyIndex in data.companies) {
+      data.companies[companyIndex].number = Number(companyIndex)+1;
+      data.companies[companyIndex].whiteSpace='';
+    }
     return data;
   };
   var nameCreator = (data) => {
@@ -541,7 +474,7 @@ function printAnnualPlanOfPlannedInspections() {
 /**
  * @PIO-103
  * @param {object} json
- * @param {string} json.subject.name - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.year - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
  * @param {string} json.subject.address - [Адрес Субъекта ГД текущего пользователя]
  * @param {string} json.creationDate - [ДАТА_СОЗДАНИЯ]
  * @param {string} json.company.name - [Предприятие.Наименование организации]
