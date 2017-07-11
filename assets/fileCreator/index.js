@@ -36,6 +36,10 @@ var typesDictionary = {
     func: raidTask,
     fileName: 'Рейдовое задание.docx',
   },
+  actOfSurvey: {
+    func: printActOfSurvey,
+    fileName: 'Акт обследования (рейд)',
+  },  
 };
 
 /* json emitation for test:
@@ -294,6 +298,7 @@ function printDecreeAboutAdministrativePunishment() {
   };
 }
 
+
 /**
  *
  * @param {object} json
@@ -335,6 +340,81 @@ function printDecreeAboutAdministrativePunishment() {
  * @return {Promise} next .then get {buf, fileName}
  */
 function printActOfVerification() {
+  var converter = (data) => {
+    if (data.basis) {
+      data.hasBasis = true;
+    }
+    else {
+      data.hasBasis = false;
+    }
+    if (data.verification.result === "Невыявлены  нарушения" ||
+      data.verification.result === "Невозможно провести проверку") {
+      data.verification.pointer = '.';
+    }
+    else {
+      data.verification.pointer = ':';
+    }
+    if (data.verification.violationTypes) {
+      for (var violType of data.verification.violationTypes) {
+        if (violType.violatedActs) {
+          for (var violActIndex in violType.violatedActs) {
+            if (violActIndex === '0') {
+              violType.violatedActs[violActIndex].violatedFirstInfo = "Согласно:";
+            }
+            else {
+              violType.violatedActs[violActIndex].violatedFirstInfo = "";
+            }
+          }
+        }
+      }
+    }
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Акт_'+nameNormalizer(data.act.number)+'.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ *
+ * @param {object} json
+ * @param {string} json.currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.currentUser.subject.addressAndPhone -[Адрес и телефон из справочника «Субъекты ГД»]
+ * @param {string} json.act.number - [№ акта]
+ * @param {string} json.act.date.dateFormat - [Дата, время составления акта в формате даты]
+ * @param {string} json.act.draftingPlace - [Место составления акта]
+ * @param {string} json.verification.terms - сроки проверки
+ * @param {string} json.verification.terms.from - [Сроки фактического проведения проверки от]
+ * @param {string} json.verification.terms.to - [Сроки фактического проведения проверки до]
+ * @param {string} json.act.date.timeFormat - [Дата, время составления акта в формате время]
+ * @param {string} json.verification.place - [Фактическое место проведения]
+ * @param {string} json.verification.inspector.position - [Дело об АП.должность инспектора]
+ * @param {string} json.verification.inspector.fullname - [Дело об АП.ФИО инспектора]
+ * @param {string} json.verification.inspector.sertificateNumber - [Дело об АП.реквизиты служебного удостоверения]
+ * @param {string} json.basis.task.number - [Основание:Задание.Номер]
+ * @param {string} json.basis.task.date -  [Основание:Задание.Дата]
+ * @param {string} json.verification.peopleWhoDidVerification - [Лица, проводившие проверку]
+ * @param {string} json.verification.result - [Результат]
+ * @param {string} json.verification.reasonsOfImpossibility - [Причины невозможности проведения проверки]
+ * @param {array} json.verification.[violationTypes] - нарушения, сортированные по типам
+ * @param {array} json.verification.violationTypes.type - [Нарушение.тип нарушения]
+ * @param {array} json.verification.violationTypes.nature - [Нарушение.Характер нарушения]
+ * @param {array} json.verification.violationTypes.violatedActs - нарушенные правовые акты
+ * @param {string} json.verification.violationTypes.violatedActs.number - [Положения нарушенных правовых актов.Номер пункта/статьи]
+ * @param {string} json.verification.violationTypes.violatedActs.name - [Наименование НПА]
+ * @param {string} json.verification.violationTypes.violatedActs.fullText - [Положения нарушенных правовых актов.Текст]
+ * @param {string} json.verification.violationTypes.peopleWhoDidIt - [Нарушение.Лица, допустившие нарушение]
+ 
+ * @param {string} json.act.acquaintance - [Ознакомление/Отказ только для значения «Отказ»]
+ *
+ * @return {Promise} next .then get {buf, fileName}
+ */
+function printActOfSurvey() {
   var converter = (data) => {
     if (data.basis) {
       data.hasBasis = true;
