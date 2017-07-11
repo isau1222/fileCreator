@@ -158,6 +158,40 @@ module.exports = {
             fio: 'Фывфывфыв Пырпырпыр Рарарар',
           },
         },
+        predpisanie: {
+          type: 'predpisanie',
+          name: 'Предписание',
+          data:{
+            subject:{
+              name: 'ООО РИЭЛ ГЕО ПРОДЖЕКТ',
+              address: 'Улица пушкина, дом колотушкина',
+              phone: '8(800)555-35-35',
+            },
+            number: '1488',
+            act: {
+              draftingPlace: 'Место составления акта',
+              date: '12.03.2007',
+            },
+            result: {
+              actNumber: '1337',
+              actDate: '12.03.2007',
+            },
+            inspector: {
+              post: 'Должность инспектора',
+              fio: 'ФИО инспектора',
+              sertificateNumber: 'Реквизиты служебного удостоверения',
+            },
+            violation: {
+              persons: 'Список лиц, допустивших нарушение',
+            },
+            content: 'Содержание предписания',
+            time: 'Срок исполнения',
+            reason: 'Основание',
+            gettingDate: 'Дата получения',
+            sendingDate: 'Дата отправления',
+            postalNumber: '№ почтового отправления',
+          },
+        },
       },
     };
   },
@@ -188,7 +222,7 @@ module.exports = {
         var str = JSON.stringify(this.chosenItem.data);
         var params = '?type=' + this.chosenItem.type + '&json=' + str;
         // location.replace(path + params);
-        window.open(path+ params);
+        window.open(path + params);
         // api.post(path + params)
         //     .then(response => {
         //       console.log(response);

@@ -39,7 +39,11 @@ var typesDictionary = {
   actOfSurvey: {
     func: printActOfSurvey,
     fileName: 'Акт обследования (рейд)',
-  },  
+  },
+  predpisanie: {
+    func: predpisanie,
+    fileName: 'Предписание.docx',
+  },
 };
 
 /* json emitation for test:
@@ -576,6 +580,42 @@ function raidTask() {
   };
   var nameCreator = (data) => {
     return 'Задание по проверке' + nameNormalizer(data.number) + '.docx';
+  };
+
+  return {
+    converter,
+    nameCreator,
+  };
+}
+
+/**
+ * @PIO-117
+ * @param {object} json
+ * @param {string} json.subject.name - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+ * @param {string} json.subject.address - [Адрес Субъекта ГД текущего пользователя]
+ * @param {string} json.subject.phone - [телефон Субъекта ГД]
+ * @param {string} json.number - [Номер]
+ * @param {string} json.act.draftingPlace - [Место составления акта]
+ * @param {string} json.act.date - [Дата вынесения]
+ * @param {string} json.result.actNumber - [Результат.№ акта (через нарушение)]
+ * @param {string} json.result.actDate - [Результат.Дата составления акта]
+ * @param {string} json.inspector.post - [Должность инспектора]
+ * @param {string} json.inspector.fio - [ФИО инспектора]
+ * @param {string} json.inspector.sertificateNumber - [Реквизиты служебного удостоверения]
+ * @param {string} json.violation.persons - [Нарушение. Список лиц, допустивших нарушение]
+ * @param {string} json.content - [Содержание предписания]
+ * @param {string} json.time - [Срок исполнения]
+ * @param {string} json.reason - [Основание]
+ * @param {string} json.gettingDate - [Дата получения]
+ * @param {string} json.sendingDate - [Дата отправления]
+ * @param {string} json.postalNumber - [№ почтового отправления]
+ */
+function predpisanie() {
+  var converter = (data) => {
+    return data;
+  };
+  var nameCreator = (data) => {
+    return 'Предписание_' + nameNormalizer(data.number) + '.docx';
   };
 
   return {
