@@ -498,7 +498,7 @@ function printActOfSurvey() {
  * @param {string} json.verification.anotherBasis - [сущность "Проверка".иные основания]
  * @param {string} json.verification.beginDate - [Плановое начало проверки]
  * @param {string} json.leader - [ФИО руководителя Субъекта ГД]
- * 
+ *
  * @return {Promise} next .then get {buf, fileName}
  */
 
@@ -707,24 +707,12 @@ function specialistProvision() {
 /**
  * @PIO-166-2
  * @param {object} json
- * @param {string} json.subject.name - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
- * @param {string} json.subject.address - [Адрес Субъекта ГД текущего пользователя]
- * @param {string} json.subject.phone - [телефон Субъекта ГД]
- * @param {string} json.number - [Номер]
- * @param {string} json.act.draftingPlace - [Место составления акта]
- * @param {string} json.act.date - [Дата вынесения]
- * @param {string} json.result.actNumber - [Результат.№ акта (через нарушение)]
- * @param {string} json.result.actDate - [Результат.Дата составления акта]
- * @param {string} json.inspector.post - [Должность инспектора]
- * @param {string} json.inspector.fio - [ФИО инспектора]
- * @param {string} json.inspector.sertificateNumber - [Реквизиты служебного удостоверения]
- * @param {string} json.violation.persons - [Нарушение. Список лиц, допустивших нарушение]
- * @param {string} json.content - [Содержание предписания]
- * @param {string} json.time - [Срок исполнения]
- * @param {string} json.reason - [Основание]
- * @param {string} json.gettingDate - [Дата получения]
- * @param {string} json.sendingDate - [Дата отправления]
- * @param {string} json.postalNumber - [№ почтового отправления]
+ * @param {string} json.specialistParticipation.reqDate - [Участие специалиста.Заявка на дату]
+ * @param {string} json.specialistParticipation.lab.name - [Участие специалиста. Лаборатория. Наименование]
+ * @param {string} json.specialistParticipation.specialist.post - [Участие специалиста. Специалист. Должность]
+ * @param {string} json.specialistParticipation.specialist.fio - [Участие специалиста. Специалист. ФИО]
+ * @param {string} json.specialistParticipation.specialist.accreditation - [Участие специалиста. Специалист. Сведения об аккредитации]
+ * @param {string} json.verification.verifyAgency.subjectName - [Проверка.Орган,осущ.проверку. Наименование субъекта ГД]
  */
 function specialistSamplesAccept() {
   var converter = (data) => {
@@ -743,24 +731,9 @@ function specialistSamplesAccept() {
 /**
  * @PIO-166-3
  * @param {object} json
- * @param {string} json.subject.name - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
- * @param {string} json.subject.address - [Адрес Субъекта ГД текущего пользователя]
- * @param {string} json.subject.phone - [телефон Субъекта ГД]
- * @param {string} json.number - [Номер]
- * @param {string} json.act.draftingPlace - [Место составления акта]
- * @param {string} json.act.date - [Дата вынесения]
- * @param {string} json.result.actNumber - [Результат.№ акта (через нарушение)]
- * @param {string} json.result.actDate - [Результат.Дата составления акта]
- * @param {string} json.inspector.post - [Должность инспектора]
- * @param {string} json.inspector.fio - [ФИО инспектора]
- * @param {string} json.inspector.sertificateNumber - [Реквизиты служебного удостоверения]
- * @param {string} json.violation.persons - [Нарушение. Список лиц, допустивших нарушение]
- * @param {string} json.content - [Содержание предписания]
- * @param {string} json.time - [Срок исполнения]
- * @param {string} json.reason - [Основание]
- * @param {string} json.gettingDate - [Дата получения]
- * @param {string} json.sendingDate - [Дата отправления]
- * @param {string} json.postalNumber - [№ почтового отправления]
+ * @param {string} json.specialistParticipation.explanations - [Участие специалиста.Пояснения]
+ * @param {string} json.specialistParticipation.reqDate - [Участие специалиста.Заявка на дату]
+ * @param {string} json.verification.verifyAgency.subjectName - [Проверка.Орган,осущ.проверку. Наименование субъекта ГД]
  */
 function specialistSamplesDecline() {
   var converter = (data) => {

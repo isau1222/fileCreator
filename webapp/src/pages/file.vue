@@ -213,6 +213,43 @@ module.exports = {
             },
           },
         },
+        specialistSamplesAccept: {
+          type: 'specialistSamplesAccept',
+          name: 'Об участии специалиста в отборе проб',
+          data:{
+            specialistParticipation:{
+              reqDate: 'Заявка на дату',
+              lab:{
+                name: 'Лаборатория. Наименование',
+              },
+              specialist:{
+                post: 'Должность',
+                fio: 'ФИО',
+                accreditation: 'Сведения об аккредитации',
+              },
+            },
+            verification:{
+              verifyAgency:{
+                subjectName: 'Наименование субъекта ГД',
+              },
+            },
+          },
+        },
+        specialistSamplesDecline: {
+          type: 'specialistSamplesDecline',
+          name: 'О невозможности участия специалиста в отборе проб',
+          data:{
+            specialistParticipation:{
+              explanations: 'Пояснения',
+              reqDate: 'Заявка на дату',
+            },
+            verification:{
+              verifyAgency:{
+                subjectName: 'Наименование субъекта ГД',
+              },
+            },
+          },
+        },
       },
     };
   },
