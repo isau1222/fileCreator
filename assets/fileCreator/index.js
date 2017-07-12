@@ -5,7 +5,7 @@ var {
   createXLSXBuffer,
 } = require('./assetWorkers.js');
 
-var typesDictionary = {
+var DOCXtypesDictionary = {
   protocolOfAO: {
     func: printProtocolOfAO,
     fileName: 'Протокол об АП.docx',
@@ -429,6 +429,7 @@ function printAgreementInProcuracy() {
 
 
 /**
+ * @PIO-70-2
  * @param {object} json
  * @param {string} json.year - [ГОД]
  * @param {string} json.verification.confirmPerson - [сущность "Проверка".Лицо, утверждающее план проверок]
@@ -710,12 +711,12 @@ function specialistSamplesDecline() {
  * @return {Promise} next .then get {buf, fileName}
  */
 function printFromType(type, json) {
-  if (typesDictionary[type]) {
-    let fileName = typesDictionary[type].fileName;
+  if (DOCXtypesDictionary[type]) {
+    let fileName = DOCXtypesDictionary[type].fileName;
     let {
       converter,
       nameCreator,
-    } = typesDictionary[type].func();
+    } = DOCXtypesDictionary[type].func();
     return createDocBuffer(fileName, json, converter, nameCreator);
   }
   else if (XLSXTypesDictionary[type]) {
