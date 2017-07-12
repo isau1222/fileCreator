@@ -27,6 +27,7 @@ currentUser.fullname - [ФИО текущего пользователя].
 currentUser.subject.phone - [Субъект ГД текущего пользователя.телефон]
 AO.creatingCaseReason - [Дело об АП.Повод для возбуждения дела]	
 expertResume.number - [Экспертное заключение.Номер]
+expertResume.date - [Экспертное заключение.Дата]
 expertResume.firstExpertiseExecutor - [Экспертное заключение.Кем проведена экспертиза.ФИО + Должность + Сведения об аккредитации]
 expertResume.secondExpertiseExecutor - [Экспертное заключение.Эксперт.ФИО + Должность + Сведения об аккредитации]
 expertise.number - [Экспертиза.Номер определения о назначении экспертизы] 
@@ -36,7 +37,9 @@ expertise.documentList - [Экспертиза.перечень поступив
 expertResume.establish - [Экспертное заключение.В ходе экспертизы установлено]
 expertResume.conclusion - [Экспертное заключение.Выводы]
 expertise.laboratorySamplesInfo - [Экспертиза.Сведения о пробах из лаборатории]
-expertise.expert.initials - [Экспертное заключение.Эксперт]
+expertResume.expert.initials - [Экспертное заключение.Эксперт]
+expertise.appointmentDate - [Экспертиза.Номер определения о назначении экспертизы]
+expertise.appointmentNumber - [Экспертиза.Дата определения о назначении экспертизы] 
 
 act.acquaintance - [Ознакомление/Отказ только для значения «Отказ»]
 act.date.dateFormat - [Дата, время составления акта в формате даты]
