@@ -242,8 +242,8 @@ function printDecreeAboutAdministrativePunishment() {
  * @param {string} json.act.date.timeFormat - [Дата, время составления акта в формате время]
  * @param {string} json.act.number - [№ акта]
  * @param {string} json.inspection.place - [Фактическое место проведения]
- * @param {string} json.basis.task.number - [Основание:Задание.Номер]
- * @param {string} json.basis.task.date -  [Основание:Задание.Дата]
+ * @param {string} json.reason.mission.number - [Основание:Задание.Номер]
+ * @param {string} json.reason.mission.date -  [Основание:Задание.Дата]
  * @param {string} json.inspection.type - [Проверка.вид]
  * @param {string} json.inspection.company.name -  [Проверка.Предприятие.Название организации]
  * @param {string} json.inspection.terms - сроки проверки
@@ -273,11 +273,11 @@ function printDecreeAboutAdministrativePunishment() {
  */
 function printActOfVerification() {
   var converter = (data) => {
-    if (data.basis) {
-      data.hasBasis = true;
+    if (data.reason) {
+      data.hasReason = true;
     }
     else {
-      data.hasBasis = false;
+      data.hasReason = false;
     }
     if (data.inspection.result === "Невыявлены  нарушения" ||
       data.inspection.result === "Невозможно провести проверку") {
