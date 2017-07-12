@@ -15,7 +15,7 @@ function nameNormalizer(name) {
   if (!name) {
     return '';
   }
-  return name.replace(/[/\*?|:<>"]{1}/g, '_');
+  return name.toString().replace(/[/\*?|:<>"]{1}/g, '_');
 }
 
 function readDoc(fileName) {
