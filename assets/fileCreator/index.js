@@ -93,11 +93,11 @@ var XLSXTypesDictionary = {
  */
 function printExpertResume() {
   var converter = (data) => {
-    if (data.expertise) {
-      if (data.expertise.secondWhoDidExpertise)
-        data.expertise.secondWhoDidExpertise += ',';
+    if (data.expertResume) {
+      if (data.expertResume.secondExpertiseExecutor)
+        data.expertResume.secondExpertiseExecutor += ',';
       else
-        data.expertise.secondWhoDidExpertise = "";
+        data.expertResume.secondExpertiseExecutor = "";
     } else {
       throw new Error('Template need expertise information!');
     }
@@ -182,6 +182,7 @@ function printClaimLetter() {
  * @param {string} json.AO.creatingCaseReason - [Дело об АП.Повод для возбуждения дела]
  * @return {Promise} next .then get {buf, fileName}
  */
+
 function printProtocolOfAO() {
   var converter = undefined;
   var nameCreator = (data) => {
@@ -202,7 +203,7 @@ function printProtocolOfAO() {
  * @param {string} json.currentUser.subject.address - [Адрес Субъекта ГД текущего пользователя]
  * @param {string} json.solution.date - [Решение по делу.вид решения с кодом 03.Дата решения]
  * @param {string} json.AO.place - [Дело об АП.Место]
- * @param {string} json.AO.inspector.position - [Дело об АП.должность инспектора]
+ * @param {string} json.AO.inspector.post - [Дело об АП.должность инспектора]
  * @param {string} json.AO.inspector.fullname - [Дело об АП.ФИО инспектора]
  * @param {string} json.AO.inspector.sertificateNumber - [Дело об АП.реквизиты служебного удостоверения]
  * @param {string} json.AO.suspect.fullname - [Дело об АП.Наименование лица, в отношении которого возбуждено дело]
@@ -230,7 +231,6 @@ function printDecreeAboutAdministrativePunishment() {
     nameCreator,
   };
 }
-
 /**
  *
  * @PIO-110-1
@@ -454,8 +454,8 @@ function printAgreementInProcuracy() {
 function printAnnualPlanOfPlannedInspections() {
   var converter = (data) => {
     for (var companyIndex in data.companies) {
-      data.companies[companyIndex].number = Number(companyIndex)+1;
-      data.companies[companyIndex].whiteSpace='';
+      data.companies[companyIndex].number = Number(companyIndex) + 1;
+      data.companies[companyIndex].whiteSpace = '';
     }
     return data;
   };
