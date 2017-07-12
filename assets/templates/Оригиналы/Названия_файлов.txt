@@ -1,0 +1,89 @@
+Проверка / Inspection
+Задание / Mission
+Уведомление / Notification
+Результат проверки / Inspection act
+Нарушение / Violation
+Ущерб / Damage
+Предписание / Requirement
+Дело об АП / Case Administrative Offence
+Экспертиза / Expertise
+Участие специалиста лаборатории или эксперта в отборе проб / Expertise Sampling (Request + Result)
+Экспертное заключение / Expert Resume
+Назначенное мероприятие / Event
+//@TODO:
+//fix АКт обследования(рейд) inspector
+//
+
+act.acquaintance - [Ознакомление/Отказ только для значения «Отказ»]
+act.date.dateFormat - [Дата, время составления акта в формате даты]
+act.date.timeFormat - [Дата, время составления акта в формате времени]
+act.draftingPlace - [Место составления акта]
+act.number - [№ акта]
+AO.amountOfFineFLIPDL - [Дело об АП.Сумма штрафа  ФЛ/ИП/ДЛ]
+AO.amountOfFineUL - [Дело об АП.Сумма штрафа ЮЛ]
+AO.inspector.fullname - [Дело об АП.ФИО инспектора]
+AO.inspector.post - [Дело об АП.должность инспектора]
+AO.inspector.sertificateNumber - [Дело об АП.реквизиты служебного удостоверения]
+AO.paymentProof - [Дело об АП.Дата факт.оплаты]
+AO.paymentRequisites - [Дело об АП.Реквизиты платежного документа]
+AO.place - [Дело об АП.Место]
+AO.receiverAndPostOfficeInfo - [Дело об АП. Кто получил/Сведения о почтовом отправлении]
+AO.violatedDecree.date - [Дело об АП.Дата постановления (протокола, определения)]
+AO.violatedDecree.number - [Дело об АП.№ постановления (протокола, определения)]
+AO.wayOfDelivery - [Дело об АП.Способ вручения]
+company.fullnameAndAddressAndNumber - [сущность «Предприятие».Наименование предприятия/ФИО ИП +юридический адрес + ОГРН/ОГРИП + ИНН]
+company.realAddress - [Адрес фактического осуществления деятельности]
+currentDate - [Текущая_дата]
+currentUser.subject.address - [Адрес Субъекта ГД текущего пользователя]
+currentUser.subject.addressAndPhone - [Адрес и телефон из справочника «Субъекты ГД»]
+currentUser.subject.fullname - [НАИМЕНОВАНИЕ СУБЪЕКТА ГД ТЕК. ПОЛЬЗОВАТЕЛЯ]
+expertiseSampling.explanations - [Участие специалиста.Пояснения]
+expertiseSampling.issuedBy - [Участие специалиста.Кем утв.заявка]
+expertiseSampling.lab.name - [Участие специалиста. Лаборатория. Наименование]
+expertiseSampling.reqDate - [Участие специалиста.Заявка на дату]
+expertiseSampling.selectionObject.name - [Участие специалиста.Объект отбора.Название]
+expertiseSampling.specialist.accreditation - [Сведения об аккредитации]
+expertiseSampling.specialist.fio - [ФИО] (относится к Об участии специалиста в отборе проб.docx)
+expertiseSampling.specialist.post - [Участие специалиста. Специалист. Должность]
+inspection.act - [Результат]
+inspection.anotherReasons - [сущность "Проверка".иные основания]
+inspection.beginActivityDate - [сущность "Проверка" .Дата начала осуществления хозяйственной деятельности]
+inspection.beginDate - [Плановое начало проверки]
+inspection.company.fullname - [Проверка.Предприятие.Наименование_предприятия]
+inspection.inspectingPersons - [Лица, проводившие проверку]
+inspection.inspectionAgency - [ПРОВЕРКА.ОРГАН, ОСУЩ.ПРОВЕРКУ.НАИМЕНОВАНИЕ]
+inspection.inspectionAgency.address - [Проверка.Орган, осущ.проверку. Адрес субъекта ГД]
+inspection.inspectionAgency.fullname - [Проверка.Орган,осущ.проверку. Наименование субъекта ГД]
+inspection.inspectionAgency.phone - [Проверка.Орган, осущ.проверку. телефон субъекта ГД]
+inspection.inspector.fullname - [Должность инспектора]
+inspection.inspector.post - [Должность инспектора]
+inspection.inspector.sertificateNumber - [Реквизиты служ. удостоверения]
+inspection.lastInspectionDate -[сущность "Проверка".Дата окончания последней проверки]
+inspection.place - [Фактическое место проведения]
+inspection.procuracyAgency - [Проверка.наименование органа прокуратуры, согл. проверку]
+inspection.reasonsOfImpossibility - [Причины невозможности проведения проверки]
+inspection.registerDate - [сущность "Проверка".Дата государственной регистрации]
+inspection.requisitesOfApproval - [Проверка.Реквизиты согласования]
+inspection.terms.duration.days - [вычислить кол-во дней между сроками факт. проведения проверки от и до, вычесть субботу и вс]
+inspection.terms.duration.hours - [Срок проведения, ч.]
+inspection.terms.from - [Сроки фактического проведения проверки от]
+inspection.terms.to - [Сроки фактического проведения проверки до]
+inspection.territory - [Проверка.Территория]
+inspection.type - [Проверка.Вид проверки]
+inspection.violationTypes.nature - [Нарушение.Характер нарушения]
+inspection.violationTypes.type - [Нарушение.тип нарушения]
+inspection.violationTypes.violatedActs.fullText - [Положения нарушенных правовых актов.Текст]
+inspection.violationTypes.violatedActs.name - [Наименование НПА]
+inspection.violationTypes.violatedActs.number - [Положения нарушенных правовых актов.Номер пункта/статьи]
+inspection.violationTypes.violatedPersons - [Нарушение.Лица, допустившие нарушение]
+inspection.watchingPerons - [Руководитель, иные представители проверяемого лица, присутствовавшие при проверке]
+procuracyAgency - [Наименование органа прокуратуры, согл. проверку]
+reason.task.date - [Основание:Задание.Дата]
+reason.task.number - [Основание:Задание.Номер]
+result.draftingPlace - [Результат.Фактическое место проведения]
+result.suspect.fullname - [Дело об АП.Наименование лица, в отношении которого возбуждено дело]	|
+solution.date - [Решение по делу.вид решения с кодом 03.Дата решения]
+subject.fullnameAndAddress - Субъект ГД + Адрес (из справочника)
+subject.leader.fullname - [ФИО руководителя Субъекта ГД]
+violation.nature - [Нарушение.Характер нарушения]
+violation.type - [Нарушение.Тип нарушения]

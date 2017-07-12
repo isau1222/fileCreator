@@ -14,8 +14,8 @@ var DOCXtypesDictionary = {
     func: printClaimLetter,
     fileName: 'Претензионное письмо.docx',
   },
-  expertConclusion: {
-    func: printExpertConclusion,
+  expertResume: {
+    func: printExpertResume,
     fileName: 'Экспертное заключение.docx',
   },
   decreeAboutAdministrativePunishment: {
@@ -76,23 +76,23 @@ var XLSXTypesDictionary = {
  *
  * @PIO-369
  * @param {object} json
- * @param {object} json.expertConclusion - экспертное заключение.
- * @param {string} json.expertConclusion.date - [Экспертное заключение.Дата]
- * @param {string} json.expertConclusion.number - [Экспертное заключение.Номер]
+ * @param {object} json.expertResume - экспертное заключение.
+ * @param {string} json.expertResume.date - [Экспертное заключение.Дата]
+ * @param {string} json.expertResume.number - [Экспертное заключение.Номер]
  * @param {object} json.expertise - экспертиза
- * @param {string} json.expertConclusion.firstWhoDidExpertise - [Экспертное заключение.Кем проведена экспертиза.ФИО + Должность + Сведения об аккредитации]
- * @param {string} [json.expertConclusion.secondWhoDidExpertise] - [Экспертное заключение.Эксперт.ФИО + Должность + Сведения об аккредитации],
+ * @param {string} json.expertResume.firstWhoDidExpertise - [Экспертное заключение.Кем проведена экспертиза.ФИО + Должность + Сведения об аккредитации]
+ * @param {string} [json.expertResume.secondWhoDidExpertise] - [Экспертное заключение.Эксперт.ФИО + Должность + Сведения об аккредитации],
  * @param {string} json.expertise.number - [Экспертиза.Номер определения о назначении экспертизы]
  * @param {string} json.expertise.date - [Экспертиза.Дата определения о назначении экспертизы]
  * @param {string} json.expertise.verifyAgency - [Проверка.Орган, осущ. проверку. Наимеенование + Адрес]
  * @param {string} json.expertise.listOfDocuments - [Экспертиза.перечень поступивших материалов]
- * @param {string} json.expertConclusion.establish - [Экспертное заключение.В ходе экспертизы установлено]
- * @param {string} json.expertConclusion.final - [Экспертное заключение.Выводы]
+ * @param {string} json.expertResume.establish - [Экспертное заключение.В ходе экспертизы установлено]
+ * @param {string} json.expertResume.final - [Экспертное заключение.Выводы]
  * @param {string} json.expertise.infoAboutSamplesFromLaboratory - [Экспертиза.Сведения о пробах из лаборатории]
  * @param {string} json.expertise.expertInitials - [Экспертное заключение.Эксперт]
  * @return {Promise} next .then get {buf, fileName}
  */
-function printExpertConclusion() {
+function printExpertResume() {
   var converter = (data) => {
     if (data.expertise) {
       if (data.expertise.secondWhoDidExpertise)
