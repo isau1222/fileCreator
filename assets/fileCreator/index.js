@@ -323,28 +323,27 @@ function printActOfVerification() {
  * @param {string} json.act.number - [№ акта]
  * @param {string} json.act.date.dateFormat - [Дата, время составления акта в формате даты]
  * @param {string} json.act.draftingPlace - [Место составления акта]
- * @param {string} json.verification.terms - сроки проверки
- * @param {string} json.verification.terms.from - [Сроки фактического проведения проверки от]
- * @param {string} json.verification.terms.to - [Сроки фактического проведения проверки до]
+ * @param {string} json.inspection.terms - сроки проверки
+ * @param {string} json.inspection.terms.from - [Сроки фактического проведения проверки от]
+ * @param {string} json.inspection.terms.to - [Сроки фактического проведения проверки до]
  * @param {string} json.act.date.timeFormat - [Дата, время составления акта в формате время]
- * @param {string} json.verification.place - [Фактическое место проведения]
- * @param {string} json.verification.inspector.position - [Дело об АП.должность инспектора]
- * @param {string} json.verification.inspector.fullname - [Дело об АП.ФИО инспектора]
- * @param {string} json.verification.inspector.sertificateNumber - [Дело об АП.реквизиты служебного удостоверения]
- * @param {string} json.basis.task.number - [Основание:Задание.Номер]
- * @param {string} json.basis.task.date -  [Основание:Задание.Дата]
- * @param {string} json.verification.peopleWhoDidVerification - [Лица, проводившие проверку]
- * @param {string} json.verification.result - [Результат]
- * @param {string} json.verification.reasonsOfImpossibility - [Причины невозможности проведения проверки]
- * @param {array} json.verification.[violationTypes] - нарушения, сортированные по типам
- * @param {array} json.verification.violationTypes.type - [Нарушение.тип нарушения]
- * @param {array} json.verification.violationTypes.nature - [Нарушение.Характер нарушения]
- * @param {array} json.verification.violationTypes.violatedActs - нарушенные правовые акты
- * @param {string} json.verification.violationTypes.violatedActs.number - [Положения нарушенных правовых актов.Номер пункта/статьи]
- * @param {string} json.verification.violationTypes.violatedActs.name - [Наименование НПА]
- * @param {string} json.verification.violationTypes.violatedActs.fullText - [Положения нарушенных правовых актов.Текст]
- * @param {string} json.verification.violationTypes.peopleWhoDidIt - [Нарушение.Лица, допустившие нарушение]
-
+ * @param {string} json.inspection.place - [Фактическое место проведения]
+ * @param {string} json.inspection.inspector.position - [Дело об АП.должность инспектора]
+ * @param {string} json.inspection.inspector.fullname - [Дело об АП.ФИО инспектора]
+ * @param {string} json.inspection.inspector.sertificateNumber - [Дело об АП.реквизиты служебного удостоверения]
+ * @param {string} json.reason.mission.number - [Основание:Задание.Номер]
+ * @param {string} json.reason.mission.date -  [Основание:Задание.Дата]
+ * @param {string} json.inspection.inspectingPersons - [Лица, проводившие проверку]
+ * @param {string} json.inspection.result - [Результат]
+ * @param {string} json.inspection.impossibilityReasons - [Причины невозможности проведения проверки]
+ * @param {array} json.inspection.[violationTypes] - нарушения, сортированные по типам
+ * @param {array} json.inspection.violationTypes.type - [Нарушение.тип нарушения]
+ * @param {array} json.inspection.violationTypes.nature - [Нарушение.Характер нарушения]
+ * @param {array} json.inspection.violationTypes.violatedActs - нарушенные правовые акты
+ * @param {string} json.inspection.violationTypes.violatedActs.number - [Положения нарушенных правовых актов.Номер пункта/статьи]
+ * @param {string} json.inspection.violationTypes.violatedActs.name - [Наименование НПА]
+ * @param {string} json.inspection.violationTypes.violatedActs.fullText - [Положения нарушенных правовых актов.Текст]
+ * @param {string} json.inspection.violationTypes.violatedPersons - [Нарушение.Лица, допустившие нарушение]
  * @param {string} json.act.acquaintance - [Ознакомление/Отказ только для значения «Отказ»]
  *
  * @return {Promise} next .then get {buf, fileName}
@@ -352,21 +351,21 @@ function printActOfVerification() {
 
 function printActOfSurvey() {
   var converter = (data) => {
-    if (data.basis) {
-      data.hasBasis = true;
+    if (data.reason) {
+      data.hasReason = true;
     }
     else {
-      data.hasBasis = false;
+      data.hasReason = false;
     }
-    if (data.verification.result === "Невыявлены  нарушения" ||
-      data.verification.result === "Невозможно провести проверку") {
-      data.verification.pointer = '.';
+    if (data.inspection.result === "Невыявлены  нарушения" ||
+      data.inspection.result === "Невозможно провести проверку") {
+      data.inspection.pointer = '.';
     }
     else {
-      data.verification.pointer = ':';
+      data.inspection.pointer = ':';
     }
-    if (data.verification.violationTypes) {
-      for (var violType of data.verification.violationTypes) {
+    if (data.inspection.violationTypes) {
+      for (var violType of data.inspection.violationTypes) {
         if (violType.violatedActs) {
           for (var violActIndex in violType.violatedActs) {
             if (violActIndex === '0') {
@@ -397,15 +396,15 @@ function printActOfSurvey() {
  * @param {object} json
  * @param {string} json.currentDate - [Текущая_дата]
  * @param {string} json.procuracyAgency - [Наименование органа прокуратуры, согл. проверку]
- * @param {string} json.subjectGDAndAddress - [Субъект ГД + Адрес (из справочника)]
+ * @param {string} json.subject.fullnameAndAddress - [Субъект ГД + Адрес (из справочника)]
  * @param {string} json.company
  * @param {string} json.company.fullnameAndAddressAndNumber - [сущность «Предприятие».Наименование предприятия/ФИО ИП +юридический адрес + ОГРН/ОГРИП + ИНН]
  * @param {string} json.company.realAddress - [Адрес фактического осуществления деятельности]
- * @param {string} json.verification.registerDate - [сущность "Проверка".Дата государственной регистрации]
- * @param {string} json.verification.lastVerificationDate - [сущность "Проверка".Дата окончания последней проверки]
- * @param {string} json.verification.dateOfBeginActivity - [сущность "Проверка" .Дата начала осуществления хозяйственной деятельности]
- * @param {string} json.verification.anotherBasis - [сущность "Проверка".иные основания]
- * @param {string} json.verification.beginDate - [Плановое начало проверки]
+ * @param {string} json.inspection.registerDate - [сущность "Проверка".Дата государственной регистрации]
+ * @param {string} json.inspection.lastVerificationDate - [сущность "Проверка".Дата окончания последней проверки]
+ * @param {string} json.inspection.beginActivityDate - [сущность "Проверка" .Дата начала осуществления хозяйственной деятельности]
+ * @param {string} json.inspection.anotherReasons - [сущность "Проверка".иные основания]
+ * @param {string} json.inspection.beginDate - [Плановое начало проверки]
  * @param {string} json.leader - [ФИО руководителя Субъекта ГД]
  *
  * @return {Promise} next .then get {buf, fileName}
@@ -430,25 +429,25 @@ function printAgreementInProcuracy() {
  * @PIO-70-2
  * @param {object} json
  * @param {string} json.year - [ГОД]
- * @param {string} json.verification.confirmPerson - [сущность "Проверка".Лицо, утверждающее план проверок]
- * @param {string} json.verification.documentRequisites - [сущность "Проверка".Реквизиты документа, утверждающего проверку]
+ * @param {string} json.inspection.confirmPerson - [сущность "Проверка".Лицо, утверждающее план проверок]
+ * @param {string} json.inspection.documentRequisites - [сущность "Проверка".Реквизиты документа, утверждающего проверку]
  * @param {array} json.companies - массив компаний
  * @param {array} json.companies
- * @param {array} json.companies.name - [сущность "Предприятие".НАИМЕНОВАНИЕ ПРЕДПРИЯТИЯ]
+ * @param {array} json.companies.fullname - [сущность "Предприятие".НАИМЕНОВАНИЕ ПРЕДПРИЯТИЯ]
  * @param {array} json.companies.juridicalAddress - [сущность "Предприятие". Юридический адрес (место жительства ИП)]
  * @param {array} json.companies.realAddress - [сущность "Предприятие" .Адрес фактического осуществления деятельности]
- * @param {array} json.companies.OGRNOrOGRNIP - [сущность "Предприятие".ОГРН/ОГРНИП]
+ * @param {array} json.companies.OGRN - [сущность "Предприятие".ОГРН/ОГРНИП]
  * @param {array} json.companies.INN - [сущность "Предприятие".ИНН]
- * @param {array} json.companies.verification.goal - [сущность "проверка".цель]
- * @param {array} json.companies.verification.registerDate - [сущность "Проверка".Дата государственной регистрации]
- * @param {array} json.companies.verification.lastVerificationDate - [сущность "Проверка".Дата окончания последней проверки]
- * @param {array} json.companies.verification.dateOfBeginActivity - [сущность "Проверка".Дата начала осуществления хозяйственной деятельности]
- * @param {array} json.companies.verification.anotherBasis - [сущность "Проверка".Иные основания]
- * @param {array} json.companies.verification.beginDate.formatMM - [сущность "Проверка". Плановое начало проверки в формате "ММ" ]
- * @param {array} json.companies.verification.duration.days - [сущность "Проверка".Срок проведения плановой проверки (дн)]
- * @param {array} json.companies.verification.duration.hours - [сущность "проверка".Срок проведения плановой проверки (раб.часов)]
- * @param {array} json.companies.verification.code - [сущность "Проверка". форма проведения проверки - код (из справочника форм)]
- * @param {array} json.companies.verification.controlAgency - [сущность "Проверка".Органы контроля, участвующие в проверке совместно]
+ * @param {array} json.companies.inspection.goal - [сущность "проверка".цель]
+ * @param {array} json.companies.inspection.registerDate - [сущность "Проверка".Дата государственной регистрации]
+ * @param {array} json.companies.inspection.lastVerificationDate - [сущность "Проверка".Дата окончания последней проверки]
+ * @param {array} json.companies.inspection.beginActivityDate - [сущность "Проверка".Дата начала осуществления хозяйственной деятельности]
+ * @param {array} json.companies.inspection.anotherReasons - [сущность "Проверка".Иные основания]
+ * @param {array} json.companies.inspection.terms.beginDate.formatMM - [сущность "Проверка". Плановое начало проверки в формате "ММ" ]
+ * @param {array} json.companies.inspection.terms.duration.days - [сущность "Проверка".Срок проведения плановой проверки (дн)]
+ * @param {array} json.companies.inspection.terms.duration.hours - [сущность "проверка".Срок проведения плановой проверки (раб.часов)]
+ * @param {array} json.companies.inspection.code - [сущность "Проверка". форма проведения проверки - код (из справочника форм)]
+ * @param {array} json.companies.inspection.controlAgency - [сущность "Проверка".Органы контроля, участвующие в проверке совместно]
  * @param {array} json.companies.dangerCalss - [сущность "предприятие". класс опасности]
  * @param {array} json.companies.ERP - [сущность "проверка".Номер по ЕРП]
  */
