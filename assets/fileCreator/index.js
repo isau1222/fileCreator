@@ -275,15 +275,13 @@ function printActOfVerification() {
   var converter = (data) => {
     if (data.reason) {
       data.hasReason = true;
-    }
-    else {
+    } else {
       data.hasReason = false;
     }
     if (data.inspection.result === "Невыявлены  нарушения" ||
       data.inspection.result === "Невозможно провести проверку") {
       data.inspection.pointer = '.';
-    }
-    else {
+    } else {
       data.inspection.pointer = ':';
     }
     if (data.inspection.violationTypes) {
@@ -292,8 +290,7 @@ function printActOfVerification() {
           for (var violActIndex in violType.violatedActs) {
             if (violActIndex === '0') {
               violType.violatedActs[violActIndex].violatedFirstInfo = "Согласно:";
-            }
-            else {
+            } else {
               violType.violatedActs[violActIndex].violatedFirstInfo = "";
             }
           }
@@ -353,15 +350,13 @@ function printActOfSurvey() {
   var converter = (data) => {
     if (data.reason) {
       data.hasReason = true;
-    }
-    else {
+    } else {
       data.hasReason = false;
     }
     if (data.inspection.result === "Невыявлены  нарушения" ||
       data.inspection.result === "Невозможно провести проверку") {
       data.inspection.pointer = '.';
-    }
-    else {
+    } else {
       data.inspection.pointer = ':';
     }
     if (data.inspection.violationTypes) {
@@ -370,8 +365,7 @@ function printActOfSurvey() {
           for (var violActIndex in violType.violatedActs) {
             if (violActIndex === '0') {
               violType.violatedActs[violActIndex].violatedFirstInfo = "Согласно:";
-            }
-            else {
+            } else {
               violType.violatedActs[violActIndex].violatedFirstInfo = "";
             }
           }
@@ -401,11 +395,11 @@ function printActOfSurvey() {
  * @param {string} json.company.fullnameAndAddressAndNumber - [сущность «Предприятие».Наименование предприятия/ФИО ИП +юридический адрес + ОГРН/ОГРИП + ИНН]
  * @param {string} json.company.realAddress - [Адрес фактического осуществления деятельности]
  * @param {string} json.inspection.registerDate - [сущность "Проверка".Дата государственной регистрации]
- * @param {string} json.inspection.lastVerificationDate - [сущность "Проверка".Дата окончания последней проверки]
+ * @param {string} json.inspection.lastInspectionDate - [сущность "Проверка".Дата окончания последней проверки]
  * @param {string} json.inspection.beginActivityDate - [сущность "Проверка" .Дата начала осуществления хозяйственной деятельности]
  * @param {string} json.inspection.anotherReasons - [сущность "Проверка".иные основания]
  * @param {string} json.inspection.beginDate - [Плановое начало проверки]
- * @param {string} json.leader - [ФИО руководителя Субъекта ГД]
+ * @param {string} json.subject.leader.fullname - [ФИО руководителя Субъекта ГД]
  *
  * @return {Promise} next .then get {buf, fileName}
  */
@@ -424,7 +418,69 @@ function printAgreementInProcuracy() {
   };
 }
 
-
+var json = {
+  year: '2017',
+  inspection: {
+    confirmPerson: 'Аникин Андрей Сергеевич',
+    documentRequisites: '4243 5400 3499 5801',
+  },
+  companies: [
+    {
+      fullname: 'ооо Опта',
+      juridicalAddress: 'ул. Программистов д.5',
+      realAddress: 'ул. Программистов д.4',
+      OGRN: '1231232143',
+      INN: '447877',
+      dangerClass: '3',
+      ERP: '13223',
+      inspection: {
+        goal: 'Важная цель',
+        registerDate: '20.03.2016',
+        lastInspectionDate: '25.03.2017',
+        beginActivityDate: '21.03.2016',
+        anotherReasons: 'Другие важные основания',
+        terms: {
+          beginDate: {
+            formatMM: 'Дата в формате ММ',
+          },
+          duration: {
+            days: '20',
+            hours: '158',
+          },
+        },
+        code: '229',
+        controlAgency: 'ООО Кто-тотам',
+      },
+    },
+    {
+      fullname: 'ооо Опта2',
+      juridicalAddress: 'ул. Программистов д.fd5',
+      realAddress: 'ул. Сахарова д.4',
+      OGRN: '99992143',
+      INN: '49997',
+      dangerClass: '4',
+      ERP: '9999999',
+      inspection: {
+        goal: 'Важная цель2',
+        registerDate: '20.03.2а016',
+        lastInspectionDate: '25.0а3.2017',
+        beginActivityDate: '21.03.20а16',
+        anotherReasons: 'Другие важные основания2',
+        terms: {
+          beginDate: {
+            formatMM: 'Дата в формате ММ2',
+          },
+          duration: {
+            days: '20ув',
+            hours: '158ав',
+          },
+        },
+        code: '2292',
+        controlAgency: 'ООО Кто-т2отам',
+      },
+    },
+  ],
+};
 /**
  * @PIO-70-2
  * @param {object} json
@@ -715,16 +771,14 @@ function printFromType(type, json) {
       nameCreator,
     } = DOCXtypesDictionary[type].func();
     return createDocBuffer(fileName, json, converter, nameCreator);
-  }
-  else if (XLSXTypesDictionary[type]) {
+  } else if (XLSXTypesDictionary[type]) {
     let fileName = XLSXTypesDictionary[type].fileName;
     let {
       converter,
       nameCreator,
     } = XLSXTypesDictionary[type].func();
     return createXLSXBuffer(fileName, json, converter, nameCreator);
-  }
-  else {
+  } else {
     throw new Error('Unrecognized type!');
   }
 }
