@@ -14,25 +14,24 @@
 //fix АКт обследования(рейд) inspector
 //
 
-claimLetter.date - [Ущерб.Дата (претенз. письма)] 
+claimLetter.date - [Ущерб.Дата (претенз. письма)]
 claimLetter.number - [Ущерб.Номер (претенз. письма)]
 claimLetter.toAdderss - [Ущерб.В адрес]
 claimLetter.toName - [Ущерб.На имя]
-inspection.inspectionAgency.name - 
-result.terms.from - [Результат. Сроки фактического проведения проверки: от] 
-result.terms.to - [Сроки фактического проведения проверки: до] 
+inspection.inspectionAgency.name -
+result.terms.from - [Результат. Сроки фактического проведения проверки: от]
+result.terms.to - [Сроки фактического проведения проверки: до]
 result.place - [Результат.фактическое место проведения проверки]
-inspection.inspectionAgency.leader.fullname - [Проверка.Орган, осущ. проверку.Руководителя]
+inspection.inspectionAgency.leader.fullname - [Проверка.Орган, осущ. проверку.Руководитель]
 currentUser.fullname - [ФИО текущего пользователя].
 currentUser.subject.phone - [Субъект ГД текущего пользователя.телефон]
-AO.creatingCaseReason - [Дело об АП.Повод для возбуждения дела]	
+AO.creatingCaseReason - [Дело об АП.Повод для возбуждения дела]
+
 expertResume.number - [Экспертное заключение.Номер]
 expertResume.date - [Экспертное заключение.Дата]
 expertResume.firstExpertiseExecutor - [Экспертное заключение.Кем проведена экспертиза.ФИО + Должность + Сведения об аккредитации]
 expertResume.secondExpertiseExecutor - [Экспертное заключение.Эксперт.ФИО + Должность + Сведения об аккредитации]
-expertise.number - [Экспертиза.Номер определения о назначении экспертизы] 
-expertise.date - [Экспертиза.Дата определения о назначении экспертизы] 
-expertise.inspectorAgency - [Проверка.Орган, осущ. проверку. Наимеенование + Адрес] 
+expertise.inspectorAgency - [Проверка.Орган, осущ. проверку. Наимеенование + Адрес]
 expertise.documentList - [Экспертиза.перечень поступивших материалов]
 expertResume.establish - [Экспертное заключение.В ходе экспертизы установлено]
 expertResume.conclusion - [Экспертное заключение.Выводы]
@@ -114,3 +113,38 @@ subject.fullnameAndAddress - Субъект ГД + Адрес (из справо
 subject.leader.fullname - [ФИО руководителя Субъекта ГД]
 violation.nature - [Нарушение.Характер нарушения]
 violation.type - [Нарушение.Тип нарушения]
+
+
+requirement.number - [ПРЕДПИСАНИЕ № [Номер]]
+result.act.number - [Результат.№ акта (через нарушение)]
+result.act.date - [Результат.Дата составления акта]
+requirement.inspector.post - [Должность инспектора]
+requirement.inspector.fullname - [ФИО инспектора]
+requirement.inspector.sertificateNumber - [Реквизиты служебного удостоверения]
+violation.violatedPersons - [Нарушение. Список лиц, допустивших нарушение]
+
+requirement.content - [Содержание предписания]
+requirement.terms - [Срок исполнения]
+requirement.reason - [Основание]
+requirement.receivedDate - [Дата получения]
+requirement.departureDate - [Дата отправления]
+requirement.postalNumber - [№ почтового отправления]
+
+expertise.availabilityGP - [Экспертиза.Наличие ГП отношений с объектом проверки = bool]
+expertise.explanations - [Экспертиза.Обоснование]
+expertise.complianceOfInspection - [Экспертиза. Соответствие планируемой инспекции области аккредитации ОИ = bool]
+expertise.complianceExplanations - [Экспертиза.Обоснование соответсвия]
+
+
+expertise.receiptDate - [Экспертиза.Дата поступления]
+
+
+expertise.createdDate - [Экспертиза.Дата создания]
+expertise.number - [Экспертиза.Номер]
+
+
+attachmentDocument.numberPP - [Прилагаемый документ.Номер п.п]
+attachmentDocument.name - [Прилагаемый документ.Наименование документа]
+attachmentDocument.number - [Прилагаемый документ.Номер]
+attachmentDocument.date - [Прилагаемый документ.Дата]
+attachmentDocument.note - [Прилагаемый документ.Примечание])
