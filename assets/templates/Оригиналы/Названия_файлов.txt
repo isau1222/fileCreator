@@ -24,6 +24,20 @@ inspection.inspectionAgency.name - [ПРОВЕРКА.ОРГАН, ОСУЩ.ПРО
 
  заменить task на mission
 //
+
+ expertResume.date - [Экспертное заключение.Дата]
+ expertResume.number - [Экспертное заключение.Номер]
+ expertResume.firstExpertiseExecutor - [Экспертное заключение.Кем проведена экспертиза.ФИО + Должность + Сведения об аккредитации]
+expertResume.secondExpertiseExecutor - [Экспертное заключение.Эксперт.ФИО + Должность + Сведения об аккредитации],
+ expertise.appointmentNumber - [Экспертиза.Номер определения о назначении экспертизы]
+ expertise.appointmentDate - [Экспертиза.Дата определения о назначении экспертизы]
+ expertise.inspectorAgency - [Проверка.Орган, осущ. проверку. Наимеенование + Адрес]
+ expertise.documentList - [Экспертиза.перечень поступивших материалов]
+ expertResume.establish - [Экспертное заключение.В ходе экспертизы установлено]
+ expertResume.conclusion - [Экспертное заключение.Выводы]
+ expertise.laboratorySamplesInfo - [Экспертиза.Сведения о пробах из лаборатории]
+ expertise.expert.initials - [Экспертное заключение.Эксперт]
+
 act.acquaintance - [Ознакомление/Отказ только для значения «Отказ»]
 act.date.dateFormat - [Дата, время составления акта в формате даты]
 act.date.timeFormat - [Дата, время составления акта в формате времени]
